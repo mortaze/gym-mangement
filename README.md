@@ -26,6 +26,43 @@ backend/   Express API application
 
 The frontend communicates with backend endpoints under `${NEXT_PUBLIC_API_URL}/api`. Static uploaded assets are resolved from the backend origin, not the frontend deployment.
 
+### Backend Layering Details
+
+The backend follows a thin route/controller/service/model flow:
+
+```text
+HTTP request
+  -> backend/index.js middleware and route mounts
+  -> backend/routes/*.routes.js
+  -> backend/controller/*.controller.js
+  -> backend/services/*.service.js
+  -> backend/model/*.js Mongoose models
+  -> MongoDB
+```
+
+Keep model imports case-exact for Linux/Vercel deployments. For example, the equipment model file is `backend/model/equipment.js`, so services must import `../model/equipment` rather than `../model/Equipment`. This preserves the existing `Equipment` Mongoose model name without changing the MongoDB schema or collection behavior.
+
+### Frontend Layering Details
+
+The frontend is a Next.js pages-router app with dashboard pages organized by role:
+
+```text
+frontend/src/pages/
+  manager-dashboard/       Manager views for users, trainers, cafe, equipment, finance, presence
+  reception-dashboard/     Reception views for users and cafe flows
+  trainers-dashboard/      Trainer views for training requests, cafe, presence
+  users-dashboard/         Member views for profile, cafe, trainers, training plan requests
+  api/                     Small Next API helpers for enum payloads used by the UI
+
+frontend/src/redux/
+  api/apiSlice.js          Shared RTK Query base API configuration
+  features/*Api.js         Feature-specific API slices
+
+frontend/src/config/api.js Central backend origin, API URL, and asset URL helpers
+```
+
+Build/deployment fixes should stay limited to import paths, SSR-safe browser usage, and lint/build configuration issues. Do not move dashboard routes or change UI behavior unless the feature itself requires it.
+
 ## Backend API Map
 
 Mounted by `backend/index.js`:
@@ -61,7 +98,7 @@ Backend `.env` variables:
 
 ```env
 PORT=7000
-DATABASE_URL=mongodb+srv://<user>:<password>@<cluster>/<database>
+MONGO_URI=mongodb+srv://<user>:<password>@<cluster>/<database>
 JWT_SECRET=<strong-secret>
 CORS_ORIGIN=http://localhost:3000,https://your-frontend.vercel.app
 UPLOAD_ROOT=/tmp/uploads
@@ -139,7 +176,7 @@ Important production note: `/tmp` is ephemeral in serverless environments. It pr
 - Build command: `npm run build` (current script starts the app for Vercel compatibility in this project)
 - Start command: `npm start` if needed by the platform
 - Required env vars:
-  - `DATABASE_URL`
+  - `MONGO_URI`
   - `JWT_SECRET`
   - `CORS_ORIGIN` with your frontend URL(s)
 
