@@ -1,5 +1,5 @@
 // backend/services/Equipment.service.js
-const Equipment = require("../model/Equipment");
+const Equipment = require("../model/equipment");
 
 class EquipmentService {
   // =========================
