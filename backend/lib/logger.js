@@ -1,14 +1,6 @@
 // backend/lib/logger.js
-const winston = require("winston");
-const path = require("path");
-const fs = require("fs");
 
-// مسیر پوشه لاگ‌ها
-const logDir = path.join(process.cwd(), "logs");
-// اگر وجود ندارد، ایجاد کن
-if (!fs.existsSync(logDir)) {
-  fs.mkdirSync(logDir, { recursive: true });
-}
+const winston = require("winston");
 
 const level = process.env.LOG_LEVEL || "debug";
 
@@ -21,42 +13,44 @@ const logger = winston.createLogger({
     winston.format.json()
   ),
   transports: [
-    // فایل لاگ خطاها
-    new winston.transports.File({
-      filename: path.join(logDir, "error.log"),
-      level: "error",
-      maxsize: 5 * 1024 * 1024,
-      maxFiles: 5,
-    }),
-    // فایل لاگ ترکیبی (info + debug)
-    new winston.transports.File({
-      filename: path.join(logDir, "combined.log"),
-      maxsize: 10 * 1024 * 1024,
-      maxFiles: 5,
+    new winston.transports.Console({
+      format:
+        process.env.NODE_ENV === "production"
+          ? winston.format.combine(
+              winston.format.timestamp(),
+              winston.format.json()
+            )
+          : winston.format.combine(
+              winston.format.colorize(),
+              winston.format.timestamp(),
+              winston.format.printf(
+                ({ timestamp, level, message }) =>
+                  `${timestamp} ${level}: ${message}`
+              )
+            ),
     }),
   ],
 });
 
-// در محیط توسعه لاگ به کنسول هم نوشته شود (خواناتر)
-if (process.env.NODE_ENV !== "production") {
-  logger.add(
-    new winston.transports.Console({
-      format: winston.format.combine(
-        winston.format.colorize(),
-        winston.format.simple()
-      ),
-    })
-  );
-}
+// تضمین وجود متدها
+logger.debug =
+  typeof logger.debug === "function"
+    ? logger.debug.bind(logger)
+    : (...args) => console.debug(...args);
 
-// تضمین وجود متدهای مورد انتظار (ایمن‌سازی)
-if (typeof logger.debug !== "function")
-  logger.debug = (...args) => console.debug(...args);
-if (typeof logger.info !== "function")
-  logger.info = (...args) => console.info(...args);
-if (typeof logger.warn !== "function")
-  logger.warn = (...args) => console.warn(...args);
-if (typeof logger.error !== "function")
-  logger.error = (...args) => console.error(...args);
+logger.info =
+  typeof logger.info === "function"
+    ? logger.info.bind(logger)
+    : (...args) => console.info(...args);
+
+logger.warn =
+  typeof logger.warn === "function"
+    ? logger.warn.bind(logger)
+    : (...args) => console.warn(...args);
+
+logger.error =
+  typeof logger.error === "function"
+    ? logger.error.bind(logger)
+    : (...args) => console.error(...args);
 
 module.exports = logger;
