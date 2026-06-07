@@ -3,9 +3,10 @@ const TrainingRequest = require("../model/TrainingRequest");
 const User = require("../model/User");
 const path = require("path");
 const fs = require("fs");
+const { getUploadDir, uploadRoot } = require("../utils/uploadPaths");
 
 // مسیر ذخیره عکس‌ها
-const uploadDir = path.join(__dirname, "../uploads/TrainingRequest");
+const uploadDir = getUploadDir("TrainingRequest");
 if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
 
 // ================================
@@ -136,7 +137,7 @@ exports.updateRequest = async (req, res) => {
     if (req.files && req.files.length > 0) {
       // پاک کردن عکس‌های قبلی
       request.photos.forEach((p) => {
-        const oldPath = path.join(__dirname, "../uploads", p);
+        const oldPath = path.join(uploadRoot, p);
         if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
       });
 
@@ -186,7 +187,7 @@ exports.deleteRequest = async (req, res) => {
     // حذف عکس‌ها
     if (request.photos && request.photos.length > 0) {
       request.photos.forEach((p) => {
-        const imgPath = path.join(__dirname, "../uploads", p);
+        const imgPath = path.join(uploadRoot, p);
         if (fs.existsSync(imgPath)) fs.unlinkSync(imgPath);
       });
     }

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect } from "react";
 import { PaginationNext, PaginationPrev } from "@/svg";
 
 const Pagination = ({
@@ -11,18 +11,22 @@ const Pagination = ({
   const pageStart = (currPage - 1) * countOfPage;
   const totalPage = Math.ceil(items.length / countOfPage);
 
-  function setPage(idx) {
-    if (idx <= 0 || idx > totalPage) {
-      return;
-    }
-    setCurrPage(idx);
-    window.scrollTo(0, 0);
-    paginatedData(items, pageStart, countOfPage);
-  }
+  const setPage = useCallback(
+    (idx) => {
+      if (idx <= 0 || idx > totalPage) {
+        return;
+      }
+      const nextPageStart = (idx - 1) * countOfPage;
+      setCurrPage(idx);
+      window.scrollTo(0, 0);
+      paginatedData(items, nextPageStart, countOfPage);
+    },
+    [countOfPage, items, paginatedData, setCurrPage, totalPage],
+  );
 
   useEffect(() => {
     paginatedData(items, pageStart, countOfPage);
-  }, [items, pageStart, countOfPage]);
+  }, [items, pageStart, countOfPage, paginatedData]);
 
   return (
     <nav>

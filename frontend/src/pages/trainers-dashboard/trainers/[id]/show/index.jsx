@@ -6,6 +6,7 @@ import { useRouter } from "next/router"; // Pages Router
 import moment from "moment-jalaali";
 import DashboardLayout from "../../../layout";
 import Swal from "sweetalert2";
+import { API_BASE_URL, API_ORIGIN } from "@/config/api";
 
 export default function TrainingRequestShowPage() {
   const router = useRouter();
@@ -25,7 +26,7 @@ export default function TrainingRequestShowPage() {
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:7000";
+  const API_BASE = API_BASE_URL;
 
   // --- 1) بارگذاری مربی از sessionStorage ---
   useEffect(() => {
@@ -225,7 +226,7 @@ export default function TrainingRequestShowPage() {
     if (!p) return null;
     if (p.startsWith("http://") || p.startsWith("https://")) return p;
     // اگر فقط مسیر فایل مثل "TrainingRequest/xyz.jpg" است
-    return `http://localhost:7000/uploads/${p.replace(/^\/+/, "")}`;
+    return `${API_ORIGIN}/uploads/${p.replace(/^\/+/, "")}`;
   };
 
   if (loading) {

@@ -13,14 +13,13 @@ import {
   BarChart3,
   ShieldCheck,
 } from "lucide-react";
+import { API_BASE_URL, API_ORIGIN } from "@/config/api";
 
 export default function CreateEquipmentPage() {
   const router = useRouter();
 
   // === تنظیم پایه API (قابل override با env در صورت نیاز) ===
-  const API_BASE =
-    (typeof window !== "undefined" && process.env.NEXT_PUBLIC_API_BASE) ||
-    "http://localhost:7000/api";
+  const API_BASE = API_BASE_URL;
 
   const [form, setForm] = useState({
     equipmentCode: "",
@@ -198,7 +197,7 @@ export default function CreateEquipmentPage() {
         Swal.fire({
           icon: "error",
           title: "خطای شبکه",
-          text: "ارتباط با سرور برقرار نشد. مطمئن شوید سرور در http://localhost:7000 اجرا شده و CORS اجازه می‌دهد.",
+          text: "ارتباط با سرور برقرار نشد. مطمئن شوید آدرس API و تنظیمات CORS درست است.",
           background: "#1a1d23",
           color: "#fff",
           confirmButtonColor: "#ef4444",

@@ -14,6 +14,7 @@ import {
   ArrowLeft,
   Zap,
 } from "lucide-react";
+import { API_BASE_URL, API_ORIGIN } from "@/config/api";
 
 export default function TrainingRequestsPage() {
   const [requests, setRequests] = useState([]);
@@ -21,7 +22,7 @@ export default function TrainingRequestsPage() {
 
   const fetchRequests = async () => {
     try {
-      const res = await fetch("http://localhost:7000/api/training-requests");
+      const res = await fetch(`${API_BASE_URL}/training-requests`);
       const data = await res.json();
       if (data.success) setRequests(data.requests);
       console.log("====================================");
@@ -151,7 +152,7 @@ export default function TrainingRequestsPage() {
                         {req.photos.map((p, idx) => (
                           <img
                             key={idx}
-                            src={`http://localhost:7000/uploads/${p}`}
+                            src={`${API_ORIGIN}/uploads/${p}`}
                             alt=""
                             className="w-20 h-20 object-cover rounded-xl border border-gray-700 hover:scale-105 transition-transform"
                           />

@@ -1,20 +1,19 @@
 // backend/routes/trainingRequest.routes.js
 const express = require("express");
 const path = require("path");
-const fs = require("fs");
 const multer = require("multer");
-const TrainingRequestController = require("../controller/TrainingRequest.controller");
+const TrainingRequestController = require("../controller/trainingRequest.controller");
 
 const router = express.Router();
 
 // ===============================
 // تنظیم مسیر آپلود عکس‌ها
 // ===============================
-const uploadDir = path.join(__dirname, "../uploads/TrainingRequest");
-if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
+const { getUploadDir, uploadRoot } = require("../utils/uploadPaths");
+const uploadDir = getUploadDir("TrainingRequest");
 
 // دسترسی عمومی به فایل‌های آپلود شده
-router.use("/uploads", express.static(path.join(__dirname, "../uploads")));
+router.use("/uploads", express.static(uploadRoot));
 
 // تنظیم Multer
 const storage = multer.diskStorage({

@@ -12,6 +12,7 @@ const userRoutes = require("./routes/user.routes");
 const authRoutes = require("./routes/auth.routes");
 const uploadRoutes = require("./routes/uploadDocument.routes");
 const cafeMenuRoutes = require("./routes/CafeMenu.routes");
+const { uploadRoot, imageRoot, documentRoot } = require("./utils/uploadPaths");
 const trainingRequestRoutes = require("./routes/trainingRequest.routes");
 const equipmentRoutes = require("./routes/equipment.routes");
 
@@ -29,7 +30,18 @@ const PORT = process.env.PORT || 7000;
 // CORS
 app.use(
   cors({
-    origin: "http://localhost:3000", // آدرس فرانت‌اند
+    origin: (origin, callback) => {
+      const allowedOrigins = (process.env.CORS_ORIGIN || "http://localhost:3000")
+        .split(",")
+        .map((item) => item.trim())
+        .filter(Boolean);
+
+      if (!origin || allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(new Error("Not allowed by CORS"));
+    },
     credentials: true, // مهم برای ارسال کوکی‌ها
   }),
 );
@@ -49,7 +61,9 @@ app.use(requestLogger);
 
 // Static folders
 app.use(express.static(path.join(__dirname, "public")));
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use("/uploads", express.static(uploadRoot));
+app.use("/images", express.static(imageRoot));
+app.use("/documents", express.static(documentRoot));
 
 // --- Connect to Database ---
 connectDB()
@@ -66,9 +80,11 @@ app.use("/api/auth", authRoutes);
 app.use("/api/upload", uploadRoutes);
 app.use("/api/training-requests", trainingRequestRoutes);
 app.use("/api/equipment", equipmentRoutes);
+app.use("/api/menu", cafeMenuRoutes);
+app.use("/menu", cafeMenuRoutes);
 
 // و برای پوشه‌ی آپلودها
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use("/uploads", express.static(uploadRoot));
 // --- Root Route ---
 app.get("/", (req, res) => res.send("Server is running successfully"));
 

@@ -3,8 +3,6 @@ import { userLoggedIn } from "./authSlice";
 import Cookies from "js-cookie";
 import Swal from "sweetalert2";
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
-
 export const authApi = apiSlice.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
@@ -13,7 +11,7 @@ export const authApi = apiSlice.injectEndpoints({
     // ===============================
     loginUser: builder.mutation({
       query: (data) => ({
-        url: `${BASE_URL}/auth/login`,
+        url: "auth/login",
         method: "POST",
         body: data,
       }),
@@ -59,7 +57,7 @@ export const authApi = apiSlice.injectEndpoints({
     // 🔹 Get Current User
     // ===============================
     getUser: builder.query({
-      query: () => `${BASE_URL}/user/me`,
+      query: () => "user/me",
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
         try {
           const result = await queryFulfilled;
@@ -78,7 +76,7 @@ export const authApi = apiSlice.injectEndpoints({
     // 🔹 Confirm Email
     // ===============================
     confirmEmail: builder.query({
-      query: (token) => `${BASE_URL}/user/confirmEmail/${token}`,
+      query: (token) => `user/confirmEmail/${token}`,
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
         try {
           const result = await queryFulfilled;
@@ -109,7 +107,7 @@ export const authApi = apiSlice.injectEndpoints({
     // ===============================
     resetPassword: builder.mutation({
       query: (data) => ({
-        url: `${BASE_URL}/user/forget-password`,
+        url: "user/forget-password",
         method: "PATCH",
         body: data,
       }),
@@ -120,7 +118,7 @@ export const authApi = apiSlice.injectEndpoints({
     // ===============================
     confirmForgotPassword: builder.mutation({
       query: (data) => ({
-        url: `${BASE_URL}/user/confirm-forget-password`,
+        url: "user/confirm-forget-password",
         method: "PATCH",
         body: data,
       }),
@@ -131,7 +129,7 @@ export const authApi = apiSlice.injectEndpoints({
     // ===============================
     changePassword: builder.mutation({
       query: (data) => ({
-        url: `${BASE_URL}/user/change-password`,
+        url: "user/change-password",
         method: "PATCH",
         body: data,
       }),
@@ -142,7 +140,7 @@ export const authApi = apiSlice.injectEndpoints({
     // ===============================
     updateProfile: builder.mutation({
       query: ({ id, ...data }) => ({
-        url: `${BASE_URL}/user/update-user/${id}`,
+        url: `user/update-user/${id}`,
         method: "PUT",
         body: data,
       }),

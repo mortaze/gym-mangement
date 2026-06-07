@@ -6,6 +6,7 @@ import axios from "axios";
 import DashboardLayout from "../../../layout";
 import { Upload, CheckCircle, XCircle } from "lucide-react";
 import Swal from "sweetalert2";
+import { API_BASE_URL, API_ORIGIN } from "@/config/api";
 
 export default function EditCafeMenu() {
   const router = useRouter();
@@ -34,7 +35,7 @@ export default function EditCafeMenu() {
 
     const fetchProduct = async () => {
       try {
-        const res = await axios.get(`http://localhost:7000/api/menu/${id}`);
+        const res = await axios.get(`${API_BASE_URL}/menu/${id}`);
         const product = res.data;
 
         setFormData({
@@ -47,7 +48,7 @@ export default function EditCafeMenu() {
         });
 
         // نمایش تصویر فعلی
-        setPreviewImg(`http://localhost:7000/uploads/${product.img}`);
+        setPreviewImg(`${API_ORIGIN}/uploads/${product.img}`);
       } catch (error) {
         console.error(error);
         setErrorMsg("خطا در دریافت اطلاعات محصول");
@@ -85,7 +86,7 @@ export default function EditCafeMenu() {
       data.append("status", formData.status);
       if (formData.img) data.append("img", formData.img);
 
-      await axios.put(`http://localhost:7000/api/menu/${id}`, data, {
+      await axios.put(`${API_BASE_URL}/menu/${id}`, data, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 

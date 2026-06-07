@@ -1,10 +1,7 @@
 // backend/middleware/uploader.js
 const multer = require("multer");
 const path = require("path");
-const fs = require("fs");
-
-// مسیر پیش‌فرض ذخیره عکس‌ها
-const baseUploadDir = path.join(__dirname, "../../frontend/public/images");
+const { getImageUploadDir } = require("../utils/uploadPaths");
 
 /**
  * تابعی که یک uploader با پوشه دلخواه می‌سازد
@@ -12,13 +9,8 @@ const baseUploadDir = path.join(__dirname, "../../frontend/public/images");
  * @returns multer instance
  */
 const createUploader = (subFolder = "") => {
-  // مسیر کامل ذخیره فایل
-  const uploadDir = path.join(baseUploadDir, subFolder);
-
-  // اگر پوشه وجود ندارد، بساز
-  if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir, { recursive: true });
-  }
+  // مسیر کامل ذخیره فایل (Vercel-safe: /tmp in serverless, public/images locally)
+  const uploadDir = getImageUploadDir(subFolder);
 
   // تنظیمات ذخیره‌سازی
   const storage = multer.diskStorage({

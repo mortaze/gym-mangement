@@ -4,10 +4,10 @@ import React, { useState } from "react";
 // از 'next/router' برای Next.js Pages Router استفاده می‌شود
 // اگر از App Router استفاده می‌کنید، باید به 'next/navigation' و 'useRouter' از آن تغییر دهید
 import { useRouter } from "next/router";
-import { useAddOwnerMutation } from "../../../../../redux/features/ownerApi";
+import { useAddOwnerMutation } from "../../../../redux/features/ownerApi";
 import { FaSave, FaArrowLeft } from "react-icons/fa";
 import Link from "next/link";
-import DashboardLayout from "../../../layout";
+import DashboardLayout from "../../layout";
 import { MdDriveFolderUpload } from "react-icons/md";
 
 export default function CreateOwnerPage() {

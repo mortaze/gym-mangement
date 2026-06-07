@@ -26,6 +26,7 @@ import {
   useGetUserByIdQuery,
   useUpdateUserMutation,
 } from "../../../../../redux/features/userApi";
+import { API_BASE_URL, API_ORIGIN } from "@/config/api";
 
 const ROLE_OPTIONS = [
   { value: "Member", label: "ورزشکار (عضو)" },
@@ -63,7 +64,7 @@ export default function EditUserPage() {
 
     const fetchData = async () => {
       try {
-        const res = await fetch(`http://localhost:7000/api/users/${id}`);
+        const res = await fetch(`${API_BASE_URL}/users/${id}`);
         const result = await res.json();
 
         if (result?.user) {

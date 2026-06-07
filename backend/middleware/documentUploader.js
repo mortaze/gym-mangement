@@ -2,25 +2,13 @@
 
 const multer = require("multer");
 const path = require("path");
-const fs = require("fs");
-
-// استفاده از پوشه موقت در سرورلس (Vercel friendly)
-const baseUploadDir = path.join("/tmp", "documents");
+const { getDocumentUploadDir } = require("../utils/uploadPaths");
 
 /**
  * ساخت uploader برای فایل‌های سند
  */
 const createDocumentUploader = (subFolder = "") => {
-  const uploadDir = path.join(baseUploadDir, subFolder);
-
-  // مهم: فقط داخل runtime ساخته شود
-  try {
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true });
-    }
-  } catch (err) {
-    console.error("Upload dir error:", err);
-  }
+  const uploadDir = getDocumentUploadDir(subFolder);
 
   const storage = multer.diskStorage({
     destination: (req, file, cb) => {

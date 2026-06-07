@@ -17,6 +17,7 @@ import {
 
 import DashboardLayout from "../layout";
 import Link from "next/link";
+import { API_BASE_URL, API_ORIGIN } from "@/config/api";
 
 export default function CafeMenuPage() {
   const [products, setProducts] = useState([]);
@@ -36,7 +37,7 @@ export default function CafeMenuPage() {
   useEffect(() => {
     const fetchMenu = async () => {
       try {
-        const res = await fetch("http://localhost:7000/api/menu");
+        const res = await fetch(`${API_BASE_URL}/menu`);
         const data = await res.json();
         setProducts(data);
       } catch (err) {
@@ -139,7 +140,7 @@ export default function CafeMenuPage() {
                   </Link>
 
                   <img
-                    src={`http://localhost:7000/uploads/${product.img}`}
+                    src={`${API_ORIGIN}/uploads/${product.img}`}
                     alt={product.name}
                     className="w-full h-full object-cover hover:scale-110 transition-transform duration-700"
                   />

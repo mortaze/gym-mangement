@@ -17,6 +17,7 @@ import {
   useGetEquipmentsQuery,
   useUpdateEquipmentMutation,
 } from "@/redux/features/equipmentApi";
+import { API_BASE_URL, API_ORIGIN } from "@/config/api";
 
 export default function EditEquipmentPage() {
   const router = useRouter();
@@ -269,7 +270,7 @@ export default function EditEquipmentPage() {
         // unlikely; placeholder
       }
       // fallback: call fetch directly to delete
-      const res = await fetch(`http://localhost:7000/api/equipment/${ident}`, {
+      const res = await fetch(`${API_BASE_URL}/equipment/${ident}`, {
         method: "DELETE",
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);

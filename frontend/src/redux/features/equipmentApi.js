@@ -1,9 +1,10 @@
 // frontend/src/redux/features/equipmentApi.js
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { API_BASE_URL } from "@/config/api";
 
 /**
  * Equipment API (RTK Query)
- * - baseUrl: http://localhost:7000/api
+ * - baseUrl: configured via NEXT_PUBLIC_API_URL
  * - endpoints:
  *    GET  /equipment
  *    GET  /equipment/:id
@@ -22,7 +23,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const equipmentApi = createApi({
   reducerPath: "equipmentApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:7000/api",
+    baseUrl: API_BASE_URL,
     prepareHeaders: (headers) => {
       // اگر توکن در sessionStorage دارید، اینجا اضافه کنید
       try {

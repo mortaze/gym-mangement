@@ -16,11 +16,12 @@ import {
   Zap,
   ChevronDown,
 } from "lucide-react";
+import { API_BASE_URL, API_ORIGIN } from "@/config/api";
 
 /**
  * Header component:
  * - می‌خونه currentUser از sessionStorage
- * - با _id به http://localhost:7000/api/users درخواست می‌زنه و کاربر رو پیدا می‌کنه
+ * - با _id به ${API_BASE_URL}/users درخواست می‌زنه و کاربر رو پیدا می‌کنه
  * - اطلاعات رو در هدر نمایش می‌ده و امکان خروج داره
  */
 
@@ -59,7 +60,7 @@ export default function Header({ onOpenSidebar }) {
       setLoading(true);
       try {
         // درخواست به endpoint اصلی
-        const res = await fetch("http://localhost:7000/api/users");
+        const res = await fetch(`${API_BASE_URL}/users`);
         if (!res.ok) {
           throw new Error(`خطا از سرور: ${res.status}`);
         }
