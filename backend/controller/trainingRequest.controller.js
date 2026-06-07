@@ -6,8 +6,7 @@ const fs = require("fs");
 const { getUploadDir, uploadRoot } = require("../utils/uploadPaths");
 
 // مسیر ذخیره عکس‌ها
-const uploadDir = getUploadDir("TrainingRequest");
-if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
+getUploadDir("TrainingRequest");
 
 // ================================
 // ایجاد یک درخواست جدید با عکس‌ها

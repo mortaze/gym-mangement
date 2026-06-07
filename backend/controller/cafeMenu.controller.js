@@ -1,4 +1,4 @@
-const CafeMenuService = require("../services/CafeMenu.service");
+const CafeMenuService = require("../services/cafeMenu.service");
 
 class CafeMenuController {
   // ایجاد منو

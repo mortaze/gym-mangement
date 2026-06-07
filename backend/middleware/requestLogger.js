@@ -1,15 +1,23 @@
 // backend/middleware/requestLogger.js
-import onFinished from "on-finished";
-import { v4 as uuidv4 } from "uuid";
-import logger from "../lib/logger.js"; // مسیر خودت را تنظیم کن
+const crypto = require("crypto");
+const onFinished = require("on-finished");
+const logger = require("../lib/logger"); // مسیر خودت را تنظیم کن
 
-export function attachRequestId(req, res, next) {
+const uuidv4 = () => {
+  if (typeof crypto.randomUUID === "function") {
+    return crypto.randomUUID();
+  }
+
+  return crypto.randomBytes(16).toString("hex");
+};
+
+function attachRequestId(req, res, next) {
   req.requestId = req.headers["x-request-id"] || uuidv4();
   res.setHeader("x-request-id", req.requestId);
   next();
 }
 
-export function requestLogger(req, res, next) {
+function requestLogger(req, res, next) {
   const start = process.hrtime();
 
   // لاگ ورودی
@@ -25,7 +33,7 @@ export function requestLogger(req, res, next) {
       user: req.user
         ? { id: req.user._id, role: req.user.role, email: req.user.email }
         : null,
-    }
+    },
   );
 
   onFinished(res, function (err) {
@@ -39,7 +47,7 @@ export function requestLogger(req, res, next) {
       {
         statusCode: res.statusCode,
         responseTimeMs: Math.round(timeMs),
-      }
+      },
     );
     if (err) logger.error("onFinished error: %o", err);
   });
@@ -59,3 +67,8 @@ function tryPreview(body) {
     return { error: "cannot stringify body" };
   }
 }
+
+module.exports = {
+  attachRequestId,
+  requestLogger,
+};

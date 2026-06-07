@@ -9,7 +9,7 @@ const { getImageUploadDir } = require("../utils/uploadPaths");
  * @returns multer instance
  */
 const createUploader = (subFolder = "") => {
-  // مسیر کامل ذخیره فایل (Vercel-safe: /tmp in serverless, public/images locally)
+  // مسیر کامل ذخیره فایل (Vercel-safe: /tmp by default)
   const uploadDir = getImageUploadDir(subFolder);
 
   // تنظیمات ذخیره‌سازی

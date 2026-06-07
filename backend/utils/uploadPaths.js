@@ -1,8 +1,6 @@
 const fs = require("fs");
 const path = require("path");
 
-const isVercel = Boolean(process.env.VERCEL || process.env.NOW_REGION);
-
 const ensureDir = (dir) => {
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir, { recursive: true });
@@ -10,21 +8,16 @@ const ensureDir = (dir) => {
   return dir;
 };
 
-const resolveRoot = (envName, fallback) => path.resolve(process.env[envName] || fallback);
+const resolveRoot = (envName, fallback) =>
+  path.resolve(process.env[envName] || fallback);
 
-const uploadRoot = resolveRoot(
-  "UPLOAD_ROOT",
-  isVercel ? path.join("/tmp", "uploads") : path.join(__dirname, "..", "uploads"),
-);
+const uploadRoot = resolveRoot("UPLOAD_ROOT", path.join("/tmp", "uploads"));
 
-const imageRoot = resolveRoot(
-  "IMAGE_UPLOAD_ROOT",
-  isVercel ? path.join("/tmp", "images") : path.join(__dirname, "..", "public", "images"),
-);
+const imageRoot = resolveRoot("IMAGE_UPLOAD_ROOT", path.join("/tmp", "images"));
 
 const documentRoot = resolveRoot(
   "DOCUMENT_UPLOAD_ROOT",
-  isVercel ? path.join("/tmp", "documents") : path.join(__dirname, "..", "public", "documents"),
+  path.join("/tmp", "documents"),
 );
 
 const getUploadDir = (subFolder = "") => ensureDir(path.join(uploadRoot, subFolder));

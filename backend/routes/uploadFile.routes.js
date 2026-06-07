@@ -1,7 +1,8 @@
 // backend\routes\uploadFile.routes.js
 const express = require("express");
 const { fileUpload } = require("../controller/upload.controller");
-const uploader = require("../middleware/uploder");
+const createUploader = require("../middleware/uploader");
+const uploader = createUploader();
 
 const router = express.Router();
 
