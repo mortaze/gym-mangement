@@ -106,7 +106,7 @@ IMAGE_UPLOAD_ROOT=/tmp/images
 DOCUMENT_UPLOAD_ROOT=/tmp/documents
 ```
 
-> `UPLOAD_ROOT`, `IMAGE_UPLOAD_ROOT`, and `DOCUMENT_UPLOAD_ROOT` are optional. On Vercel, the backend automatically uses `/tmp` when these are not set.
+> `UPLOAD_ROOT`, `IMAGE_UPLOAD_ROOT`, and `DOCUMENT_UPLOAD_ROOT` are optional. When they are not set, the backend uses `/tmp` so uploads do not write into the deployed source tree.
 
 ### Frontend
 
@@ -161,8 +161,8 @@ backend/utils/uploadPaths.js
 
 Behavior:
 
-- On Vercel: writes to `/tmp/uploads`, `/tmp/images`, and `/tmp/documents` by default.
-- Locally: writes to backend-local public/upload folders unless overridden by env vars.
+- Writes to `/tmp/uploads`, `/tmp/images`, and `/tmp/documents` by default so runtime uploads never create folders inside `frontend/` or `backend/`.
+- The upload roots can still be overridden with `UPLOAD_ROOT`, `IMAGE_UPLOAD_ROOT`, and `DOCUMENT_UPLOAD_ROOT` when a deployment provides another writable location.
 - Existing API response shapes are preserved, such as `/documents/property-documents/<file>` and `CafeMenu/<file>`.
 - Express statically serves `/uploads`, `/images`, and `/documents` from the configured roots.
 
