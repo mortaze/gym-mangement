@@ -7,7 +7,7 @@ import * as Yup from "yup";
 // import { useRouter } from "next/navigation";
 import { useRouter } from "next/router";
 
-import ReCAPTCHA from "react-google-recaptcha";
+// import ReCAPTCHA from "react-google-recaptcha";
 import {
   Shield,
   Dumbbell,
@@ -265,13 +265,13 @@ export default function UnifiedLoginForm() {
           </div>
 
           {/* CAPTCHA */}
-          <div className="flex justify-center scale-90">
+          {/* <div className="flex justify-center scale-90">
             <ReCAPTCHA
               sitekey="6LdnLyAsAAAAANcQ13SwbVVzuOhdHmjmbDiyGnkK"
               onChange={(val) => setCaptchaValue(val)}
               hl="fa"
             />
-          </div>
+          </div> */}
 
           <button
             type="submit"
