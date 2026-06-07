@@ -94,7 +94,8 @@ const deleteRequest = async (id) => {
   const request = await TrainingRequest.findById(id);
   if (!request) throw new Error("درخواست پیدا نشد");
 
-  return await request.remove();
+  await request.deleteOne();
+  return request;
 };
 
 module.exports = {

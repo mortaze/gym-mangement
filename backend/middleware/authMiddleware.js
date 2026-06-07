@@ -2,24 +2,43 @@
 const jwt = require("jsonwebtoken");
 const User = require("../model/User");
 
-// Middleware برای احراز هویت
-// میتونی roles رو به عنوان آرایه پاس بدی، برای محدود کردن دسترسی به نقش‌های خاص
-const protect =
-  (roles = []) =>
-  async (req, res, next) => {
+const getJwtSecret = () =>
+  process.env.JWT_SECRET || process.env.TOKEN_SECRET || "development-jwt-secret";
+
+const getUserRole = (user) => {
+  if (!user) return undefined;
+  if (typeof user.role === "string") return user.role;
+  if (user.role && typeof user.role.name === "string") return user.role.name;
+  return undefined;
+};
+
+const normalizeRole = (role) => String(role || "").toLowerCase();
+
+// Middleware factory. Also supports direct Express usage: router.get('/me', protect, handler).
+function protect(roles = []) {
+  if (roles && roles.headers && roles.method) {
+    return protect()(roles, arguments[1], arguments[2]);
+  }
+
+  const allowedRoles = Array.isArray(roles) ? roles : [];
+
+  return async (req, res, next) => {
     try {
       let token;
 
-      // 1️⃣ بررسی هدر Authorization
       if (
         req.headers.authorization &&
         req.headers.authorization.startsWith("Bearer ")
       ) {
         token = req.headers.authorization.split(" ")[1];
-      }
-      // 2️⃣ بررسی کوکی HttpOnly
-      else if (req.cookies && req.cookies.token) {
+      } else if (req.cookies && req.cookies.token) {
         token = req.cookies.token;
+      } else if (req.headers.cookie) {
+        const tokenCookie = req.headers.cookie
+          .split(";")
+          .map((cookie) => cookie.trim())
+          .find((cookie) => cookie.startsWith("token="));
+        if (tokenCookie) token = decodeURIComponent(tokenCookie.split("=")[1]);
       }
 
       if (!token) {
@@ -29,17 +48,10 @@ const protect =
         });
       }
 
-      // 3️⃣ بررسی اعتبار JWT
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      if (!decoded) {
-        return res.status(401).json({
-          success: false,
-          message: "توکن معتبر نیست یا منقضی شده است.",
-        });
-      }
+      const decoded = jwt.verify(token, getJwtSecret());
+      const userId = decoded.id || decoded._id;
 
-      // 4️⃣ گرفتن اطلاعات کاربر از DB
-      const user = await User.findById(decoded.id).select("-password");
+      const user = await User.findById(userId).select("-password");
       if (!user) {
         return res.status(404).json({
           success: false,
@@ -47,17 +59,18 @@ const protect =
         });
       }
 
-      // 5️⃣ بررسی نقش‌ها (اگر داده شده)
-      if (roles.length && !roles.includes(user.role.name)) {
+      const userRole = getUserRole(user);
+      if (
+        allowedRoles.length &&
+        !allowedRoles.map(normalizeRole).includes(normalizeRole(userRole))
+      ) {
         return res.status(403).json({
           success: false,
           message: "دسترسی کافی برای این عملیات ندارید.",
         });
       }
 
-      // 6️⃣ attach کردن user به request
       req.user = user;
-
       next();
     } catch (err) {
       console.error("AuthMiddleware Error:", err);
@@ -68,11 +81,13 @@ const protect =
       });
     }
   };
+}
 
-// Middleware برای محدود کردن فقط به نقش‌های خاص
 const authorize = (...roles) => protect(roles);
 
 module.exports = {
   protect,
   authorize,
+  getJwtSecret,
+  getUserRole,
 };

@@ -4,47 +4,64 @@ const router = express.Router();
 const User = require("../model/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { protect } = require("../middleware/authMiddleware"); // middleware JWT
-const { authorize } = require("../middleware/authMiddleware");
+const {
+  protect,
+  authorize,
+  getJwtSecret,
+  getUserRole,
+} = require("../middleware/authMiddleware");
 
-console.log("🔹 auth.routes.js loaded");
+const publicUserFields = (user) => ({
+  _id: user._id,
+  name: user.name,
+  username: user.username,
+  employeeCode: user.employeeCode,
+  role: getUserRole(user),
+  email: user.email,
+  profileImage: user.profileImage,
+  status: user.status,
+});
 
 // --------------------
 // POST /api/auth/login
 // --------------------
 router.post("/login", async (req, res) => {
-  console.log("➡️ /api/auth/login endpoint hit");
-  console.log("📥 Request body:", req.body);
-
   try {
-    const { employeeCode, password } = req.body;
+    const { employeeCode, email, username, password } = req.body;
+    const identifier = employeeCode || email || username;
 
-    // 1️⃣ چک کاربر
-    const user = await User.findOne({ employeeCode }).populate("role");
-    console.log("🔹 Searching for user with employeeCode:", employeeCode);
+    if (!identifier || !password) {
+      return res.status(400).json({
+        success: false,
+        message: "employeeCode, email, or username and password are required",
+      });
+    }
+
+    const user = await User.findOne({
+      $or: [
+        { employeeCode: identifier },
+        { email: String(identifier).toLowerCase() },
+        { username: String(identifier).toLowerCase() },
+      ],
+    });
 
     if (!user) {
-      console.log("⚠️ User not found");
       return res
         .status(404)
         .json({ success: false, message: "کاربر یافت نشد" });
     }
-    console.log("✅ User found:", user);
 
-    // 2️⃣ چک رمز
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      console.log("⚠️ Password mismatch");
       return res
         .status(400)
         .json({ success: false, message: "رمز عبور اشتباه است" });
     }
 
-    // 3️⃣ تولید JWT و ست کردن در HttpOnly Cookie
     const token = jwt.sign(
-      { id: user._id, role: user.role.name },
-      process.env.JWT_SECRET,
-      { expiresIn: "7d" }
+      { id: user._id, _id: user._id, role: getUserRole(user) },
+      getJwtSecret(),
+      { expiresIn: "7d" },
     );
 
     res
@@ -52,21 +69,13 @@ router.post("/login", async (req, res) => {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "lax",
-        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 روز
+        maxAge: 7 * 24 * 60 * 60 * 1000,
       })
       .json({
         success: true,
-        user: {
-          _id: user._id,
-          name: user.name,
-          employeeCode: user.employeeCode,
-          role: user.role.name,
-          email: user.email,
-          profileImage: user.profileImage,
-        },
+        token,
+        user: publicUserFields(user),
       });
-
-    console.log("✅ Login successful, JWT cookie set");
   } catch (error) {
     console.error("❌ Login error:", error);
     res.status(500).json({ success: false, error: error.message });
@@ -74,35 +83,83 @@ router.post("/login", async (req, res) => {
 });
 
 // --------------------
+// POST /api/auth/register
+// --------------------
+router.post("/register", async (req, res) => {
+  try {
+    const {
+      name,
+      employeeCode,
+      username,
+      email,
+      password,
+      role = "user",
+      contactNumber,
+      address,
+      birthday,
+    } = req.body;
+
+    if (!name || !employeeCode || !password) {
+      return res.status(400).json({
+        success: false,
+        message: "name, employeeCode, and password are required",
+      });
+    }
+
+    const duplicateConditions = [{ employeeCode }];
+    if (email) duplicateConditions.push({ email: String(email).toLowerCase() });
+    if (username)
+      duplicateConditions.push({ username: String(username).toLowerCase() });
+
+    const existingUser = await User.findOne({ $or: duplicateConditions });
+    if (existingUser) {
+      return res.status(400).json({
+        success: false,
+        message: "User already exists with this employeeCode, email, or username",
+      });
+    }
+
+    const user = await User.create({
+      name,
+      employeeCode,
+      username,
+      email,
+      password,
+      role,
+      contactNumber,
+      address,
+      birthday,
+      status: "active",
+    });
+
+    const token = jwt.sign(
+      { id: user._id, _id: user._id, role: getUserRole(user) },
+      getJwtSecret(),
+      { expiresIn: "7d" },
+    );
+
+    res.status(201).json({
+      success: true,
+      token,
+      user: publicUserFields(user),
+    });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+});
+
+// --------------------
 // GET /api/auth/me
 // --------------------
 router.get("/me", protect, async (req, res) => {
-  console.log("➡️ /api/auth/me endpoint hit");
-
-  if (!req.user) {
-    console.log("⚠️ No user in request (not logged in)");
-    return res
-      .status(401)
-      .json({ success: false, message: "هیچ کاربری لاگین نکرده است" });
-  }
-
-  const user = await User.findById(req.user.id).populate("role");
-
   res.json({
     success: true,
-    user: {
-      _id: user._id,
-      name: user.name,
-      employeeCode: user.employeeCode,
-      role: user.role.name,
-      email: user.email,
-      profileImage: user.profileImage,
-    },
+    user: publicUserFields(req.user),
   });
-
-  console.log("✅ Current user returned:", user);
 });
-router.get("/admin-only", authorize("Admin"), (req, res) => {
+
+router.get("/admin-only", authorize("Admin", "admin"), (req, res) => {
   res.json({ success: true, message: "Welcome Admin!" });
 });
+
 module.exports = router;

@@ -57,7 +57,7 @@ class CafeMenuService {
       if (fs.existsSync(imgPath)) fs.unlinkSync(imgPath);
     }
 
-    await menuItem.remove();
+    await menuItem.deleteOne();
     return menuItem;
   }
 }

@@ -13,6 +13,17 @@ const userSchema = mongoose.Schema(
       maxLength: [100, "Name is too large"],
     },
 
+    // نام کاربری اختیاری برای ورود یا seed
+    username: {
+      type: String,
+      unique: true,
+      sparse: true,
+      trim: true,
+      lowercase: true,
+      minLength: [3, "Username must be at least 3 characters."],
+      maxLength: [50, "Username is too long"],
+    },
+
     // کد عضویت یا کد ملی
     employeeCode: {
       type: String,
@@ -33,7 +44,7 @@ const userSchema = mongoose.Schema(
     // نقش کاربر
     role: {
       type: String,
-      enum: ["Member", "Trainer", "Reception", "Admin", "CafeManager"],
+      enum: ["Member", "Trainer", "Reception", "Admin", "CafeManager", "admin", "user"],
       required: [true, "Role is required"],
       default: "Member",
     },
@@ -91,6 +102,12 @@ const userSchema = mongoose.Schema(
 // هش کردن پسورد قبل از ذخیره
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
+
+  // Avoid double-hashing when legacy routes/services already supplied a bcrypt hash.
+  if (typeof this.password === "string" && this.password.startsWith("$2")) {
+    return next();
+  }
+
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
   next();
