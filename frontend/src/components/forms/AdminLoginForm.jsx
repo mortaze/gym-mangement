@@ -141,10 +141,10 @@ export default function UnifiedLoginForm() {
   });
 
   const onSubmit = async (data) => {
-    if (!captchaValue) {
-      notifyError("تأیید کپچا الزامی است");
-      return;
-    }
+    // if (!captchaValue) {
+    //   notifyError("تأیید کپچا الزامی است");
+    //   return;
+    // }
 
     try {
       const response = await loginUser({
