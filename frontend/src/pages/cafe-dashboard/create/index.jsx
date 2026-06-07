@@ -11,6 +11,7 @@ import {
   File,
   UploadIcon,
 } from "lucide-react";
+import { API_ORIGIN } from "@/config/api";
 
 export default function CreateCafeMenu() {
   const [formData, setFormData] = useState({
@@ -60,7 +61,7 @@ export default function CreateCafeMenu() {
       data.append("status", formData.status);
       data.append("img", formData.img);
 
-      const response = await axios.post("http://localhost:7000/menu", data, {
+      const response = await axios.post(`${API_ORIGIN}/menu`, data, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 

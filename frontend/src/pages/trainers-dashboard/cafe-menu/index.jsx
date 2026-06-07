@@ -13,6 +13,7 @@ import {
   Search,
 } from "lucide-react";
 import DashboardLayout from "../layout";
+import { API_BASE_URL, API_ORIGIN } from "@/config/api";
 
 export default function CafeMenuPage() {
   const [products, setProducts] = useState([]);
@@ -33,7 +34,7 @@ export default function CafeMenuPage() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await axios.get("http://localhost:7000/api/menu");
+        const res = await axios.get(`${API_BASE_URL}/menu`);
         setProducts(res.data);
       } catch (error) {
         console.error("خطا در دریافت محصولات:", error);
@@ -128,7 +129,7 @@ export default function CafeMenuPage() {
               {/* Image */}
               <div className="relative h-48 overflow-hidden">
                 <img
-                  src={`http://localhost:7000/uploads/${product.img}`}
+                  src={`${API_ORIGIN}/uploads/${product.img}`}
                   alt={product.name}
                   className="w-full h-full object-cover hover:scale-110 transition-transform duration-700"
                 />

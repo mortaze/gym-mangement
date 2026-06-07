@@ -139,7 +139,7 @@ export default function UserMainDashboard() {
             <div className="flex justify-between items-start mb-4">
               <Target className="text-green-400" />
               <span className="text-[9px] font-black text-gray-500 uppercase tracking-tighter">
-                Today's Mission
+                Today&apos;s Mission
               </span>
             </div>
             <h3 className="text-white text-base font-black italic">
@@ -262,8 +262,8 @@ export default function UserMainDashboard() {
                 نکته امنیتی:
               </p>
               <p className="text-white/70 text-[11px] font-bold leading-relaxed italic">
-                "یادت باشه یگان! نظم در تمرین یعنی نتیجه در آینه. رزروهای هوازی
-                خودت رو حداقل ۲۴ ساعت قبل نهایی کن."
+                &quot;یادت باشه یگان! نظم در تمرین یعنی نتیجه در آینه. رزروهای هوازی
+                خودت رو حداقل ۲۴ ساعت قبل نهایی کن.&quot;
               </p>
             </div>
           </div>

@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
-import DashboardLayout from "../../../layout";
-import PropertyStepper from "../../../components/stepper/PropertyStepper";
+import DashboardLayout from "../../layout";
+import PropertyStepper from "../../components/stepper/PropertyStepper";
 
 export default function CreatePropertyPage() {
   return (

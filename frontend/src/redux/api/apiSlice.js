@@ -2,12 +2,12 @@
 import Cookies from "js-cookie";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-const NEXT_PUBLIC_API_BASE_URL = "http://localhost:7000/api";
+import { API_BASE_URL } from "@/config/api";
 
 export const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
-    baseUrl: NEXT_PUBLIC_API_BASE_URL,
+    baseUrl: API_BASE_URL,
     prepareHeaders: async (headers) => {
       try {
         if (typeof window !== "undefined") {

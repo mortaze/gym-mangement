@@ -5,12 +5,13 @@ import { useRouter } from "next/router";
 import {
   useGetOwnerByIdQuery,
   useUpdateOwnerMutation,
-} from "../../../../../../redux/features/ownerApi";
-import DashboardLayout from "../../../../layout";
+} from "../../../../../redux/features/ownerApi";
+import DashboardLayout from "../../../layout";
 import Link from "next/link";
 import { FaArrowLeft, FaSave } from "react-icons/fa";
 import { MdDriveFolderUpload } from "react-icons/md";
 import Swal from "sweetalert2";
+import { API_ORIGIN } from "@/config/api";
 
 export default function EditOwnerPage() {
   const router = useRouter();
@@ -59,7 +60,7 @@ export default function EditOwnerPage() {
       photo: null, // عکس جدید فقط زمان آپلود ست می‌شود
     });
 
-    setPreviewOld(owner.photo ? `http://localhost:7000${owner.photo}` : "");
+    setPreviewOld(owner.photo ? `${API_ORIGIN}${owner.photo}` : "");
   }, [data]);
 
   const handleChange = (e) => {

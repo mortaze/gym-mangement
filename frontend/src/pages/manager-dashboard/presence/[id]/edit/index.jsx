@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
-import PropertyStepper from "../../../../components/stepper/PropertyStepper";
+import PropertyStepper from "../../../components/stepper/PropertyStepper";
 import {
   setIdentity,
   setLegalStatus,
@@ -15,8 +15,9 @@ import {
   setAdditionalInfo,
   setStatus, // <--- این رو اضافه کن
   resetDraft,
-} from "../../../../../../redux/features/propertyDraftSlice";
-import DashboardLayout from "@/pages/dashboard/layout";
+} from "../../../../../redux/features/propertyDraftSlice";
+import DashboardLayout from "../../../layout";
+import { API_BASE_URL, API_ORIGIN } from "@/config/api";
 
 export default function EditPropertyPage() {
   const router = useRouter();
@@ -43,7 +44,7 @@ export default function EditPropertyPage() {
       setError(null);
       try {
         const res = await fetch(
-          `http://localhost:7000/api/properties/${propertyId}/full`
+          `${API_BASE_URL}/properties/${propertyId}/full`
         );
         if (!res.ok) {
           const errData = await res.json();
@@ -104,7 +105,7 @@ export default function EditPropertyPage() {
       if (!propertyId) throw new Error("شناسه ملک موجود نیست");
       if (hasData(draft.status)) {
         const resStatus = await fetch(
-          `http://localhost:7000/api/properties/${propertyId}`,
+          `${API_BASE_URL}/properties/${propertyId}`,
           {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
@@ -148,7 +149,7 @@ export default function EditPropertyPage() {
         }
 
         const res = await fetch(
-          `http://localhost:7000/api/properties/${propertyId}/${s.path}`,
+          `${API_BASE_URL}/properties/${propertyId}/${s.path}`,
           {
             method: "PUT",
             headers: { "Content-Type": "application/json" },

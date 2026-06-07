@@ -7,11 +7,11 @@ const CafeMenu = require("../model/CafeMenu");
 const router = express.Router();
 
 // ایجاد فولدر آپلود در صورت نبودن
-const uploadDir = path.join(__dirname, "../uploads/CafeMenu");
-if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
+const { getUploadDir, uploadRoot } = require("../utils/uploadPaths");
+const uploadDir = getUploadDir("CafeMenu");
 
 // دسترسی عمومی به عکس‌ها (باید در server.js هم استفاده شود)
-router.use("/uploads", express.static(path.join(__dirname, "../uploads")));
+router.use("/uploads", express.static(uploadRoot));
 
 // تنظیم Multer
 const storage = multer.diskStorage({
@@ -86,7 +86,7 @@ router.put("/:id", upload.single("img"), async (req, res) => {
 
     // اگر عکس جدید آپلود شد، عکس قبلی پاک شود
     if (req.file && menu.img) {
-      const oldPath = path.join(__dirname, "../uploads", menu.img);
+      const oldPath = path.join(uploadRoot, menu.img);
       if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
       menu.img = `CafeMenu/${req.file.filename}`;
     }
@@ -112,7 +112,7 @@ router.delete("/:id", async (req, res) => {
 
     // پاک کردن عکس
     if (menu.img) {
-      const imgPath = path.join(__dirname, "../uploads", menu.img);
+      const imgPath = path.join(uploadRoot, menu.img);
       if (fs.existsSync(imgPath)) fs.unlinkSync(imgPath);
     }
 

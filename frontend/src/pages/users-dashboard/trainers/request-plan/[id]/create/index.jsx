@@ -6,6 +6,7 @@ import { useRouter } from "next/router"; // Pages Router
 import moment from "moment-jalaali";
 import DashboardLayout from "../../../../layout";
 import Swal from "sweetalert2";
+import { API_BASE_URL, API_ORIGIN } from "@/config/api";
 
 /**
  * صفحهٔ درخواست برنامه تمرینی (نسخه‌ی کاربر -> ارسال درخواست به یک مربی مشخص)
@@ -25,7 +26,7 @@ export default function TrainingRequestPage() {
   const router = useRouter();
   const { id } = router.query; // id مربی از URL
 
-  const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:7000";
+  const API_BASE = API_BASE_URL;
 
   const [trainer, setTrainer] = useState(null);
   const [currentUser, setCurrentUser] = useState(null);
@@ -63,7 +64,7 @@ export default function TrainingRequestPage() {
 
         // گرفتن اطلاعات کامل کاربر از API با id
         const res = await fetch(
-          `http://localhost:7000/api/users/${sessionUser._id}`,
+          `${API_BASE_URL}/users/${sessionUser._id}`,
         );
         const json = await res.json();
 

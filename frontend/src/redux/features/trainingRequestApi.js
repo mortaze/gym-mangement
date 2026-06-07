@@ -1,8 +1,9 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { API_BASE_URL } from "@/config/api";
 
 export const trainingRequestApi = createApi({
   reducerPath: "trainingRequestApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:7000/api" }),
+  baseQuery: fetchBaseQuery({ baseUrl: API_BASE_URL }),
   tagTypes: ["TrainingRequest"],
   endpoints: (builder) => ({
     // ایجاد درخواست جدید
