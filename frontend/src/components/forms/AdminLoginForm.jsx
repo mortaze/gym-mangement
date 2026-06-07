@@ -114,14 +114,22 @@ export default function UnifiedLoginForm() {
   const router = useRouter();
   const [loginUser, { isLoading }] = useLoginUserMutation();
 
+  // const schema = Yup.object({
+  //   employeeCode: Yup.string()
+  //     .required("شناسه ورود الزامی است")
+  //     .matches(/^[0-9]{4,15}$/, "فرمت شناسه نامعتبر است"),
+  //   password: Yup.string()
+  //     .required("رمز عبور الزامی است")
+  //     .min(6, "حداقل ۶ کاراکتر"),
+  // });
   const schema = Yup.object({
-    employeeCode: Yup.string()
-      .required("شناسه ورود الزامی است")
-      .matches(/^[0-9]{4,15}$/, "فرمت شناسه نامعتبر است"),
-    password: Yup.string()
-      .required("رمز عبور الزامی است")
-      .min(6, "حداقل ۶ کاراکتر"),
-  });
+  employeeCode: Yup.string()
+    .required("شناسه ورود الزامی است")
+    .min(2, "شناسه خیلی کوتاه است"),
+  password: Yup.string()
+    .required("رمز عبور الزامی است")
+    .min(6, "حداقل ۶ کاراکتر"),
+});
 
   const {
     register,
