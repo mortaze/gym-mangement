@@ -1,16 +1,25 @@
-// backend\middleware\documentUploader.js
+// backend/middleware/documentUploader.js
+
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 
-// مسیر ذخیره فایل‌های سند
-const baseUploadDir = path.join(__dirname, "../../frontend/public/documents");
+// استفاده از پوشه موقت در سرورلس (Vercel friendly)
+const baseUploadDir = path.join("/tmp", "documents");
 
+/**
+ * ساخت uploader برای فایل‌های سند
+ */
 const createDocumentUploader = (subFolder = "") => {
   const uploadDir = path.join(baseUploadDir, subFolder);
 
-  if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir, { recursive: true });
+  // مهم: فقط داخل runtime ساخته شود
+  try {
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    }
+  } catch (err) {
+    console.error("Upload dir error:", err);
   }
 
   const storage = multer.diskStorage({
@@ -18,7 +27,9 @@ const createDocumentUploader = (subFolder = "") => {
       cb(null, uploadDir);
     },
     filename: (req, file, cb) => {
-      const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+      const uniqueSuffix =
+        Date.now() + "-" + Math.round(Math.random() * 1e9);
+
       cb(null, uniqueSuffix + path.extname(file.originalname));
     },
   });
@@ -32,11 +43,11 @@ const createDocumentUploader = (subFolder = "") => {
       if (allowedExt.test(ext)) {
         cb(null, true);
       } else {
-        cb(new Error("فایل فقط باید با فرمت zip یا rar باشد"));
+        cb(new Error("فایل فقط باید zip یا rar باشد"));
       }
     },
     limits: {
-      fileSize: 20 * 1024 * 1024, // ۲۰ مگابایت
+      fileSize: 20 * 1024 * 1024, // 20MB
     },
   });
 
