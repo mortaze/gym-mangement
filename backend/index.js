@@ -10,6 +10,7 @@ const connectDB = require("./config/db"); // مسیر فایل کانکت DB (CJ
 // --- Routes ---
 const userRoutes = require("./routes/user.routes");
 const authRoutes = require("./routes/auth.routes");
+const adminRoutes = require("./routes/admin.routes");
 const uploadRoutes = require("./routes/uploadDocument.routes");
 const cafeMenuRoutes = require("./routes/CafeMenu.routes");
 const { uploadRoot, imageRoot, documentRoot } = require("./utils/uploadPaths");
@@ -77,6 +78,7 @@ connectDB()
 // --- API Routes ---
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/admin", adminRoutes);
 app.use("/api/upload", uploadRoutes);
 app.use("/api/training-requests", trainingRequestRoutes);
 app.use("/api/equipment", equipmentRoutes);

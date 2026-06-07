@@ -1,228 +1,811 @@
-# Gym Management System
+# Gym Management Backend API Documentation
 
-A full-stack gym management platform with a **Next.js frontend**, **Node.js/Express backend**, and **MongoDB** persistence. The app supports role-based dashboards, user and trainer management, cafe menu management, equipment tracking, training-plan requests, profile management, and file uploads.
+This repository contains a Node.js/Express/MongoDB backend for a gym management system plus a Next.js frontend. This document focuses on the backend API surface, especially users, authentication, roles, and permissions.
 
-## Production URLs
+## Backend Runtime
 
-- Backend API: `https://gym-mangement-backend.vercel.app/`
-- Frontend API origin is configured with `NEXT_PUBLIC_API_URL` and defaults to the backend URL above.
+- Backend entry point: `backend/index.js`
+- Default port: `7000`
+- Base URL locally: `http://localhost:7000`
+- API base path: `http://localhost:7000/api`
+- Database: MongoDB via Mongoose
+- Module system: CommonJS
 
-## Architecture
+## Environment Variables
 
-```text
-frontend/  Next.js 13 pages application
-  src/config/api.js          Central API URL and asset URL configuration
-  src/redux/                 RTK Query APIs and Redux store
-  src/pages/                 Role dashboards and Next API enum helpers
+Create `backend/.env` or root `.env` with:
 
-backend/   Express API application
-  index.js                   Express app, middleware, static file mounts, routes
-  routes/                    API route definitions
-  controller/                Request handlers
-  model/                     Mongoose models
-  middleware/                Auth, logging, multer upload middleware
-  utils/uploadPaths.js       Vercel-safe upload path abstraction
+```env
+PORT=7000
+MONGO_URI=mongodb://127.0.0.1:27017/gym-management
+JWT_SECRET=replace-with-a-strong-secret
+TOKEN_SECRET=replace-with-a-strong-secret
+JWT_SECRET_FOR_VERIFY=replace-with-a-strong-secret
+CORS_ORIGIN=http://localhost:3000
 ```
 
-The frontend communicates with backend endpoints under `${NEXT_PUBLIC_API_URL}/api`. Static uploaded assets are resolved from the backend origin, not the frontend deployment.
+If `MONGO_URI` is not set, the backend falls back to `mongodb://127.0.0.1:27017/gym-management`.
 
-### Backend Layering Details
+## Authentication and Roles
 
-The backend follows a thin route/controller/service/model flow:
+JWT authentication is supported with either:
 
-```text
-HTTP request
-  -> backend/index.js middleware and route mounts
-  -> backend/routes/*.routes.js
-  -> backend/controller/*.controller.js
-  -> backend/services/*.service.js
-  -> backend/model/*.js Mongoose models
-  -> MongoDB
+```http
+Authorization: Bearer <token>
 ```
 
-Keep model imports case-exact for Linux/Vercel deployments. For example, the equipment model file is `backend/model/equipment.js`, so services must import `../model/equipment` rather than `../model/Equipment`. This preserves the existing `Equipment` Mongoose model name without changing the MongoDB schema or collection behavior.
+or the `token` HTTP-only cookie set by `POST /api/auth/login`.
 
-### Frontend Layering Details
+Supported user roles in the `User` model include the existing application roles plus the simple role values required for seeding:
 
-The frontend is a Next.js pages-router app with dashboard pages organized by role:
+- `Admin`
+- `Member`
+- `Trainer`
+- `Reception`
+- `CafeManager`
+- `admin`
+- `user`
 
-```text
-frontend/src/pages/
-  manager-dashboard/       Manager views for users, trainers, cafe, equipment, finance, presence
-  reception-dashboard/     Reception views for users and cafe flows
-  trainers-dashboard/      Trainer views for training requests, cafe, presence
-  users-dashboard/         Member views for profile, cafe, trainers, training plan requests
-  api/                     Small Next API helpers for enum payloads used by the UI
+Use `admin`/`user` for the default seeded accounts. Existing role names remain available for compatibility.
 
-frontend/src/redux/
-  api/apiSlice.js          Shared RTK Query base API configuration
-  features/*Api.js         Feature-specific API slices
+## Default User Seeding
 
-frontend/src/config/api.js Central backend origin, API URL, and asset URL helpers
+A safe user seed script is available at `scripts/seedUsers.js`.
+
+Run it manually from the repository root:
+
+```bash
+node scripts/seedUsers.js
 ```
 
-Build/deployment fixes should stay limited to import paths, SSR-safe browser usage, and lint/build configuration issues. Do not move dashboard routes or change UI behavior unless the feature itself requires it.
+The script:
 
-## Backend API Map
+- Connects to MongoDB.
+- Creates a default admin and normal user.
+- Hashes passwords with `bcryptjs`.
+- Skips existing users by `email`, `username`, or `employeeCode`.
 
-Mounted by `backend/index.js`:
+Default users:
 
-- `GET /` health/root response.
-- `/api/auth` authentication endpoints.
-- `/api/users` user CRUD, profile images, status, password/reset helpers.
-- `/api/upload/upload-document` document upload endpoint.
-- `/api/training-requests` training plan request CRUD and photo uploads.
-- `/api/equipment` equipment CRUD and maintenance endpoints.
-- `/api/menu` cafe menu CRUD.
-- `/menu` legacy cafe menu route kept for compatibility.
-- `/uploads`, `/images`, `/documents` static file routes for uploaded/runtime files.
+| Role | Email | Username | Employee Code | Password |
+| --- | --- | --- | --- | --- |
+| admin | `admin@example.com` | `admin` | `ADMIN001` | `Admin@123456` |
+| user | `user@example.com` | `user` | `USER001` | `User@123456` |
 
-## Setup
+Override passwords with:
 
-### Prerequisites
+```env
+SEED_ADMIN_PASSWORD=your-admin-password
+SEED_USER_PASSWORD=your-user-password
+```
 
-- Node.js 16+
-- npm
-- MongoDB connection string
+## Health Endpoint
 
-### Backend
+### `GET /`
+
+Authentication: not required.
+
+Response example:
+
+```text
+Server is running successfully
+```
+
+## Authentication APIs
+
+### `POST /api/auth/login`
+
+Authentication: not required.
+
+Logs in by `employeeCode`, `email`, or `username` plus password. Returns a JWT in the response body and sets an HTTP-only cookie named `token`.
+
+Request body examples:
+
+```json
+{
+  "employeeCode": "ADMIN001",
+  "password": "Admin@123456"
+}
+```
+
+```json
+{
+  "email": "admin@example.com",
+  "password": "Admin@123456"
+}
+```
+
+```json
+{
+  "username": "admin",
+  "password": "Admin@123456"
+}
+```
+
+Success response example:
+
+```json
+{
+  "success": true,
+  "token": "<jwt>",
+  "user": {
+    "_id": "665f1f000000000000000001",
+    "name": "Default Admin",
+    "username": "admin",
+    "employeeCode": "ADMIN001",
+    "role": "admin",
+    "email": "admin@example.com",
+    "profileImage": null,
+    "status": "active"
+  }
+}
+```
+
+Error response examples:
+
+```json
+{ "success": false, "message": "employeeCode, email, or username and password are required" }
+```
+
+```json
+{ "success": false, "message": "کاربر یافت نشد" }
+```
+
+```json
+{ "success": false, "message": "رمز عبور اشتباه است" }
+```
+
+### `POST /api/auth/register`
+
+Authentication: not required.
+
+Creates a user account through the auth API. This is a minimal registration endpoint and does not remove or replace the existing `/api/users` create endpoint.
+
+Request body example:
+
+```json
+{
+  "name": "New Member",
+  "employeeCode": "MEM001",
+  "username": "newmember",
+  "email": "newmember@example.com",
+  "password": "Password@123",
+  "role": "user",
+  "contactNumber": "09120000000",
+  "address": "Tehran",
+  "birthday": "1375/01/01"
+}
+```
+
+Success response example:
+
+```json
+{
+  "success": true,
+  "token": "<jwt>",
+  "user": {
+    "_id": "665f1f000000000000000002",
+    "name": "New Member",
+    "username": "newmember",
+    "employeeCode": "MEM001",
+    "role": "user",
+    "email": "newmember@example.com",
+    "status": "active"
+  }
+}
+```
+
+### `GET /api/auth/me`
+
+Authentication: required.
+
+Returns the current authenticated user.
+
+Request header example:
+
+```http
+Authorization: Bearer <jwt>
+```
+
+Success response example:
+
+```json
+{
+  "success": true,
+  "user": {
+    "_id": "665f1f000000000000000001",
+    "name": "Default Admin",
+    "username": "admin",
+    "employeeCode": "ADMIN001",
+    "role": "admin",
+    "email": "admin@example.com",
+    "status": "active"
+  }
+}
+```
+
+### `GET /api/auth/admin-only`
+
+Authentication: required. Role: `Admin` or `admin`.
+
+Success response example:
+
+```json
+{ "success": true, "message": "Welcome Admin!" }
+```
+
+## User APIs
+
+Routes are mounted under `/api/users`. Existing route-level auth placeholders are preserved for compatibility, so check individual production auth requirements before exposing these endpoints publicly.
+
+### `POST /api/users`
+
+Authentication: currently not enforced by the route placeholder.
+
+Creates a user. Supports `multipart/form-data` with optional `profileImage` file.
+
+JSON request body example:
+
+```json
+{
+  "name": "Gym Member",
+  "employeeCode": "MEM002",
+  "username": "gymmember",
+  "password": "Password@123",
+  "email": "gymmember@example.com",
+  "role": "Member",
+  "contactNumber": "09120000001",
+  "address": "Tehran",
+  "status": "active",
+  "birthday": "1375/01/01"
+}
+```
+
+Success response example:
+
+```json
+{
+  "success": true,
+  "user": {
+    "_id": "665f1f000000000000000003",
+    "name": "Gym Member",
+    "employeeCode": "MEM002",
+    "username": "gymmember",
+    "email": "gymmember@example.com",
+    "role": "Member",
+    "status": "active",
+    "profileImage": "/images/users/file.jpg"
+  }
+}
+```
+
+### `GET /api/users`
+
+Authentication: currently placeholder; intended Admin access.
+
+Query parameters:
+
+- `status`: `active`, `inactive`, `blocked`
+- `role`: any supported role
+
+Example:
+
+```http
+GET /api/users?status=active&role=Member
+```
+
+Success response example:
+
+```json
+{
+  "success": true,
+  "users": [
+    {
+      "_id": "665f1f000000000000000003",
+      "name": "Gym Member",
+      "employeeCode": "MEM002",
+      "role": "Member",
+      "status": "active"
+    }
+  ]
+}
+```
+
+### `GET /api/users/employee/:code`
+
+Authentication: currently placeholder.
+
+Success response example:
+
+```json
+{
+  "success": true,
+  "user": {
+    "_id": "665f1f000000000000000003",
+    "name": "Gym Member",
+    "employeeCode": "MEM002",
+    "role": "Member"
+  }
+}
+```
+
+### `GET /api/users/:id`
+
+Authentication: currently placeholder.
+
+Success response example:
+
+```json
+{
+  "success": true,
+  "user": {
+    "_id": "665f1f000000000000000003",
+    "name": "Gym Member",
+    "employeeCode": "MEM002",
+    "role": "Member"
+  }
+}
+```
+
+### `PUT /api/users/:id`
+
+Authentication: currently placeholder; intended Admin access.
+
+Updates a user. Supports `multipart/form-data` with optional `profileImage` file.
+
+Request body example:
+
+```json
+{
+  "name": "Updated Member",
+  "email": "updated@example.com",
+  "role": "Trainer",
+  "contactNumber": "09120000002",
+  "status": "active",
+  "birthday": "1375/01/01"
+}
+```
+
+Success response example:
+
+```json
+{
+  "success": true,
+  "user": {
+    "_id": "665f1f000000000000000003",
+    "name": "Updated Member",
+    "email": "updated@example.com",
+    "role": "Trainer"
+  }
+}
+```
+
+### `DELETE /api/users/:id`
+
+Authentication: currently placeholder; intended Admin access.
+
+Success response example:
+
+```json
+{ "success": true, "message": "User deleted" }
+```
+
+### `POST /api/users/:id/verify-password`
+
+Authentication: currently placeholder.
+
+Request body example:
+
+```json
+{ "password": "Password@123" }
+```
+
+Success response example:
+
+```json
+{ "success": true, "valid": true }
+```
+
+### `POST /api/users/:id/reset-token`
+
+Authentication: currently placeholder.
+
+Generates a password reset token for a user.
+
+Success response example:
+
+```json
+{ "success": true, "token": "<reset-token>" }
+```
+
+### `POST /api/users/reset-password`
+
+Authentication: not required.
+
+Request body example:
+
+```json
+{
+  "token": "<reset-token>",
+  "newPassword": "NewPassword@123"
+}
+```
+
+Success response example:
+
+```json
+{ "success": true, "message": "Password reset successful" }
+```
+
+### `PATCH /api/users/:id/status`
+
+Authentication: currently placeholder; intended Admin access.
+
+Request body example:
+
+```json
+{ "status": "blocked" }
+```
+
+Success response example:
+
+```json
+{
+  "success": true,
+  "user": {
+    "_id": "665f1f000000000000000003",
+    "status": "blocked"
+  }
+}
+```
+
+## Admin / Staff Authentication and Role APIs
+
+Routes are mounted under `/api/admin`. These are legacy staff/admin APIs backed by the `Admin` model.
+
+### `POST /api/admin/register`
+
+Authentication: not required by route.
+
+Request body example:
+
+```json
+{
+  "name": "Staff Admin",
+  "email": "staff-admin@example.com",
+  "password": "Password@123",
+  "role": "Admin"
+}
+```
+
+Success response example:
+
+```json
+{
+  "token": "<jwt>",
+  "_id": "665f1f000000000000000010",
+  "name": "Staff Admin",
+  "email": "staff-admin@example.com",
+  "role": "Admin",
+  "joiningData": 1717510000000
+}
+```
+
+### `POST /api/admin/login`
+
+Authentication: not required.
+
+Request body example:
+
+```json
+{
+  "email": "staff-admin@example.com",
+  "password": "Password@123"
+}
+```
+
+Success response example:
+
+```json
+{
+  "token": "<jwt>",
+  "_id": "665f1f000000000000000010",
+  "name": "Staff Admin",
+  "phone": "09120000003",
+  "email": "staff-admin@example.com",
+  "image": "",
+  "role": "Admin"
+}
+```
+
+### `PATCH /api/admin/change-password`
+
+Authentication: not required by route.
+
+Request body example:
+
+```json
+{
+  "email": "staff-admin@example.com",
+  "oldPass": "Password@123",
+  "newPass": "NewPassword@123"
+}
+```
+
+Success response example:
+
+```json
+{ "message": "Password changed successfully" }
+```
+
+### `POST /api/admin/add`
+
+Authentication: not required by route.
+
+Request body example:
+
+```json
+{
+  "name": "Reception Staff",
+  "email": "reception@example.com",
+  "password": "Password@123",
+  "phone": "09120000004",
+  "joiningDate": "2026/06/07",
+  "role": "Reception",
+  "image": ""
+}
+```
+
+Success response example:
+
+```json
+{ "message": "Staff Added Successfully!" }
+```
+
+### `GET /api/admin/all`
+
+Authentication: not required by route.
+
+Success response example:
+
+```json
+{
+  "status": true,
+  "message": "Staff get successfully",
+  "data": []
+}
+```
+
+### `GET /api/admin/get/:id`
+
+Authentication: not required by route.
+
+Success response example:
+
+```json
+{
+  "_id": "665f1f000000000000000010",
+  "name": "Staff Admin",
+  "email": "staff-admin@example.com",
+  "role": "Admin"
+}
+```
+
+### `PATCH /api/admin/update-stuff/:id`
+
+Authentication: not required by route.
+
+Request body example:
+
+```json
+{
+  "name": "Updated Staff",
+  "email": "staff-admin@example.com",
+  "phone": "09120000005",
+  "role": "Manager",
+  "joiningDate": "2026/06/07",
+  "image": ""
+}
+```
+
+Success response example:
+
+```json
+{
+  "token": "<jwt>",
+  "_id": "665f1f000000000000000010",
+  "name": "Updated Staff",
+  "email": "staff-admin@example.com",
+  "role": "Manager",
+  "image": "",
+  "phone": "09120000005"
+}
+```
+
+### `DELETE /api/admin/:id`
+
+Authentication: not required by route.
+
+Success response example:
+
+```json
+{ "message": "Admin Deleted Successfully" }
+```
+
+### `PATCH /api/admin/forget-password`
+
+Authentication: not required.
+
+Request body example:
+
+```json
+{ "email": "staff-admin@example.com" }
+```
+
+Success response example:
+
+```json
+{ "message": "Please check your email to reset password!" }
+```
+
+### `PATCH /api/admin/confirm-forget-password`
+
+Authentication: not required.
+
+Request body example:
+
+```json
+{
+  "token": "<reset-token>",
+  "password": "NewPassword@123"
+}
+```
+
+Success response example:
+
+```json
+{ "message": "Password reset successfully" }
+```
+
+## Equipment APIs
+
+Routes are mounted under `/api/equipment`.
+
+### `POST /api/equipment`
+
+Request body example:
+
+```json
+{
+  "equipmentCode": "EQ-401",
+  "name": "Treadmill",
+  "brand": "Technogym",
+  "model": "Run 1000",
+  "healthIndex": 95,
+  "lastServiceDate": "1404/03/17",
+  "operationalStatus": "Operational",
+  "location": "Cardio Hall",
+  "purchaseDate": "1403/01/01",
+  "warrantyEndDate": "1405/01/01",
+  "notes": "New unit"
+}
+```
+
+### `GET /api/equipment`
+
+Returns all equipment.
+
+### `GET /api/equipment/:id`
+
+Returns one equipment item by MongoDB id.
+
+### `PUT /api/equipment/:id`
+
+Updates equipment fields.
+
+### `DELETE /api/equipment/:id`
+
+Deletes equipment.
+
+### `POST /api/equipment/:id/maintenance`
+
+Request body example:
+
+```json
+{
+  "date": "1404/03/17",
+  "action": "Monthly service",
+  "performedBy": "Maintenance Team",
+  "healthIndex": 98
+}
+```
+
+## Training Request APIs
+
+Routes are mounted under `/api/training-requests`.
+
+- `POST /api/training-requests` — create a training request; supports multipart `photos` upload.
+- `GET /api/training-requests` — list all requests.
+- `GET /api/training-requests/user/:userId` — list requests for a user.
+- `GET /api/training-requests/trainer/:trainerId` — list requests for a trainer.
+- `GET /api/training-requests/:id` — get a request by id.
+- `PUT /api/training-requests/:id` — update a request; supports multipart `photos` upload.
+- `DELETE /api/training-requests/:id` — delete a request.
+
+Create request body example:
+
+```json
+{
+  "user": "665f1f000000000000000003",
+  "trainer": "665f1f000000000000000004",
+  "goal": "Hypertrophy",
+  "notes": "Beginner program"
+}
+```
+
+## Cafe Menu APIs
+
+Routes are mounted under `/api/menu` and legacy `/menu`.
+
+- `POST /api/menu` — create menu item; requires multipart `img` file.
+- `GET /api/menu` — list menu items.
+- `GET /api/menu/:id` — get menu item by id.
+- `PUT /api/menu/:id` — update menu item; optional multipart `img` file.
+- `DELETE /api/menu/:id` — delete menu item.
+
+Create menu multipart fields:
+
+```json
+{
+  "name": "Protein Shake",
+  "category": "Drink",
+  "price": 150000,
+  "kcal": 220
+}
+```
+
+## Upload APIs
+
+### `POST /api/upload/upload-document`
+
+Authentication: not required by route.
+
+Multipart form field: `documentFile`.
+
+Success response example:
+
+```json
+{
+  "success": true,
+  "filePath": "/documents/property-documents/document.pdf"
+}
+```
+
+## Static File Routes
+
+- `GET /uploads/<path>`
+- `GET /images/<path>`
+- `GET /documents/<path>`
+
+These serve files produced by the upload middleware.
+
+## Local Development Commands
 
 ```bash
 cd backend
 npm install
-cp .env.example .env # if you add an example file later
 npm run dev
 ```
 
-Backend `.env` variables:
-
-```env
-PORT=7000
-MONGO_URI=mongodb+srv://<user>:<password>@<cluster>/<database>
-JWT_SECRET=<strong-secret>
-CORS_ORIGIN=http://localhost:3000,https://your-frontend.vercel.app
-UPLOAD_ROOT=/tmp/uploads
-IMAGE_UPLOAD_ROOT=/tmp/images
-DOCUMENT_UPLOAD_ROOT=/tmp/documents
-```
-
-> `UPLOAD_ROOT`, `IMAGE_UPLOAD_ROOT`, and `DOCUMENT_UPLOAD_ROOT` are optional. When they are not set, the backend uses `/tmp` so uploads do not write into the deployed source tree.
-
-### Frontend
+Run syntax checks:
 
 ```bash
-cd frontend
-npm install
-npm run dev
+cd backend
+npm run build
 ```
 
-Frontend `.env.local`:
-
-```env
-NEXT_PUBLIC_API_URL=https://gym-mangement-backend.vercel.app
-```
-
-For local backend development:
-
-```env
-NEXT_PUBLIC_API_URL=http://localhost:7000
-```
-
-## API Base URL Configuration
-
-All frontend API origin/base handling is centralized in:
-
-```text
-frontend/src/config/api.js
-```
-
-Exports:
-
-- `API_ORIGIN`: backend origin, e.g. `https://gym-mangement-backend.vercel.app`
-- `API_BASE_URL`: API base, e.g. `https://gym-mangement-backend.vercel.app/api`
-- `apiUrl(path)`: helper for API URLs
-- `assetUrl(path)`: helper for backend-hosted asset URLs
-
-Avoid hardcoding backend URLs in pages or components. Use the shared config instead.
-
-## MongoDB Usage
-
-MongoDB remains the system of record. Backend models are Mongoose models under `backend/model/`, and route/controller layers continue to read/write MongoDB documents for users, cafe menu items, equipment, and training requests.
-
-File uploads store file metadata/path strings in MongoDB where existing features already did so. The binary files themselves are stored by the upload layer described below.
-
-## File Upload System
-
-Vercel serverless functions cannot write to the deployed project directory (for example `frontend/public` or backend source folders). Runtime uploads now use a safe abstraction:
-
-```text
-backend/utils/uploadPaths.js
-```
-
-Behavior:
-
-- Writes to `/tmp/uploads`, `/tmp/images`, and `/tmp/documents` by default so runtime uploads never create folders inside `frontend/` or `backend/`.
-- The upload roots can still be overridden with `UPLOAD_ROOT`, `IMAGE_UPLOAD_ROOT`, and `DOCUMENT_UPLOAD_ROOT` when a deployment provides another writable location.
-- Existing API response shapes are preserved, such as `/documents/property-documents/<file>` and `CafeMenu/<file>`.
-- Express statically serves `/uploads`, `/images`, and `/documents` from the configured roots.
-
-Important production note: `/tmp` is ephemeral in serverless environments. It prevents crashes and supports immediate runtime handling, but files can disappear between cold starts. For durable production uploads, configure a cloud storage implementation (Cloudinary/S3/Vercel Blob) behind the same path abstraction and keep API responses unchanged.
-
-## Deployment Guide (Vercel)
-
-### Backend Vercel project
-
-- Root directory: `backend`
-- Build command: `npm run build` (current script starts the app for Vercel compatibility in this project)
-- Start command: `npm start` if needed by the platform
-- Required env vars:
-  - `MONGO_URI`
-  - `JWT_SECRET`
-  - `CORS_ORIGIN` with your frontend URL(s)
-
-### Frontend Vercel project
-
-- Root directory: `frontend`
-- Build command: `npm run build`
-- Required env vars:
-  - `NEXT_PUBLIC_API_URL=https://gym-mangement-backend.vercel.app`
-
-## Common Issues and Fixes
-
-### `ENOENT mkdir ... frontend/public/documents` on Vercel
-
-Cause: serverless code attempted to write into the deployed source tree.
-
-Fix: uploads now use `backend/utils/uploadPaths.js`, which points runtime writes to `/tmp` on Vercel.
-
-### Frontend still calls localhost in production
-
-Cause: hardcoded API URLs.
-
-Fix: set `NEXT_PUBLIC_API_URL` in Vercel and use `frontend/src/config/api.js` everywhere.
-
-### Next.js build fails on Leaflet with `window is not defined`
-
-Cause: Leaflet requires browser globals during server-side build.
-
-Fix: dashboard map wrappers dynamically import the shared Leaflet map with `ssr: false`.
-
-### Next.js build fails on missing property enum backend model imports
-
-Cause: frontend API routes imported backend-only Mongoose files that are not present in the frontend build context.
-
-Fix: frontend enum routes now return static option payloads directly.
-
-### Warnings about `<img>` or chart container sizes
-
-These are non-fatal warnings in the current codebase. They do not stop production builds, but can be cleaned up later by migrating images to `next/image` and ensuring chart containers have explicit dimensions.
-
-## Useful Commands
+Seed users:
 
 ```bash
-# Frontend production build
-cd frontend && npm run build
-
-# Backend JavaScript syntax check
-find backend -name '*.js' -not -path '*/node_modules/*' -print0 | xargs -0 -n1 node --check
+node scripts/seedUsers.js
 ```

@@ -20,6 +20,7 @@ router.post("/", userUpload.single("profileImage"), async (req, res) => {
     const {
       name,
       employeeCode,
+      username,
       password,
       email,
       role,
@@ -33,6 +34,13 @@ router.post("/", userUpload.single("profileImage"), async (req, res) => {
     const exist = await User.findOne({ employeeCode });
     if (exist)
       return res.status(400).json({ message: "Employee code already exists" });
+
+    // بررسی یکتا بودن نام کاربری در صورت وجود
+    if (username) {
+      const usernameExist = await User.findOne({ username: username.toLowerCase() });
+      if (usernameExist)
+        return res.status(400).json({ message: "Username already exists" });
+    }
 
     // بررسی یکتا بودن ایمیل در صورت وجود
     if (email) {
@@ -51,6 +59,7 @@ router.post("/", userUpload.single("profileImage"), async (req, res) => {
     const newUser = new User({
       name,
       employeeCode,
+      username,
       password: hashedPassword,
       email,
       role: role || "Member",
@@ -107,20 +116,6 @@ router.put(
 );
 
 // =======================
-// ✅ READ: دریافت کاربر با ID
-// =======================
-router.get("/:id", authMiddleware, async (req, res) => {
-  try {
-    const user = await User.findById(req.params.id);
-    if (!user) return res.status(404).json({ message: "User not found" });
-    res.json({ success: true, user });
-  } catch (err) {
-    console.error("❌ Error fetching user:", err.message);
-    res.status(400).json({ success: false, message: err.message });
-  }
-});
-
-// =======================
 // ✅ READ: دریافت کاربر با employeeCode
 // =======================
 router.get("/employee/:code", authMiddleware, async (req, res) => {
@@ -130,6 +125,20 @@ router.get("/employee/:code", authMiddleware, async (req, res) => {
     res.json({ success: true, user });
   } catch (err) {
     console.error("❌ Error fetching user by code:", err.message);
+    res.status(400).json({ success: false, message: err.message });
+  }
+});
+
+// =======================
+// ✅ READ: دریافت کاربر با ID
+// =======================
+router.get("/:id", authMiddleware, async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) return res.status(404).json({ message: "User not found" });
+    res.json({ success: true, user });
+  } catch (err) {
+    console.error("❌ Error fetching user:", err.message);
     res.status(400).json({ success: false, message: err.message });
   }
 });

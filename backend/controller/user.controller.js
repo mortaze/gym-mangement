@@ -11,6 +11,7 @@ class UserController {
       const userData = {
         name: req.body.name,
         employeeCode: req.body.employeeCode,
+        username: req.body.username,
         password: req.body.password,
         email: req.body.email,
         role: req.body.role || "Member", // مستقیم از فرانت

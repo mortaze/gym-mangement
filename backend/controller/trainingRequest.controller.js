@@ -191,7 +191,7 @@ exports.deleteRequest = async (req, res) => {
       });
     }
 
-    await request.remove();
+    await request.deleteOne();
     res.json({ success: true, message: "درخواست حذف شد." });
   } catch (err) {
     console.error("deleteRequest error:", err);

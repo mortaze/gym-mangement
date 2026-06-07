@@ -116,7 +116,7 @@ router.delete("/:id", async (req, res) => {
       if (fs.existsSync(imgPath)) fs.unlinkSync(imgPath);
     }
 
-    await menu.remove();
+    await menu.deleteOne();
     res.status(200).json({ message: "Menu deleted successfully" });
   } catch (error) {
     res.status(500).json({ message: error.message });

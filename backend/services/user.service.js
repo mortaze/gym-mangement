@@ -12,6 +12,7 @@ class UserService {
       const {
         name,
         employeeCode,
+        username,
         password,
         email,
         role = "Member",
@@ -26,6 +27,12 @@ class UserService {
       const exist = await User.findOne({ employeeCode });
       if (exist) throw new Error("Employee code already exists");
 
+      // بررسی یکتا بودن نام کاربری (اگر داده شده)
+      if (username) {
+        const usernameExist = await User.findOne({ username: username.toLowerCase() });
+        if (usernameExist) throw new Error("Username already exists");
+      }
+
       // بررسی یکتا بودن ایمیل (اگر داده شده)
       if (email) {
         const emailExist = await User.findOne({ email });
@@ -35,6 +42,7 @@ class UserService {
       const user = new User({
         name,
         employeeCode,
+        username,
         email,
         password,
         role,

@@ -93,7 +93,7 @@ class EquipmentService {
       throw new Error("Equipment not found");
     }
 
-    await equipment.remove();
+    await equipment.deleteOne();
     return equipment;
   }
 
