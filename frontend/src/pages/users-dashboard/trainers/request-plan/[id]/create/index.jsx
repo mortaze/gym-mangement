@@ -367,7 +367,7 @@ export default function TrainingRequestPage() {
     <DashboardLayout>
       <div className="p-8 bg-[#0f1115] rounded-3xl border border-gray-800">
         <h1 className="text-2xl font-black text-white mb-6">
-          ثبت درخواست برنامه تمرینی
+          ثبت درخواست برنامه تمرینی فارسی
         </h1>
 
         {/* بالای صفحه: اطلاعات مربی و پرداخت خلاصه */}
@@ -540,7 +540,7 @@ export default function TrainingRequestPage() {
           <div className="mt-4">
             <label className="block text-xs text-gray-500 mb-2">اهداف تمرینی</label>
             <div className="flex flex-wrap gap-2">
-              {["Weight loss", "Fat loss", "Muscle gain", "Strength", "Bodybuilding", "Fitness", "Rehabilitation", "Endurance", "Flexibility"].map((goal) => (
+              {["چربی سوزی", "عضله سازی", "افزایش وزن", "کاهش وزن", "افزایش قدرت", "بدنسازی حرفه‌ای", "تناسب اندام", "آمادگی جسمانی", "توانبخشی", "اصلاح فرم بدن"].map((goal) => (
                 <button key={goal} type="button" onClick={() => toggleGoal(goal)} className={`px-3 py-2 rounded-xl text-xs font-black border ${form.goals.includes(goal) ? "bg-yellow-400 text-black border-yellow-400" : "bg-gray-900 text-gray-300 border-gray-700"}`}>{goal}</button>
               ))}
             </div>

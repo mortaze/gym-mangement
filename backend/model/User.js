@@ -44,7 +44,7 @@ const userSchema = mongoose.Schema(
     // نقش کاربر
     role: {
       type: String,
-      enum: ["Member", "Trainer", "Reception", "Admin", "CafeManager", "Finance", "admin", "user"],
+      enum: ["Member", "Trainer", "Reception", "Admin", "CafeManager", "Finance", "admin", "user", "member", "trainer", "reception", "cafe", "finance"],
       required: [true, "Role is required"],
       default: "Member",
     },

@@ -7,10 +7,10 @@ const { addMonths, expireMemberships, getMembershipSummary } = require("../utils
 const router = express.Router();
 
 const PLANS = {
-  "1m-10": { planName: "1 Month / 10 Sessions", durationMonths: 1, totalSessions: 10, price: 850000 },
-  "1m-15": { planName: "1 Month / 15 Sessions", durationMonths: 1, totalSessions: 15, price: 1100000 },
-  "1m-20": { planName: "1 Month / 20 Sessions", durationMonths: 1, totalSessions: 20, price: 1350000 },
-  "3m-30": { planName: "3 Month / 30 Sessions", durationMonths: 3, totalSessions: 30, price: 3200000 },
+  "1m-10": { planName: "طرح یک‌ماهه ۱۰ جلسه‌ای", durationMonths: 1, totalSessions: 10, price: 850000 },
+  "1m-15": { planName: "طرح یک‌ماهه ۱۵ جلسه‌ای", durationMonths: 1, totalSessions: 15, price: 1100000 },
+  "1m-20": { planName: "طرح یک‌ماهه ۲۰ جلسه‌ای", durationMonths: 1, totalSessions: 20, price: 1350000 },
+  "3m-30": { planName: "طرح سه‌ماهه ۳۰ جلسه‌ای", durationMonths: 3, totalSessions: 30, price: 3200000 },
 };
 
 router.get("/plans", (req, res) => res.json({ success: true, plans: PLANS }));

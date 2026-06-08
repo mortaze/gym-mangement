@@ -4,6 +4,11 @@ const router = express.Router();
 const User = require("../model/User");
 const createUploader = require("../middleware/uploader");
 const bcrypt = require("bcryptjs");
+const Attendance = require("../model/Attendance");
+const TrainingRequest = require("../model/TrainingRequest");
+const TrainingProgram = require("../model/TrainingProgram");
+const Payment = require("../model/Payment");
+const Membership = require("../model/Membership");
 
 // Middleware ساده (بعداً JWT و نقش‌ها اضافه می‌کنیم)
 const authMiddleware = (req, res, next) => next();
@@ -132,6 +137,73 @@ router.get("/employee/:code", authMiddleware, async (req, res) => {
   } catch (err) {
     console.error("❌ Error fetching user by code:", err.message);
     res.status(400).json({ success: false, message: err.message });
+  }
+});
+
+// =======================
+// ✅ READ: فعالیت‌های اخیر واقعی کاربر
+// =======================
+router.get("/:id/activities", authMiddleware, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const [attendances, requests, programs, payments, memberships, user] = await Promise.all([
+      Attendance.find({ userId: id }).sort({ checkedInAt: -1 }).limit(5).lean(),
+      TrainingRequest.find({ userId: id }).sort({ createdAt: -1 }).limit(5).lean(),
+      TrainingProgram.find({ userId: id }).populate("trainerId", "name").sort({ createdAt: -1 }).limit(5).lean(),
+      Payment.find({ userId: id }).sort({ createdAt: -1 }).limit(5).lean(),
+      Membership.find({ userId: id }).sort({ createdAt: -1 }).limit(5).lean(),
+      User.findById(id).select("updatedAt createdAt").lean(),
+    ]);
+
+    const activities = [];
+    attendances.forEach((item) => activities.push({
+      type: "attendance",
+      title: "ثبت حضور",
+      description: item.notes || "حضور شما در باشگاه ثبت شد",
+      amount: "یک جلسه مصرف شد",
+      date: item.checkedInAt || item.createdAt,
+    }));
+    requests.forEach((item) => activities.push({
+      type: "training_request",
+      title: "درخواست برنامه تمرینی",
+      description: item.goals?.length ? `اهداف: ${item.goals.join("، ")}` : "درخواست شما برای مربی ثبت شد",
+      amount: item.status,
+      date: item.createdAt,
+    }));
+    programs.forEach((item) => activities.push({
+      type: "program",
+      title: "صدور برنامه توسط مربی",
+      description: `${item.title}${item.trainerId?.name ? ` | مربی: ${item.trainerId.name}` : ""}`,
+      amount: `${item.exercises?.length || 0} حرکت`,
+      date: item.createdAt,
+    }));
+    payments.forEach((item) => activities.push({
+      type: "payment",
+      title: "ثبت پرداخت",
+      description: item.notes || `روش پرداخت: ${item.method || "نامشخص"}`,
+      amount: item.amount,
+      date: item.approvedAt || item.createdAt,
+    }));
+    memberships.forEach((item) => activities.push({
+      type: "membership",
+      title: item.status === "Active" ? "تمدید اشتراک" : "ثبت اشتراک",
+      description: item.planName,
+      amount: `${item.remainingSessions}/${item.totalSessions} جلسه باقی‌مانده`,
+      date: item.membershipStartDate || item.createdAt,
+    }));
+    if (user?.updatedAt) activities.push({
+      type: "profile",
+      title: "تغییر مشخصات",
+      description: "اطلاعات پروفایل شما به‌روزرسانی شد",
+      amount: "پروفایل",
+      date: user.updatedAt,
+    });
+
+    activities.sort((a, b) => new Date(b.date) - new Date(a.date));
+    res.json({ success: true, activities: activities.slice(0, 12) });
+  } catch (err) {
+    console.error("❌ Error fetching user activities:", err.message);
+    res.status(500).json({ success: false, message: err.message });
   }
 });
 

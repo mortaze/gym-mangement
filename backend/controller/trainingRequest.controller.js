@@ -169,6 +169,7 @@ exports.updateRequest = async (req, res) => {
       userNotes: request.userNotes || "",
       trainerNotes: request.trainerNotes || "",
       trainingPlan: request.trainingPlan || "",
+      nutritionPlan: request.nutritionPlan || "",
     });
 
     await request.save();

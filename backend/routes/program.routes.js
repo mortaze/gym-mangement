@@ -20,11 +20,12 @@ router.post("/training", async (req, res) => {
 
 router.post("/nutrition", async (req, res) => {
   try {
-    const { userId, trainerId, requestId, title, plan } = req.body;
-    if (!userId || !trainerId || !title || !plan) return res.status(400).json({ success: false, message: "Required fields are missing" });
+    const { userId, trainerId, requestId, title, plan, meals } = req.body;
+    const normalizedPlan = plan || (meals ? Object.values(meals).filter(Boolean).join("\n") : "");
+    if (!userId || !trainerId || !title || !normalizedPlan) return res.status(400).json({ success: false, message: "Required fields are missing" });
     await NutritionProgram.updateMany({ userId, status: "active" }, { status: "archived" });
-    const nutrition = await NutritionProgram.create({ userId, trainerId, requestId, title, plan });
-    if (requestId) await TrainingRequest.findByIdAndUpdate(requestId, { nutritionPlan: plan, status: "approved" });
+    const nutrition = await NutritionProgram.create({ userId, trainerId, requestId, title, plan: normalizedPlan, meals: meals || {} });
+    if (requestId) await TrainingRequest.findByIdAndUpdate(requestId, { nutritionPlan: JSON.stringify({ title, meals: meals || {}, plan: normalizedPlan }), status: "approved" });
     res.status(201).json({ success: true, nutrition });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
