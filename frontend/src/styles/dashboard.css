@@ -84,3 +84,18 @@ body {
   background-color: #11141b !important;
   color: #f8fafc !important;
 }
+
+.dashboard-dark-shell {
+  min-width: 0;
+  overflow-x: hidden;
+}
+.dashboard-dark-shell img,
+.dashboard-dark-shell table {
+  max-width: 100%;
+}
+@media (max-width: 640px) {
+  .dashboard-dark-shell .recharts-wrapper,
+  .dashboard-dark-shell .recharts-surface {
+    max-width: 100% !important;
+  }
+}

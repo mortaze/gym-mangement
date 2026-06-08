@@ -55,21 +55,47 @@ export default function FinanceDashboard() {
           <Card icon={<DollarSign />} label="درآمد تأیید شده" value={`${stats.revenue.toLocaleString()} تومان`} />
         </div>
         {loading ? <p className="text-yellow-400">در حال بارگذاری...</p> : (
-          <div className="bg-[#1a1d23] border border-gray-800 rounded-[2rem] overflow-hidden">
-            <table className="w-full text-sm text-right">
-              <thead><tr className="text-gray-400 border-b border-gray-800"><th className="p-4">عضو</th><th>طرح</th><th>مبلغ</th><th>وضعیت</th><th>جلسات</th><th>عملیات</th></tr></thead>
-              <tbody>{memberships.map((m) => (
-                <tr key={m._id} className="border-b border-gray-800 text-gray-200">
-                  <td className="p-4">{m.userId?.name || "—"}<div className="text-xs text-gray-500">{m.userId?.employeeCode}</div></td>
-                  <td>{m.planName}</td><td>{Number(m.price || 0).toLocaleString()}</td><td>{statusLabel(m.status)}</td><td>{m.remainingSessions}/{m.totalSessions}</td>
-                  <td>{m.status === "Pending Payment" && <button onClick={() => approve(m._id)} className="bg-green-500 text-black px-3 py-2 rounded-xl font-black">تایید پرداخت</button>}</td>
-                </tr>
-              ))}</tbody>
-            </table>
-          </div>
+          <>
+            <div className="grid grid-cols-1 gap-4 md:hidden">
+              {memberships.map((m) => <MembershipCard key={m._id} membership={m} approve={approve} />)}
+            </div>
+            <div className="hidden overflow-x-auto rounded-[2rem] border border-gray-800 bg-[#1a1d23] md:block">
+              <table className="w-full min-w-[760px] text-right text-sm">
+                <thead><tr className="border-b border-gray-800 text-gray-400"><th className="p-4">عضو</th><th className="p-4">طرح</th><th className="p-4">مبلغ</th><th className="p-4">وضعیت</th><th className="p-4">جلسات</th><th className="p-4">عملیات</th></tr></thead>
+                <tbody>{memberships.map((m) => (
+                  <tr key={m._id} className="border-b border-gray-800 text-gray-200 last:border-b-0">
+                    <td className="p-4">{m.userId?.name || "—"}<div className="text-xs text-gray-500">{m.userId?.employeeCode}</div></td>
+                    <td className="p-4">{m.planName}</td><td className="p-4">{Number(m.price || 0).toLocaleString()}</td><td className="p-4">{statusLabel(m.status)}</td><td className="p-4">{m.remainingSessions}/{m.totalSessions}</td>
+                    <td className="p-4">{m.status === "Pending Payment" && <button onClick={() => approve(m._id)} className="bg-green-500 text-black px-3 py-2 rounded-xl font-black">تایید پرداخت</button>}</td>
+                  </tr>
+                ))}</tbody>
+              </table>
+            </div>
+          </>
         )}
       </div>
     </DashboardLayout>
+  );
+}
+
+function MembershipCard({ membership, approve }) {
+  const fields = [
+    ["طرح", membership.planName || "—"],
+    ["مبلغ", `${Number(membership.price || 0).toLocaleString()} تومان`],
+    ["وضعیت", statusLabel(membership.status)],
+    ["جلسات", `${membership.remainingSessions}/${membership.totalSessions}`],
+  ];
+  return (
+    <article className="rounded-3xl border border-gray-800 bg-[#1a1d23] p-4 text-gray-200 shadow-xl">
+      <div className="mb-4 border-b border-gray-800 pb-3">
+        <h3 className="text-base font-black text-white">{membership.userId?.name || "—"}</h3>
+        <p className="mt-1 text-xs font-bold text-gray-500">{membership.userId?.employeeCode || "بدون کد"}</p>
+      </div>
+      <div className="space-y-3">
+        {fields.map(([label, value]) => <div key={label} className="flex items-center justify-between gap-3 rounded-2xl bg-gray-900/70 p-3 text-sm"><span className="text-gray-500">{label}</span><span className="text-left font-black text-white">{value}</span></div>)}
+      </div>
+      {membership.status === "Pending Payment" && <button onClick={() => approve(membership._id)} className="mt-4 w-full rounded-2xl bg-green-500 px-4 py-3 font-black text-black">تایید پرداخت</button>}
+    </article>
   );
 }
 

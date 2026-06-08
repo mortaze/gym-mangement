@@ -33,9 +33,9 @@ export default function CreateCafeMenu() {
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     if (name === "img") {
-      const file = files[0];
-      setFormData((prev) => ({ ...prev, img: file }));
-      setPreviewImg(URL.createObjectURL(file));
+      const file = files?.[0];
+      setFormData((prev) => ({ ...prev, img: file || null }));
+      if (file) setPreviewImg(URL.createObjectURL(file));
     } else {
       setFormData((prev) => ({ ...prev, [name]: value }));
     }
@@ -43,11 +43,6 @@ export default function CreateCafeMenu() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.img) {
-      setErrorMsg("لطفاً یک تصویر انتخاب کنید.");
-      return;
-    }
-
     setLoading(true);
     setErrorMsg("");
     setSuccessMsg("");
@@ -59,7 +54,7 @@ export default function CreateCafeMenu() {
       data.append("price", formData.price);
       data.append("kcal", formData.kcal);
       data.append("status", formData.status);
-      data.append("img", formData.img);
+      if (formData.img) data.append("img", formData.img);
 
       const response = await axios.post(`${API_ORIGIN}/menu`, data, {
         headers: { "Content-Type": "multipart/form-data" },
@@ -88,7 +83,7 @@ export default function CreateCafeMenu() {
   return (
     <DashboardLayout>
       <div
-        className="p-6 md:p-10 min-h-screen rounded-4xl bg-[#0f1115] text-right"
+        className="p-4 sm:p-6 md:p-10 min-h-screen rounded-4xl bg-[#0f1115] text-right overflow-x-hidden"
         dir="rtl"
       >
         <h1 className="text-3xl md:text-4xl font-black text-white italic mb-8">
@@ -108,7 +103,7 @@ export default function CreateCafeMenu() {
 
         <form
           onSubmit={handleSubmit}
-          className="bg-[#1a1d23] p-8 rounded-3xl shadow-xl max-w-2xl mx-auto flex flex-col gap-6"
+          className="bg-[#1a1d23] p-4 sm:p-6 md:p-8 rounded-3xl shadow-xl max-w-2xl mx-auto flex flex-col gap-5 sm:gap-6"
         >
           {/* نام محصول */}
           <div className="flex flex-col">
@@ -226,13 +221,12 @@ export default function CreateCafeMenu() {
                 accept="image/*"
                 onChange={handleChange}
                 className="absolute w-full h-full opacity-0 cursor-pointer"
-                required
               />
 
               {/* ظاهر سفارشی */}
               <div className="flex justify-between items-center bg-[#0f1115] border border-gray-800 rounded-xl px-4 py-3 cursor-pointer hover:border-yellow-400 transition-all">
                 <span className="text-gray-300 text-sm italic">
-                  {formData.img ? formData.img.name : "No file chosen"}
+                  {formData.img ? formData.img.name : "بدون تصویر (Placeholder نمایش داده می‌شود)"}
                 </span>
                 <Upload size={18} className="text-yellow-400" />
               </div>

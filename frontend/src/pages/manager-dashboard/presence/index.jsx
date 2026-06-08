@@ -85,7 +85,7 @@ export default function PresencePage() {
             </p>
           </div>
 
-          <button className="w-full md:w-auto bg-yellow-400 hover:bg-yellow-500 text-black font-black px-8 py-4 rounded-2xl flex items-center justify-center gap-3 transition-all active:scale-95 shadow-[0_10px_20px_rgba(250,204,21,0.2)]">
+          <button onClick={() => window.alert("ثبت ورود اعضا در باشگاه از طریق سیستم احراز هویت حضوری انجام می‌شود و اطلاعات ثبت‌شده در این بخش صرفاً جهت نمایش و گزارش‌گیری نمایش داده می‌شوند.")} className="w-full md:w-auto bg-yellow-400 hover:bg-yellow-500 text-black font-black px-8 py-4 rounded-2xl flex items-center justify-center gap-3 transition-all active:scale-95 shadow-[0_10px_20px_rgba(250,204,21,0.2)]">
             <UserPlus size={20} /> ثبت ورود جدید (SCAN)
           </button>
         </div>

@@ -58,3 +58,30 @@ input:-webkit-autofill:active {
 .scrollbar-hide::-webkit-scrollbar {
   display: none; /* Chrome, Safari and Opera */
 }
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#__next {
+  max-width: 100%;
+  overflow-x: hidden;
+  font-family: "Vazir", sans-serif;
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}

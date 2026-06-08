@@ -81,28 +81,28 @@ export default function GlobalGymDashboard() {
       title: "مدیریت اعضا",
       desc: "تمدید شهریه و ثبت‌نام",
       icon: <ShieldCheck />,
-      link: "/members",
+      link: "/trainers-dashboard/trainers",
     },
     {
       id: 2,
       title: "لیست مربیان",
       desc: "برنامه تمرینی و درصد فروش",
       icon: <ClipboardList />,
-      link: "/coaches",
+      link: "/trainers-dashboard/trainers",
     },
     {
       id: 3,
       title: "انبار و تجهیزات",
       desc: "خرید دستگاه و استهلاک",
       icon: <Settings />,
-      link: "/equipment",
+      link: "/manager-dashboard/equipment",
     },
     {
       id: 4,
       title: "فروشگاه مکمل",
       desc: "مدیریت فروش محصولات",
       icon: <ShoppingCart />,
-      link: "/shop",
+      link: "/trainers-dashboard/cafe-menu",
     },
   ];
 

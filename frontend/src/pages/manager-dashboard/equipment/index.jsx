@@ -36,6 +36,37 @@ const equipmentStatusData = [
   { name: "خارج از رده", value: 10, color: "#ef4444" }, // قرمز
 ];
 
+
+function EquipmentMobileCard({ item }) {
+  return (
+    <article className="rounded-3xl border border-gray-800 bg-[#10131a] p-4 text-right shadow-xl">
+      <div className="mb-4 flex items-start gap-3">
+        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-gray-700 bg-gray-900 text-yellow-400"><Zap size={20} /></div>
+        <div className="min-w-0 flex-1">
+          <h4 className="break-words text-base font-black text-white">{item.name}</h4>
+          <p className="mt-1 break-all text-[11px] font-mono text-gray-500">{item.id}</p>
+        </div>
+      </div>
+      <div className="space-y-3 text-sm font-bold text-gray-300">
+        <MobileRow label="برند سازنده" value={item.brand} />
+        <MobileRow label="آخرین سرویس" value={item.lastService} />
+        <div className="rounded-2xl bg-gray-900/70 p-3">
+          <div className="mb-2 flex items-center justify-between"><span className="text-gray-500">شاخص سلامت</span><span className="text-white">{item.health}%</span></div>
+          <div className="h-2 overflow-hidden rounded-full bg-gray-800"><div className={`h-full ${item.health > 80 ? "bg-green-500" : item.health > 40 ? "bg-yellow-400" : "bg-red-500"}`} style={{ width: `${item.health}%` }} /></div>
+        </div>
+        <MobileRow label="وضعیت عملیاتی" value={item.status} />
+      </div>
+      <Link href={`/manager-dashboard/equipment/${item.id}/edit`} className="mt-4 flex w-full items-center justify-center gap-2 rounded-2xl bg-gray-800 p-3 font-black text-yellow-400">
+        <Edit3 size={16} /> ویرایش
+      </Link>
+    </article>
+  );
+}
+
+function MobileRow({ label, value }) {
+  return <div className="flex items-center justify-between gap-3 rounded-2xl bg-gray-900/70 p-3"><span className="text-gray-500">{label}</span><span className="break-words text-left text-white">{value || "—"}</span></div>;
+}
+
 export default function EquipmentPage() {
   // داخل تابع کامپوننت (مثلاً بالای return)
   const {
@@ -82,13 +113,13 @@ export default function EquipmentPage() {
   return (
     <DashboardLayout>
       <div
-        className="p-4 sm:p-8 min-h-screen rounded-4xl bg-[#0f1115]"
+        className="min-h-screen overflow-x-hidden rounded-4xl bg-[#0f1115] p-3 sm:p-4 md:p-8"
         dir="rtl"
       >
         {/* Header - مدیریت دارایی‌ها */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-10 pb-6 border-b border-gray-800">
           <div>
-            <h1 className="text-4xl font-black text-white italic tracking-tighter uppercase">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-white italic tracking-tighter uppercase">
               مدیریت{" "}
               <span className="text-yellow-400">تجهیزات و ماشین‌آلات</span>
             </h1>
@@ -110,7 +141,7 @@ export default function EquipmentPage() {
         {/* Top Analytics - تحلیل سلامت کل */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-10">
           {/* کارت نمودار وضعیت */}
-          <div className="bg-[#1a1d23] p-8 rounded-[2.5rem] border border-gray-800 flex flex-col md:flex-row items-center gap-8 shadow-2xl">
+          <div className="bg-[#1a1d23] p-5 sm:p-8 rounded-[2rem] sm:rounded-[2.5rem] border border-gray-800 flex flex-col md:flex-row items-center gap-6 md:gap-8 shadow-2xl">
             <div className="h-[180px] w-[180px]">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
@@ -211,7 +242,7 @@ export default function EquipmentPage() {
 
         {/* Inventory Table - لیست موجودی انبار آهن */}
         <div className="bg-[#1a1d23] rounded-[2.5rem] border border-gray-800 overflow-hidden shadow-2xl">
-          <div className="p-6 border-b border-gray-800 bg-gray-800/20 flex justify-between items-center">
+          <div className="flex flex-col gap-4 border-b border-gray-800 bg-gray-800/20 p-4 sm:p-6 sm:flex-row sm:items-center sm:justify-between">
             <h3 className="text-white font-black italic uppercase tracking-widest text-sm flex items-center gap-3">
               <Dumbbell className="text-yellow-400" size={20} /> لیست دارایی‌های
               ثابت مجموعه
@@ -226,8 +257,12 @@ export default function EquipmentPage() {
             </div>
           </div>
 
-          <div className="overflow-x-auto">
-            <table className="w-full text-right">
+          <div className="grid grid-cols-1 gap-4 p-4 md:hidden">
+            {inventory.map((item) => <EquipmentMobileCard key={item.id} item={item} />)}
+          </div>
+
+          <div className="hidden overflow-x-auto md:block">
+            <table className="w-full min-w-[880px] text-right">
               <thead className="bg-gray-800/50 text-gray-500 text-[10px] uppercase font-black tracking-widest">
                 <tr>
                   <th className="p-6">شناسه / دستگاه</th>
@@ -304,7 +339,7 @@ export default function EquipmentPage() {
                           <Edit3 size={16} />
                         </Link>
                         <button
-                          onClick={() => handleDelete(user._id)}
+                          onClick={() => window.alert("حذف تجهیزات از این صفحه فعال نشده است.")}
                           className="p-2 bg-gray-800 text-gray-400 hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-all"
                         >
                           <Trash2 size={16} />

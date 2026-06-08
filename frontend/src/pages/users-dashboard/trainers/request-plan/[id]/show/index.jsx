@@ -100,6 +100,7 @@ export default function TrainingRequestShowPage() {
           amount: req.amount ?? 500000,
           paymentMethod: req.paymentMethod || "online",
           trainerNotes: req.trainerNotes || "",
+          userNotes: req.userNotes || "",
           trainingPlan: req.trainingPlan || "",
         });
 
@@ -282,7 +283,7 @@ export default function TrainingRequestShowPage() {
 
   return (
     <DashboardLayout>
-      <div className="p-8 bg-[#0f1115] rounded-3xl border border-gray-800">
+      <div className="overflow-x-hidden rounded-3xl border border-gray-800 bg-[#0f1115] p-4 sm:p-6 md:p-8">
         <h1 className="text-2xl font-black text-white mb-6">
           مشاهده و ویرایش درخواست تمرینی
         </h1>
@@ -475,19 +476,7 @@ export default function TrainingRequestShowPage() {
           />
         </section>
 
-        {/* برنامه تمرینی */}
-        <section className="mb-6">
-          <label className="text-sm text-gray-400">
-            برنامه تمرینی (متن یا JSON)
-          </label>
-          <textarea
-            value={form.trainingPlan}
-            onChange={(e) => onChange("trainingPlan", e.target.value)}
-            className="w-full bg-gray-800 p-3 rounded-lg text-white mt-2 min-h-[160px] font-mono text-sm"
-            placeholder='مثال: {"days":[...]} یا متن توضیحی'
-            disabled
-          />
-        </section>
+        <TrainingPlanPreview request={request} trainer={trainer} />
         <SelectField
           label="وضعیت"
           value={form.status}
@@ -495,23 +484,23 @@ export default function TrainingRequestShowPage() {
           options={[
             { value: "pending", label: "در انتظار" },
             { value: "in_progress", label: "ویرایش شده توسط کاربر" },
-            { value: "approved", label: "تایید شده" },
+            { value: "approved", label: "تأیید شده" },
           ]}
         />
         {/* سمت چپ: پرداخت نمادین و دکمه ثبت */}
         <div className="flex flex-col md:flex-row items-center md:items-start justify-between gap-4 mt-6">
-          <div className="flex items-center gap-3">
+          <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center">
             <button
               onClick={onSave}
               disabled={saving}
-              className="px-6 py-3 bg-yellow-400 text-black font-black rounded-2xl"
+              className="w-full rounded-2xl bg-yellow-400 px-6 py-3 font-black text-black sm:w-auto"
             >
               {saving ? "در حال ذخیره..." : "ثبت / بروزرسانی درخواست"}
             </button>
 
             <button
               onClick={() => router.back()}
-              className="px-5 py-3 bg-gray-800 text-gray-300 rounded-2xl"
+              className="w-full rounded-2xl bg-gray-800 px-5 py-3 text-gray-300 sm:w-auto"
             >
               بازگشت
             </button>
@@ -550,6 +539,77 @@ export default function TrainingRequestShowPage() {
 }
 
 /* ---------- کمکی‌ها ---------- */
+
+function parseTrainingPlan(raw) {
+  if (!raw) return null;
+  if (typeof raw === "object") return raw;
+  try {
+    return JSON.parse(raw);
+  } catch (error) {
+    return { title: "برنامه تمرینی", exercises: [{ day: "توضیحات", name: raw }] };
+  }
+}
+
+function groupExercisesByDay(exercises = []) {
+  return exercises.reduce((acc, exercise) => {
+    const day = exercise.day || "روز تمرینی";
+    acc[day] = acc[day] || [];
+    acc[day].push(exercise);
+    return acc;
+  }, {});
+}
+
+function TrainingPlanPreview({ request, trainer }) {
+  const plan = parseTrainingPlan(request?.trainingPlan);
+  const exercisesByDay = groupExercisesByDay(plan?.exercises || []);
+  const issuedAt = request?.updatedAt || request?.createdAt;
+
+  return (
+    <section className="mb-6 rounded-[2rem] border border-gray-800 bg-[#10131a] p-4 sm:p-5">
+      <div className="mb-5 flex flex-col gap-3 border-b border-gray-800 pb-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p className="text-xs font-black text-gray-500">کارت اطلاعات برنامه</p>
+          <h3 className="mt-1 text-xl font-black text-white">{plan?.title || "برنامه تمرینی صادر نشده است"}</h3>
+        </div>
+        <span className="w-fit rounded-full bg-yellow-400/10 px-4 py-2 text-xs font-black text-yellow-400">
+          {request?.status === "approved" ? "برنامه صادر شد" : "در انتظار صدور"}
+        </span>
+      </div>
+      <div className="mb-5 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <PlanMeta label="عنوان برنامه" value={plan?.title || "—"} />
+        <PlanMeta label="تعداد روزهای تمرین" value={plan?.trainingDays ? `${plan.trainingDays} روز` : "—"} />
+        <PlanMeta label="نام مربی" value={trainer?.name || request?.trainerId?.name || "—"} />
+        <PlanMeta label="تاریخ صدور" value={issuedAt ? moment(issuedAt).format("jYYYY/jMM/jDD") : "—"} />
+      </div>
+      {Object.keys(exercisesByDay).length ? (
+        <div className="space-y-3">
+          {Object.entries(exercisesByDay).map(([day, exercises], index) => (
+            <details key={day} className="group rounded-2xl border border-gray-800 bg-[#1a1d23] p-4" open={index === 0}>
+              <summary className="cursor-pointer list-none text-base font-black text-yellow-400">{day}</summary>
+              <div className="mt-4 space-y-3 border-r-2 border-yellow-400/30 pr-4">
+                {exercises.map((exercise, i) => (
+                  <div key={`${exercise.name}-${i}`} className="rounded-2xl bg-gray-900/80 p-4">
+                    <h4 className="font-black text-white">{exercise.name || "حرکت تمرینی"}</h4>
+                    <div className="mt-3 grid grid-cols-1 gap-2 text-sm font-bold text-gray-300 sm:grid-cols-3">
+                      <span>ست: {exercise.sets || "—"}</span>
+                      <span>تکرار: {exercise.reps || "—"}</span>
+                      <span>استراحت: {exercise.restTime || "—"}</span>
+                    </div>
+                    {exercise.notes && <p className="mt-3 rounded-xl bg-white/5 p-3 text-xs font-bold leading-6 text-gray-400">{exercise.notes}</p>}
+                  </div>
+                ))}
+              </div>
+            </details>
+          ))}
+        </div>
+      ) : <p className="rounded-2xl bg-gray-900/80 p-5 text-center text-sm font-bold text-gray-500">هنوز برنامه تمرینی برای نمایش صادر نشده است.</p>}
+    </section>
+  );
+}
+
+function PlanMeta({ label, value }) {
+  return <div className="rounded-2xl bg-gray-900/80 p-3"><p className="text-[11px] font-black text-gray-500">{label}</p><p className="mt-1 text-sm font-black text-white">{value}</p></div>;
+}
 
 function Field({ label, value, onChange, disabled = false }) {
   return (
