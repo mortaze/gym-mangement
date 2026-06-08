@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   ShieldAlert,
   Clock,
@@ -11,11 +11,41 @@ import {
   Target,
   Bell,
   CheckCircle2,
+  Activity,
 } from "lucide-react";
 import DashboardLayout from "./layout";
 import Link from "next/link";
+import { RadialBarChart, RadialBar, ResponsiveContainer } from "recharts";
+import { API_BASE_URL } from "@/config/api";
 
 export default function UserMainDashboard() {
+  const [currentUser, setCurrentUser] = useState(null);
+  const [membership, setMembership] = useState(null);
+  const [programs, setPrograms] = useState({ trainingPrograms: [], nutritionPrograms: [] });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const raw = sessionStorage.getItem("currentUser");
+    const parsed = raw ? JSON.parse(raw) : null;
+    setCurrentUser(parsed);
+    if (!parsed?._id) {
+      setLoading(false);
+      return;
+    }
+    Promise.all([
+      fetch(`${API_BASE_URL}/memberships/active/${parsed._id}`, { credentials: "include" }).then((res) => res.json()).catch(() => null),
+      fetch(`${API_BASE_URL}/programs/member/${parsed._id}`, { credentials: "include" }).then((res) => res.json()).catch(() => null),
+      fetch(`${API_BASE_URL}/users/${parsed._id}`).then((res) => res.json()).catch(() => null),
+    ]).then(([membershipRes, programRes, userRes]) => {
+      if (membershipRes?.success) setMembership(membershipRes.membership);
+      if (programRes?.success) setPrograms(programRes);
+      if (userRes?.user) setCurrentUser((prev) => ({ ...prev, ...userRes.user }));
+    }).finally(() => setLoading(false));
+  }, []);
+
+  const bmi = Number(currentUser?.bmi || 0);
+  const bmiData = useMemo(() => [{ name: "BMI", value: Math.min(bmi || 0, 40), fill: bmi < 18.5 ? "#38bdf8" : bmi < 25 ? "#22c55e" : bmi < 30 ? "#facc15" : "#ef4444" }], [bmi]);
+
   // داده‌های واقعی بر اساس صفحات قبلی که با هم ساختیم
   const dashboardState = {
     // از بخش رزرو دستگاه
@@ -26,9 +56,9 @@ export default function UserMainDashboard() {
     },
     // از بخش مالی
     subscription: {
-      daysLeft: 8,
-      type: "ویژه (VIP)",
-      isWarning: true, // چون زیر ۱۰ روز است
+      daysLeft: membership?.remainingDays ?? 0,
+      type: membership?.planName || "بدون عضویت فعال",
+      isWarning: !membership || membership.remainingDays <= 7,
     },
     // از بخش کافه
     lastOrder: {
@@ -38,9 +68,9 @@ export default function UserMainDashboard() {
     },
     // از بخش مربی
     trainingPlan: {
-      title: "عضلات سینه و جلو بازو",
-      progress: "۳ از ۸ تمرین انجام شده",
-      coach: "کاپیتان فلاح",
+      title: programs.trainingPrograms?.[0]?.title || "برنامه فعالی ثبت نشده",
+      progress: membership ? `${membership.completedSessions} از ${membership.totalSessions} جلسه انجام شده` : "—",
+      coach: programs.trainingPrograms?.[0]?.trainerId?.name || "—",
     },
   };
 
@@ -65,6 +95,8 @@ export default function UserMainDashboard() {
             <span className="absolute top-2 right-2 w-2 h-2 bg-red-600 rounded-full animate-ping"></span>
           </div>
         </div>
+
+        {loading && <div className="mb-4 text-yellow-400 text-xs font-black">در حال بروزرسانی داشبورد...</div>}
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           {/* کارت ۱: وضعیت اشتراک (بسیار مهم) */}
@@ -93,29 +125,38 @@ export default function UserMainDashboard() {
             <p className="text-gray-500 text-[10px] font-bold mt-1">
               تا پایان اعتبار سطح {dashboardState.subscription.type}
             </p>
+            <p className="text-yellow-400 text-[10px] font-black mt-2">
+              جلسات: {membership?.remainingSessions ?? 0} باقی‌مانده / {membership?.completedSessions ?? 0} انجام‌شده
+            </p>
+            <p className="text-gray-500 text-[10px] font-bold mt-1">
+              انقضا: {membership?.membershipEndDate ? new Date(membership.membershipEndDate).toLocaleDateString("fa-IR") : "—"}
+            </p>
             <button className="w-full mt-4 py-2 bg-white/5 hover:bg-white/10 text-white text-[10px] font-black rounded-xl transition-all">
               تمدید سریع
             </button>
           </div>
 
-          {/* کارت ۲: رزرو بعدی (برگرفته از صفحه هوازی) */}
+          {/* کارت ۲: BMI خودکار */}
           <div className="bg-[#1a1d23] border border-gray-800 p-6 rounded-[2rem]">
             <div className="flex justify-between items-start mb-4">
-              <Clock className="text-blue-400" />
+              <Activity className="text-blue-400" />
               <span className="text-[9px] font-black text-gray-500 uppercase tracking-tighter">
-                Next Session
+                BMI
               </span>
             </div>
+            <div className="h-20">
+              <ResponsiveContainer width="100%" height="100%">
+                <RadialBarChart innerRadius="65%" outerRadius="100%" data={bmiData} startAngle={180} endAngle={0}>
+                  <RadialBar dataKey="value" background />
+                </RadialBarChart>
+              </ResponsiveContainer>
+            </div>
             <h3 className="text-white text-lg font-black italic">
-              {dashboardState.nextReservation.device}
+              {bmi ? bmi.toFixed(1) : "—"}
             </h3>
             <p className="text-blue-400 text-[11px] font-black mt-1">
-              {dashboardState.nextReservation.time}
+              {currentUser?.bmiCategory || "نامشخص"}
             </p>
-            <div className="mt-4 flex items-center gap-2 text-[9px] text-gray-500 font-bold uppercase">
-              <Zap size={12} className="text-yellow-400" /> شروع تا{" "}
-              {dashboardState.nextReservation.remains}
-            </div>
           </div>
 
           {/* کارت ۳: وضعیت کافه (برگرفته از صفحه کافه) */}

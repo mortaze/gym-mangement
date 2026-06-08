@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { calculateBmi, getBmiCategory } = require("../utils/membershipUtils");
 
 // تاریخچه تغییرات
 const historySchema = mongoose.Schema(
@@ -29,9 +30,16 @@ const trainingRequestSchema = mongoose.Schema(
       ref: "User",
       required: true,
     },
+    goals: [{ type: String, trim: true }],
+    age: { type: Number, min: 1, max: 120 },
     height: { type: Number, required: true },
     weight: { type: Number, required: true },
-    photos: [{ type: String, required: true }],
+    bmi: { type: Number },
+    bmiCategory: { type: String },
+    trainingExperience: { type: String, trim: true },
+    injuries: { type: String, trim: true },
+    weeklyAvailableDays: { type: Number, min: 1, max: 7 },
+    photos: [{ type: String }],
     paymentMethod: {
       type: String,
       enum: ["online", "cash"],
@@ -46,10 +54,24 @@ const trainingRequestSchema = mongoose.Schema(
     userNotes: { type: String },
     trainerNotes: { type: String },
     trainingPlan: { type: String },
+    trainingProgramId: { type: mongoose.Schema.Types.ObjectId, ref: "TrainingProgram" },
+    nutritionProgramId: { type: mongoose.Schema.Types.ObjectId, ref: "NutritionProgram" },
     history: [historySchema], // اینجا همه تغییرات ثبت می‌شود
   },
   { timestamps: true },
 );
+
+trainingRequestSchema.index({ userId: 1, createdAt: -1 });
+trainingRequestSchema.index({ trainerId: 1, status: 1, createdAt: -1 });
+
+trainingRequestSchema.pre("validate", function (next) {
+  const bmi = calculateBmi(this.height, this.weight);
+  if (bmi !== undefined) {
+    this.bmi = bmi;
+    this.bmiCategory = getBmiCategory(bmi);
+  }
+  next();
+});
 
 const TrainingRequest = mongoose.model(
   "TrainingRequest",

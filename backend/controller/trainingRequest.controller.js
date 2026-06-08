@@ -4,6 +4,7 @@ const User = require("../model/User");
 const path = require("path");
 const fs = require("fs");
 const { getUploadDir, uploadRoot } = require("../utils/uploadPaths");
+const { calculateBmi, getBmiCategory } = require("../utils/membershipUtils");
 
 // مسیر ذخیره عکس‌ها
 getUploadDir("TrainingRequest");
@@ -21,6 +22,12 @@ exports.createRequest = async (req, res) => {
       paymentMethod,
       amount,
       userNotes,
+      goals,
+      age,
+      trainingExperience,
+      injuries,
+      weeklyAvailableDays,
+      notes,
     } = req.body;
 
     // دریافت فایل‌ها از multer
@@ -31,8 +38,6 @@ exports.createRequest = async (req, res) => {
       !trainerId ||
       !height ||
       !weight ||
-      !photos ||
-      photos.length === 0 ||
       !amount
     ) {
       return res
@@ -41,23 +46,31 @@ exports.createRequest = async (req, res) => {
     }
 
     // مسیر عکس‌ها برای دیتابیس
-    const photoPaths = photos.map((file) => `TrainingRequest/${file.filename}`);
+    const photoPaths = (photos || []).map((file) => `TrainingRequest/${file.filename}`);
+    const bmi = calculateBmi(height, weight);
 
     const request = await TrainingRequest.create({
       userId,
       trainerId,
+      age,
       height,
       weight,
+      bmi,
+      bmiCategory: getBmiCategory(bmi),
+      goals: Array.isArray(goals) ? goals : String(goals || "").split(",").map((goal) => goal.trim()).filter(Boolean),
+      trainingExperience,
+      injuries,
+      weeklyAvailableDays,
       photos: photoPaths,
       paymentMethod,
       amount,
       status: "pending",
-      userNotes,
+      userNotes: userNotes || notes,
       history: [
         {
           by: "user",
           status: "pending",
-          userNotes: userNotes || "",
+          userNotes: userNotes || notes || "",
           trainingPlan: "",
         },
       ],
@@ -82,7 +95,7 @@ exports.getAllRequests = async (req, res) => {
     if (trainerId) filter.trainerId = trainerId;
 
     const requests = await TrainingRequest.find(filter)
-      .populate("userId", "name profileImage")
+      .populate("userId", "name profileImage age height weight bmi bmiCategory")
       .populate("trainerId", "name profileImage role")
       .sort({ createdAt: -1 });
 
@@ -103,8 +116,10 @@ exports.getRequestById = async (req, res) => {
     const { id } = req.params;
 
     const request = await TrainingRequest.findById(id)
-      .populate("userId", "name profileImage")
-      .populate("trainerId", "name profileImage role");
+      .populate("userId", "name profileImage age height weight bmi bmiCategory")
+      .populate("trainerId", "name profileImage role")
+      .populate("trainingProgramId")
+      .populate("nutritionProgramId");
 
     if (!request)
       return res
@@ -124,7 +139,7 @@ exports.getRequestById = async (req, res) => {
 exports.updateRequest = async (req, res) => {
   try {
     const { id } = req.params;
-    const { by, status, userNotes, trainerNotes, trainingPlan } = req.body;
+    const { by, status, userNotes, trainerNotes, trainingPlan, goals, age, height, weight, trainingExperience, injuries, weeklyAvailableDays } = req.body;
 
     const request = await TrainingRequest.findById(id);
     if (!request)
@@ -150,6 +165,18 @@ exports.updateRequest = async (req, res) => {
     if (userNotes !== undefined) request.userNotes = userNotes;
     if (trainerNotes !== undefined) request.trainerNotes = trainerNotes;
     if (trainingPlan !== undefined) request.trainingPlan = trainingPlan;
+    if (goals !== undefined) request.goals = Array.isArray(goals) ? goals : String(goals || "").split(",").map((goal) => goal.trim()).filter(Boolean);
+    if (age !== undefined) request.age = age;
+    if (height !== undefined) request.height = height;
+    if (weight !== undefined) request.weight = weight;
+    if (trainingExperience !== undefined) request.trainingExperience = trainingExperience;
+    if (injuries !== undefined) request.injuries = injuries;
+    if (weeklyAvailableDays !== undefined) request.weeklyAvailableDays = weeklyAvailableDays;
+    const bmi = calculateBmi(request.height, request.weight);
+    if (bmi !== undefined) {
+      request.bmi = bmi;
+      request.bmiCategory = getBmiCategory(bmi);
+    }
 
     // اضافه کردن رکورد به تاریخچه
     request.history.push({
@@ -225,7 +252,7 @@ exports.getRequestsByTrainer = async (req, res) => {
   try {
     const { trainerId } = req.params;
     const requests = await TrainingRequest.find({ trainerId })
-      .populate("userId", "name profileImage")
+      .populate("userId", "name profileImage age height weight bmi bmiCategory")
       .sort({ createdAt: -1 });
 
     res.json({ success: true, requests });

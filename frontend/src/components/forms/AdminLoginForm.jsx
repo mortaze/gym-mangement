@@ -15,7 +15,6 @@ import {
   User,
   Eye,
   EyeOff,
-  User2,
   Book,
 } from "lucide-react";
 
@@ -91,10 +90,17 @@ const ACCENT_CLASSES = {
 // نقش‌های API به کلیدهای فرانت
 const ROLE_MAP = {
   Member: "user",
+  user: "user",
   Trainer: "trainer",
+  trainer: "trainer",
   Admin: "admin",
-  Reception: "reception", // اگر لازم شد
+  admin: "admin",
+  Reception: "reception",
+  reception: "reception",
   CafeManager: "cafe",
+  cafe: "cafe",
+  Finance: "admin",
+  finance: "admin",
 };
 
 // مسیر ریدایرکت بر اساس کلید فرانت
@@ -136,9 +142,18 @@ export default function UnifiedLoginForm() {
     handleSubmit,
     formState: { errors },
     reset,
+    setValue,
+    clearErrors,
   } = useForm({
     resolver: yupResolver(schema),
+    defaultValues: { employeeCode: "", password: "" },
   });
+
+  const normalizeInput = (fieldName) => (event) => {
+    const value = event.target.value.replace(/[؀-ۿ]/g, "");
+    setValue(fieldName, value, { shouldValidate: true, shouldDirty: true });
+    if (value) clearErrors(fieldName);
+  };
 
   const onSubmit = async (data) => {
     // if (!captchaValue) {
@@ -159,7 +174,11 @@ export default function UnifiedLoginForm() {
         return;
       }
 
-      const normalizedRole = activeRole.key;
+      const normalizedRole = ROLE_MAP[user.role] || activeRole.key;
+      if (normalizedRole !== activeRole.key) {
+        notifyError("نقش انتخاب‌شده با نقش حساب کاربری مطابقت ندارد");
+        return;
+      }
 
       const safeUser = {
         _id: user._id,
@@ -232,11 +251,7 @@ export default function UnifiedLoginForm() {
             <input
               {...register("employeeCode")}
               placeholder="شناسه ورود"
-              onChange={(e) => {
-                const value = e.target.value;
-                // حذف تمام کاراکترهای فارسی و عربی
-                e.target.value = value.replace(/[\u0600-\u06FF]/g, "");
-              }}
+              onChange={normalizeInput("employeeCode")}
               className="w-full bg-[#0f1115] border border-gray-800 rounded-xl py-4 px-4 text-white font-bold focus:outline-none focus:border-yellow-400"
             />
             <ErrorMsg msg={errors.employeeCode?.message} />
@@ -247,11 +262,7 @@ export default function UnifiedLoginForm() {
               {...register("password")}
               type={showPass ? "text" : "password"}
               placeholder="رمز عبور"
-              onChange={(e) => {
-                const value = e.target.value;
-                // حذف تمام کاراکترهای فارسی و عربی
-                e.target.value = value.replace(/[\u0600-\u06FF]/g, "");
-              }}
+              onChange={normalizeInput("password")}
               className="w-full bg-[#0f1115] border border-gray-800 rounded-xl py-4 px-4 text-white font-bold focus:outline-none focus:border-yellow-400"
             />
             <button

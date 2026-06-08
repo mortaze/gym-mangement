@@ -28,6 +28,8 @@ export const authApi = apiSlice.injectEndpoints({
             }),
             { expires: 1 }
           );
+          Cookies.set("token", result.data.token, { expires: 1 });
+          Cookies.set("accessToken", result.data.token, { expires: 1 });
 
           // ذخیره در Redux
           dispatch(
