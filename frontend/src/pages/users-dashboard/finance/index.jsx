@@ -7,10 +7,10 @@ import { CreditCard, ShieldCheck, Clock } from "lucide-react";
 import Swal from "sweetalert2";
 
 const plans = [
-  ["1m-10", "1 Month / 10 Sessions", "۸۵۰,۰۰۰"],
-  ["1m-15", "1 Month / 15 Sessions", "۱,۱۰۰,۰۰۰"],
-  ["1m-20", "1 Month / 20 Sessions", "۱,۳۵۰,۰۰۰"],
-  ["3m-30", "3 Month / 30 Sessions", "۳,۲۰۰,۰۰۰"],
+  ["1m-10", "طرح یک‌ماهه ۱۰ جلسه‌ای", "۸۵۰,۰۰۰"],
+  ["1m-15", "طرح یک‌ماهه ۱۵ جلسه‌ای", "۱,۱۰۰,۰۰۰"],
+  ["1m-20", "طرح یک‌ماهه ۲۰ جلسه‌ای", "۱,۳۵۰,۰۰۰"],
+  ["3m-30", "طرح سه‌ماهه ۳۰ جلسه‌ای", "۳,۲۰۰,۰۰۰"],
 ];
 
 export default function UserFinancePage() {
@@ -56,7 +56,7 @@ export default function UserFinancePage() {
     <DashboardLayout>
       <div className="p-4 md:p-8 min-h-screen rounded-[2rem] bg-[#0f1115] text-right" dir="rtl">
         <h1 className="text-3xl font-black text-white mb-2">خرید و تمدید عضویت</h1>
-        <p className="text-gray-500 mb-8">پرداخت واقعی وجود ندارد؛ درخواست با وضعیت Pending Payment ثبت می‌شود.</p>
+        <p className="text-gray-500 mb-8">پرداخت واقعی وجود ندارد؛ درخواست با وضعیت در انتظار پرداخت ثبت می‌شود.</p>
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 mb-10">
           {plans.map(([code, name, price]) => (
             <div key={code} className="bg-[#1a1d23] border border-gray-800 rounded-[2rem] p-6">

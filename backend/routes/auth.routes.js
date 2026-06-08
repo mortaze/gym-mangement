@@ -11,6 +11,22 @@ const {
   getUserRole,
 } = require("../middleware/authMiddleware");
 
+const ROLE_REDIRECTS = {
+  admin: "/admin-dashboard",
+  Admin: "/admin-dashboard",
+  trainer: "/trainers-dashboard",
+  Trainer: "/trainers-dashboard",
+  member: "/member-dashboard",
+  Member: "/member-dashboard",
+  user: "/member-dashboard",
+  reception: "/reception-dashboard",
+  Reception: "/reception-dashboard",
+  cafe: "/cafe-dashboard",
+  CafeManager: "/cafe-dashboard",
+  finance: "/manager-dashboard/finance",
+  Finance: "/manager-dashboard/finance",
+};
+
 const publicUserFields = (user) => ({
   _id: user._id,
   name: user.name,
@@ -20,6 +36,9 @@ const publicUserFields = (user) => ({
   email: user.email,
   profileImage: user.profileImage,
   status: user.status,
+  height: user.height,
+  weight: user.weight,
+  bmi: user.bmi,
 });
 
 // --------------------
@@ -27,21 +46,24 @@ const publicUserFields = (user) => ({
 // --------------------
 router.post("/login", async (req, res) => {
   try {
-    const { employeeCode, email, username, password } = req.body;
-    const identifier = employeeCode || email || username;
+    const { employeeCode, email, username, loginIdentifier, identifier: rawIdentifier, password } = req.body;
+    const identifier = loginIdentifier || rawIdentifier || employeeCode || email || username;
 
     if (!identifier || !password) {
       return res.status(400).json({
         success: false,
-        message: "employeeCode, email, or username and password are required",
+        message: "شناسه ورود و رمز عبور الزامی است",
       });
     }
 
+    const normalizedIdentifier = String(identifier).trim();
+    const lowerIdentifier = normalizedIdentifier.toLowerCase();
+
     const user = await User.findOne({
       $or: [
-        { employeeCode: identifier },
-        { email: String(identifier).toLowerCase() },
-        { username: String(identifier).toLowerCase() },
+        { employeeCode: normalizedIdentifier },
+        { email: lowerIdentifier },
+        { username: lowerIdentifier },
       ],
     });
 
@@ -52,6 +74,10 @@ router.post("/login", async (req, res) => {
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
+    if (user.status && user.status !== "active") {
+      return res.status(403).json({ success: false, message: "حساب کاربری فعال نیست" });
+    }
+
     if (!isMatch) {
       return res
         .status(400)
@@ -75,6 +101,7 @@ router.post("/login", async (req, res) => {
         success: true,
         token,
         user: publicUserFields(user),
+        redirectTo: ROLE_REDIRECTS[getUserRole(user)] || ROLE_REDIRECTS[String(getUserRole(user)).toLowerCase()],
       });
   } catch (error) {
     console.error("❌ Login error:", error);
