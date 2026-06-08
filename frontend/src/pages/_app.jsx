@@ -17,7 +17,7 @@ const NEXT_PUBLIC_GOOGLE_CLIENT_ID =
 const routeRoleMap = {
   "/users-dashboard": ["user"],
   "/trainers-dashboard": ["trainer", "coach"],
-  "/manager-dashboard": ["admin"],
+  "/manager-dashboard": ["admin", "finance"],
   "/cafe-dashboard": ["cafe"],
   "/reception-dashboard": ["reception"],
 };
@@ -40,7 +40,8 @@ export default function App({ Component, pageProps }) {
     }
 
     // چک نقش کاربر برای مسیرهای محدود
-    const allowedRoles = routeRoleMap[router.pathname];
+    const matchedRoute = Object.keys(routeRoleMap).find((route) => router.pathname === route || router.pathname.startsWith(`${route}/`));
+    const allowedRoles = matchedRoute ? routeRoleMap[matchedRoute] : undefined;
     if (allowedRoles && currentUser) {
       if (!allowedRoles.includes(currentUser.role)) {
         // نقش مجاز نیست → ریدایرکت به داشبورد خودش

@@ -23,6 +23,7 @@ export default function TrainingRequestShowPage() {
     trainerNotes: "",
     userrNotes: "",
     trainingPlan: "",
+    nutritionPlan: "",
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -92,15 +93,13 @@ export default function TrainingRequestShowPage() {
           console.warn("درخواست مربی نداشت — دسترسی بررسی نشد");
         } else if (
           String(reqTrainerId) !== String(trainer._id) &&
-          trainer.role !== "Admin"
+          !["Admin", "admin"].includes(trainer.role)
         ) {
           console.warn("⛔ trainer mismatch", {
             reqTrainerId,
             trainerId: trainer._id,
           });
-          // اگر می‌خواهی redirect کن:
-          router.replace("/403");
-          return;
+          throw new Error("این درخواست به مربی دیگری اختصاص دارد.");
         }
 
         setRequest(json.request);
@@ -113,24 +112,27 @@ export default function TrainingRequestShowPage() {
           trainerNotes: json.request.trainerNotes || "",
           userNotes: json.request.userNotes || "",
           trainingPlan: json.request.trainingPlan || "",
+          nutritionPlan: json.request.nutritionPlan || "",
         });
 
-        // 3) گرفتن اطلاعات کامل کاربر مرتبط
-        const userId = json.request?.userId?._id || json.request?.userId;
-        if (userId) {
+        // 3) اطلاعات کاربر از populate بک‌اند می‌آید؛ در صورت نبود، endpoint کاربر fallback است.
+        const populatedUser = typeof json.request?.userId === "object" ? json.request.userId : null;
+        const userId = populatedUser?._id || json.request?.userId;
+        if (populatedUser) {
+          setUser(populatedUser);
+        } else if (userId) {
           const uRes = await fetch(`${API_BASE}/users/${userId}`);
           const uJson = await uRes.json();
           console.log("📡 user response:", uJson);
           if (uJson && (uJson.user || uJson.success)) {
             // بعضی endpointها ممکنه ساختار متفاوت برگردانند (users vs user)
-            const u = uJson.user ?? (uJson.users && uJson.users[0]) ?? null;
+            const u = uJson.user ?? uJson.data ?? (uJson.users && uJson.users[0]) ?? null;
             setUser(u);
           } else {
             console.warn("کاربر یافت نشد یا پاسخ نامتعارف:", uJson);
             setUser(null);
           }
         } else {
-          console.warn("userId در درخواست وجود ندارد");
           setUser(null);
         }
       } catch (err) {
@@ -162,6 +164,7 @@ export default function TrainingRequestShowPage() {
         status: form.status,
         amount: Number(form.amount) || 0,
         paymentMethod: form.paymentMethod,
+        nutritionPlan: form.nutritionPlan,
         trainerNotes: form.trainerNotes,
         userNotes: form.userNotes,
         trainingPlan: form.trainingPlan,
@@ -385,6 +388,15 @@ export default function TrainingRequestShowPage() {
             onChange={(e) => onChange("trainingPlan", e.target.value)}
             className="w-full bg-gray-800 p-3 rounded-lg text-white mt-2 min-h-[160px] font-mono text-sm"
             placeholder='مثال: {"days":[...]} یا متن توضیحی'
+          />
+        </section>
+        <section className="mb-6">
+          <label className="text-sm text-gray-400">برنامه تغذیه</label>
+          <textarea
+            value={form.nutritionPlan}
+            onChange={(e) => onChange("nutritionPlan", e.target.value)}
+            className="w-full bg-gray-800 p-3 rounded-lg text-white mt-2 min-h-[140px] font-mono text-sm"
+            placeholder="برنامه تغذیه، وعده‌ها، کالری و توضیحات"
           />
         </section>
         <SelectField

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Calendar,
   ShieldCheck,
@@ -14,9 +14,17 @@ import {
 import DashboardLayout from "../layout";
 import { useListUsersQuery } from "../../../redux/features/userApi";
 import moment from "moment-jalaali";
+import { API_BASE_URL } from "@/config/api";
 
 export default function UserFinancePage() {
   const [includeProgram, setIncludeProgram] = useState(false);
+  const [message, setMessage] = useState("");
+  const [currentUser, setCurrentUser] = useState(null);
+
+  useEffect(() => {
+    const raw = sessionStorage.getItem("currentUser");
+    setCurrentUser(raw ? JSON.parse(raw) : null);
+  }, []);
 
   // گرفتن اطلاعات واقعی کاربر از API
   const { data, isLoading, isError } = useListUsersQuery();
@@ -63,6 +71,38 @@ export default function UserFinancePage() {
   const basePrice = user.basePrice || 850000; // پیش‌فرض
   const programPrice = user.programPrice || 350000; // پیش‌فرض
   const totalPrice = includeProgram ? basePrice + programPrice : basePrice;
+
+  const createMockPayment = async () => {
+    const memberId = currentUser?._id || user?._id;
+    if (!memberId) {
+      setMessage("شناسه عضو برای ثبت پرداخت پیدا نشد.");
+      return;
+    }
+    const start = new Date();
+    const end = new Date();
+    end.setMonth(end.getMonth() + 1);
+    try {
+      const res = await fetch(`${API_BASE_URL}/memberships/purchase`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({
+          userId: memberId,
+          planName: includeProgram ? "1 Month / 15 Sessions + Trainer Program" : "1 Month / 10 Sessions",
+          membershipStartDate: start.toISOString(),
+          membershipEndDate: end.toISOString(),
+          totalSessions: includeProgram ? 15 : 10,
+          amount: totalPrice,
+          type: "membership_renewal",
+        }),
+      });
+      const json = await res.json();
+      if (!json.success) throw new Error(json.message || "خطا در ثبت پرداخت");
+      setMessage("درخواست پرداخت شبیه‌سازی‌شده ثبت شد. پس از تایید مدیر مالی، عضویت فعال می‌شود.");
+    } catch (err) {
+      setMessage(err.message);
+    }
+  };
 
   return (
     <DashboardLayout>
@@ -238,8 +278,9 @@ export default function UserFinancePage() {
               </div>
 
               {/* دکمه پرداخت */}
-              <button className="w-full bg-black hover:bg-yellow-400 text-white hover:text-black font-black py-5 rounded-2xl transition-all flex items-center justify-center gap-3 text-lg group">
-                تایید و انتقال به سبد خرید
+              {message && <div className="mb-4 rounded-2xl bg-yellow-50 text-black p-3 text-xs font-bold leading-6">{message}</div>}
+              <button onClick={createMockPayment} className="w-full bg-black hover:bg-yellow-400 text-white hover:text-black font-black py-5 rounded-2xl transition-all flex items-center justify-center gap-3 text-lg group">
+                ثبت پرداخت شبیه‌سازی‌شده
                 <ArrowRight
                   size={20}
                   className="group-hover:translate-x-[-4px] transition-transform"

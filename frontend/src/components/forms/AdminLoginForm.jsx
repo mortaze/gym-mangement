@@ -7,7 +7,7 @@ import * as Yup from "yup";
 // import { useRouter } from "next/navigation";
 import { useRouter } from "next/router";
 
-import ReCAPTCHA from "react-google-recaptcha";
+// import ReCAPTCHA from "react-google-recaptcha";
 import {
   Shield,
   Dumbbell,
@@ -15,7 +15,6 @@ import {
   User,
   Eye,
   EyeOff,
-  User2,
   Book,
 } from "lucide-react";
 
@@ -91,10 +90,17 @@ const ACCENT_CLASSES = {
 // نقش‌های API به کلیدهای فرانت
 const ROLE_MAP = {
   Member: "user",
+  user: "user",
   Trainer: "trainer",
+  trainer: "trainer",
   Admin: "admin",
-  Reception: "reception", // اگر لازم شد
+  admin: "admin",
+  Reception: "reception",
+  reception: "reception",
   CafeManager: "cafe",
+  cafe: "cafe",
+  Finance: "admin",
+  finance: "admin",
 };
 
 // مسیر ریدایرکت بر اساس کلید فرانت
@@ -109,35 +115,53 @@ const roleRedirectMap = {
 export default function UnifiedLoginForm() {
   const [activeRole, setActiveRole] = useState(ROLES[0]);
   const [showPass, setShowPass] = useState(false);
-  const [captchaValue, setCaptchaValue] = useState(null);
+  const [loginError, setLoginError] = useState("");
 
   const router = useRouter();
   const [loginUser, { isLoading }] = useLoginUserMutation();
 
+  // const schema = Yup.object({
+  //   employeeCode: Yup.string()
+  //     .required("شناسه ورود الزامی است")
+  //     .matches(/^[0-9]{4,15}$/, "فرمت شناسه نامعتبر است"),
+  //   password: Yup.string()
+  //     .required("رمز عبور الزامی است")
+  //     .min(6, "حداقل ۶ کاراکتر"),
+  // });
   const schema = Yup.object({
-    employeeCode: Yup.string()
-      .required("شناسه ورود الزامی است")
-      .matches(/^[0-9]{4,15}$/, "فرمت شناسه نامعتبر است"),
-    password: Yup.string()
-      .required("رمز عبور الزامی است")
-      .min(6, "حداقل ۶ کاراکتر"),
-  });
+  employeeCode: Yup.string()
+    .required("شناسه ورود الزامی است")
+    .min(2, "شناسه خیلی کوتاه است"),
+  password: Yup.string()
+    .required("رمز عبور الزامی است")
+    .min(6, "حداقل ۶ کاراکتر"),
+});
 
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
+    setValue,
+    clearErrors,
   } = useForm({
     resolver: yupResolver(schema),
+    defaultValues: { employeeCode: "", password: "" },
   });
 
-  const onSubmit = async (data) => {
-    if (!captchaValue) {
-      notifyError("تأیید کپچا الزامی است");
-      return;
-    }
+  const normalizeInput = (fieldName) => (event) => {
+    const value = event.target.value.replace(/[؀-ۿ]/g, "");
+    setValue(fieldName, value, { shouldValidate: true, shouldDirty: true });
+    if (value) clearErrors(fieldName);
+  };
 
+  const onSubmit = async (data) => {
+    // if (!captchaValue) {
+    //   notifyError("تأیید کپچا الزامی است");
+    //   return;
+    // }
+
+    setLoginError("");
     try {
       const response = await loginUser({
         employeeCode: data.employeeCode,
@@ -151,7 +175,11 @@ export default function UnifiedLoginForm() {
         return;
       }
 
-      const normalizedRole = activeRole.key;
+      const normalizedRole = ROLE_MAP[user.role] || activeRole.key;
+      if (normalizedRole !== activeRole.key) {
+        notifyError("نقش انتخاب‌شده با نقش حساب کاربری مطابقت ندارد");
+        return;
+      }
 
       const safeUser = {
         _id: user._id,
@@ -174,7 +202,9 @@ export default function UnifiedLoginForm() {
 
       notifySuccess(`ورود موفق | ${activeRole.label}`);
     } catch (err) {
-      notifyError(err?.data?.message || "ورود ناموفق");
+      const message = err?.data?.message || "ورود ناموفق";
+      setLoginError(message);
+      notifyError(message);
       console.error(err);
     }
   };
@@ -218,17 +248,20 @@ export default function UnifiedLoginForm() {
           ))}
         </div>
 
+        {loginError && (
+          <div className="mb-4 rounded-xl border border-red-500/30 bg-red-500/10 p-3 text-sm font-bold text-red-300">
+            {loginError}
+          </div>
+        )}
+
         {/* Form */}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           <div>
             <input
               {...register("employeeCode")}
+              name="employeeCode"
               placeholder="شناسه ورود"
-              onChange={(e) => {
-                const value = e.target.value;
-                // حذف تمام کاراکترهای فارسی و عربی
-                e.target.value = value.replace(/[\u0600-\u06FF]/g, "");
-              }}
+              onChange={normalizeInput("employeeCode")}
               className="w-full bg-[#0f1115] border border-gray-800 rounded-xl py-4 px-4 text-white font-bold focus:outline-none focus:border-yellow-400"
             />
             <ErrorMsg msg={errors.employeeCode?.message} />
@@ -237,13 +270,10 @@ export default function UnifiedLoginForm() {
           <div className="relative">
             <input
               {...register("password")}
+              name="password"
               type={showPass ? "text" : "password"}
               placeholder="رمز عبور"
-              onChange={(e) => {
-                const value = e.target.value;
-                // حذف تمام کاراکترهای فارسی و عربی
-                e.target.value = value.replace(/[\u0600-\u06FF]/g, "");
-              }}
+              onChange={normalizeInput("password")}
               className="w-full bg-[#0f1115] border border-gray-800 rounded-xl py-4 px-4 text-white font-bold focus:outline-none focus:border-yellow-400"
             />
             <button
@@ -257,13 +287,13 @@ export default function UnifiedLoginForm() {
           </div>
 
           {/* CAPTCHA */}
-          <div className="flex justify-center scale-90">
+          {/* <div className="flex justify-center scale-90">
             <ReCAPTCHA
               sitekey="6LdnLyAsAAAAANcQ13SwbVVzuOhdHmjmbDiyGnkK"
               onChange={(val) => setCaptchaValue(val)}
               hl="fa"
             />
-          </div>
+          </div> */}
 
           <button
             type="submit"
