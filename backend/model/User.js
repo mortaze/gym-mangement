@@ -13,7 +13,7 @@ const userSchema = mongoose.Schema(
       maxLength: [100, "Name is too large"],
     },
 
-    // نام کاربری اختیاری برای ورود یا seed
+    // نام کاربری اختیاری برای ورود
     username: {
       type: String,
       unique: true,

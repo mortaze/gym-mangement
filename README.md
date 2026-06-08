@@ -36,48 +36,15 @@ Authorization: Bearer <token>
 
 or the `token` HTTP-only cookie set by `POST /api/auth/login`.
 
-Supported user roles in the `User` model include the existing application roles plus the simple role values required for seeding:
+Supported user roles in the `User` model include the existing application roles used by MongoDB-backed authentication:
 
-- `Admin`
-- `Member`
-- `Trainer`
-- `Reception`
-- `CafeManager`
-- `admin`
-- `user`
+- `Admin` / `admin`
+- `Member` / `member` / `user`
+- `Trainer` / `trainer`
+- `Reception` / `reception`
+- `CafeManager` / `cafe`
 
-Use `admin`/`user` for the default seeded accounts. Existing role names remain available for compatibility.
-
-## Default User Seeding
-
-A safe user seed script is available at `scripts/seedUsers.js`.
-
-Run it manually from the repository root:
-
-```bash
-node scripts/seedUsers.js
-```
-
-The script:
-
-- Connects to MongoDB.
-- Creates a default admin and normal user.
-- Hashes passwords with `bcryptjs`.
-- Skips existing users by `email`, `username`, or `employeeCode`.
-
-Default users:
-
-| Role | Email | Username | Employee Code | Password |
-| --- | --- | --- | --- | --- |
-| admin | `admin@example.com` | `admin` | `ADMIN001` | `Admin@123456` |
-| user | `user@example.com` | `user` | `USER001` | `User@123456` |
-
-Override passwords with:
-
-```env
-SEED_ADMIN_PASSWORD=your-admin-password
-SEED_USER_PASSWORD=your-user-password
-```
+The application does not create demo users for login. Authentication reads only existing MongoDB users and returns role-aware redirects from `POST /api/auth/login`.
 
 ## Health Endpoint
 
@@ -99,26 +66,12 @@ Authentication: not required.
 
 Logs in by `employeeCode`, `email`, or `username` plus password. Returns a JWT in the response body and sets an HTTP-only cookie named `token`.
 
-Request body examples:
+Request body example:
 
 ```json
 {
-  "employeeCode": "ADMIN001",
-  "password": "Admin@123456"
-}
-```
-
-```json
-{
-  "email": "admin@example.com",
-  "password": "Admin@123456"
-}
-```
-
-```json
-{
-  "username": "admin",
-  "password": "Admin@123456"
+  "loginIdentifier": "<employeeCode-or-email-or-username>",
+  "password": "<password>"
 }
 ```
 
@@ -129,15 +82,16 @@ Success response example:
   "success": true,
   "token": "<jwt>",
   "user": {
-    "_id": "665f1f000000000000000001",
-    "name": "Default Admin",
-    "username": "admin",
-    "employeeCode": "ADMIN001",
-    "role": "admin",
-    "email": "admin@example.com",
+    "_id": "<mongo-user-id>",
+    "name": "<user-name>",
+    "username": "<username>",
+    "employeeCode": "<employee-code>",
+    "role": "<normalized-role>",
+    "email": "<email>",
     "profileImage": null,
     "status": "active"
-  }
+  },
+  "redirectTo": "<role-dashboard-path>"
 }
 ```
 
@@ -213,12 +167,12 @@ Success response example:
 {
   "success": true,
   "user": {
-    "_id": "665f1f000000000000000001",
-    "name": "Default Admin",
-    "username": "admin",
-    "employeeCode": "ADMIN001",
-    "role": "admin",
-    "email": "admin@example.com",
+    "_id": "<mongo-user-id>",
+    "name": "<user-name>",
+    "username": "<username>",
+    "employeeCode": "<employee-code>",
+    "role": "<normalized-role>",
+    "email": "<email>",
     "status": "active"
   }
 }
@@ -804,8 +758,4 @@ cd backend
 npm run build
 ```
 
-Seed users:
-
-```bash
-node scripts/seedUsers.js
-```
+Login users must already exist in MongoDB; no seed command is provided for authentication.

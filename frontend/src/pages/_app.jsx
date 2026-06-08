@@ -1,4 +1,3 @@
-// frontend\src\pages\_app.jsx
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
@@ -6,6 +5,7 @@ import store from "@/redux/store";
 import { Provider } from "react-redux";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import ReactModal from "react-modal";
+import { clearAuth, fetchCurrentUser, getDashboardPath, getStoredAuth, normalizeRole, persistAuth } from "@/utils/auth";
 
 import "../styles/globals.css";
 import "../styles/dashboard.css";
@@ -13,64 +13,74 @@ import "../styles/dashboard.css";
 const NEXT_PUBLIC_GOOGLE_CLIENT_ID =
   "768004342999-p4ivhapdmh7sm1pv02vft691vlt9d38n.apps.googleusercontent.com";
 
-// نقش‌های مجاز برای هر مسیر
+const publicRoutes = ["/"];
+
 const routeRoleMap = {
-  "/users-dashboard": ["user"],
-  "/trainers-dashboard": ["trainer", "coach"],
+  "/admin-dashboard": ["admin"],
   "/manager-dashboard": ["admin"],
-  "/cafe-dashboard": ["cafe"],
+  "/trainers-dashboard": ["trainer"],
+  "/member-dashboard": ["member"],
+  "/users-dashboard": ["member"],
+  "/cafe-dashboard": ["cafeManager"],
   "/reception-dashboard": ["reception"],
 };
 
-export default function App({ Component, pageProps }) {
+const getAllowedRolesForPath = (pathname) => {
+  const matchedRoute = Object.keys(routeRoleMap).find((route) =>
+    pathname === route || pathname.startsWith(`${route}/`),
+  );
+  return matchedRoute ? routeRoleMap[matchedRoute] : null;
+};
+
+function AuthGate({ children }) {
   const router = useRouter();
 
-  // ⭐ Route Guard
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    if (typeof window === "undefined" || !router.isReady) return;
 
-    const publicRoutes = ["/"]; // فقط صفحه لاگین
-    const currentUserRaw = sessionStorage.getItem("currentUser");
-    const currentUser = currentUserRaw ? JSON.parse(currentUserRaw) : null;
+    let cancelled = false;
 
-    // اگر صفحه عمومی نیست و کاربر لاگین نکرده
-    if (!currentUser && !publicRoutes.includes(router.pathname)) {
-      router.replace("/");
-      return;
-    }
+    const guardRoute = async () => {
+      const isPublicRoute = publicRoutes.includes(router.pathname);
+      const { token, user } = getStoredAuth();
 
-    // چک نقش کاربر برای مسیرهای محدود؛ مسیرهای داینامیک داشبورد هم باید مجاز بمانند.
-    const matchedRoute = Object.keys(routeRoleMap).find((route) =>
-      router.pathname === route || router.pathname.startsWith(`${route}/`),
-    );
-    const allowedRoles = matchedRoute ? routeRoleMap[matchedRoute] : null;
-    if (allowedRoles && currentUser) {
-      if (!allowedRoles.includes(currentUser.role)) {
-        // نقش مجاز نیست → ریدایرکت به داشبورد خودش
-        switch (currentUser.role) {
-          case "user":
-            router.replace("/users-dashboard");
-            break;
-          case "trainer":
-            router.replace("/trainers-dashboard");
-            break;
-          case "admin":
-            router.replace("/manager-dashboard");
-            break;
-          case "cafe":
-            router.replace("/cafe-dashboard");
-            break;
-          case "reception":
-            router.replace("/reception-dashboard");
-            break;
-          default:
-            router.replace("/");
-        }
+      if (!token || !user) {
+        if (!isPublicRoute) router.replace("/");
+        return;
       }
-    }
-  }, [router.pathname]);
 
-  // React Modal
+      try {
+        const freshUser = await fetchCurrentUser(token);
+        if (cancelled) return;
+        persistAuth(token, freshUser);
+
+        if (isPublicRoute) {
+          router.replace(getDashboardPath(freshUser.role));
+          return;
+        }
+
+        const allowedRoles = getAllowedRolesForPath(router.pathname);
+        const currentRole = normalizeRole(freshUser.role);
+        if (allowedRoles && !allowedRoles.includes(currentRole)) {
+          router.replace(getDashboardPath(currentRole));
+        }
+      } catch (error) {
+        if (cancelled) return;
+        clearAuth();
+        if (!isPublicRoute) router.replace("/");
+      }
+    };
+
+    guardRoute();
+    return () => {
+      cancelled = true;
+    };
+  }, [router, router.isReady, router.pathname]);
+
+  return children;
+}
+
+export default function App({ Component, pageProps }) {
   useEffect(() => {
     if (typeof window !== "undefined") {
       ReactModal.setAppElement("body");
@@ -80,7 +90,9 @@ export default function App({ Component, pageProps }) {
   return (
     <GoogleOAuthProvider clientId={NEXT_PUBLIC_GOOGLE_CLIENT_ID}>
       <Provider store={store}>
-        <Component {...pageProps} />
+        <AuthGate>
+          <Component {...pageProps} />
+        </AuthGate>
       </Provider>
     </GoogleOAuthProvider>
   );

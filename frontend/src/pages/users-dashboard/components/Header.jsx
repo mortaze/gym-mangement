@@ -55,11 +55,9 @@ export default function Header({ onOpenSidebar }) {
     });
 
     if (result.isConfirmed) {
-      // 🔥 پاک کردن کل sessionStorage
-      sessionStorage.clear();
-
-      // (اختیاری) اگر localStorage هم داری
-      // localStorage.clear();
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      sessionStorage.removeItem("currentUser");
 
       // ریدایرکت امن به صفحه اصلی
       router.replace("/");

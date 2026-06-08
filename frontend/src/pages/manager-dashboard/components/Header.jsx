@@ -139,8 +139,9 @@ export default function Header({ onOpenSidebar }) {
       // پاک‌سازی کل session و local
       try {
         if (typeof window !== "undefined") {
-          sessionStorage.clear();
-          sessionStorage.clear();
+          localStorage.removeItem("token");
+          localStorage.removeItem("user");
+          sessionStorage.removeItem("currentUser");
         }
       } catch (e) {
         console.error("Error clearing storage:", e);
