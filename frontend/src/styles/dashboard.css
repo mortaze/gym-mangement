@@ -45,3 +45,42 @@ body {
 .scrollbar-hide::-webkit-scrollbar {
   display: none; /* Chrome, Safari and Opera */
 }
+
+/* Unified production dark dashboard theme */
+.dashboard-dark-shell,
+.dashboard-dark-shell section,
+.dashboard-dark-shell article {
+  color-scheme: dark;
+}
+.dashboard-dark-shell .bg-gray-200,
+.dashboard-dark-shell .bg-gray-100,
+.dashboard-dark-shell .bg-white {
+  background-color: #11141b !important;
+  color: #f8fafc !important;
+  border-color: #1f2937 !important;
+}
+.dashboard-dark-shell .text-black { color: #f8fafc !important; }
+.dashboard-dark-shell .text-gray-800,
+.dashboard-dark-shell .text-gray-700 { color: #d1d5db !important; }
+.dashboard-dark-shell input,
+.dashboard-dark-shell select,
+.dashboard-dark-shell textarea {
+  background-color: #151922 !important;
+  color: #f8fafc !important;
+  border-color: #374151 !important;
+}
+.dashboard-dark-shell table,
+.dashboard-dark-shell thead,
+.dashboard-dark-shell tbody,
+.dashboard-dark-shell tr,
+.dashboard-dark-shell td,
+.dashboard-dark-shell th {
+  background-color: #11141b !important;
+  color: #e5e7eb !important;
+  border-color: #283241 !important;
+}
+.dashboard-dark-shell .modal,
+.dashboard-dark-shell [role="dialog"] {
+  background-color: #11141b !important;
+  color: #f8fafc !important;
+}

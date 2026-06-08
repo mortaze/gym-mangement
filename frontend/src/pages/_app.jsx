@@ -39,8 +39,11 @@ export default function App({ Component, pageProps }) {
       return;
     }
 
-    // چک نقش کاربر برای مسیرهای محدود
-    const allowedRoles = routeRoleMap[router.pathname];
+    // چک نقش کاربر برای مسیرهای محدود؛ مسیرهای داینامیک داشبورد هم باید مجاز بمانند.
+    const matchedRoute = Object.keys(routeRoleMap).find((route) =>
+      router.pathname === route || router.pathname.startsWith(`${route}/`),
+    );
+    const allowedRoles = matchedRoute ? routeRoleMap[matchedRoute] : null;
     if (allowedRoles && currentUser) {
       if (!allowedRoles.includes(currentUser.role)) {
         // نقش مجاز نیست → ریدایرکت به داشبورد خودش

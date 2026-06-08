@@ -26,8 +26,8 @@ const CafeMenuSchema = mongoose.Schema(
       min: 0,
     },
     img: {
-      type: String, // URL عکس
-      required: true,
+      type: String, // URL عکس (optional)
+      default: "",
     },
     kcal: {
       type: Number,

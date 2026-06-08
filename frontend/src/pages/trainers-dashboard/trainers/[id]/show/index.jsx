@@ -23,6 +23,9 @@ export default function TrainingRequestShowPage() {
     trainerNotes: "",
     userrNotes: "",
     trainingPlan: "",
+    nutritionPlan: "",
+    trainingDays: "3",
+    exercises: "",
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -92,15 +95,13 @@ export default function TrainingRequestShowPage() {
           console.warn("درخواست مربی نداشت — دسترسی بررسی نشد");
         } else if (
           String(reqTrainerId) !== String(trainer._id) &&
-          trainer.role !== "Admin"
+          !["Admin", "admin"].includes(trainer.role)
         ) {
           console.warn("⛔ trainer mismatch", {
             reqTrainerId,
             trainerId: trainer._id,
           });
-          // اگر می‌خواهی redirect کن:
-          router.replace("/403");
-          return;
+          throw new Error("این درخواست به مربی دیگری اختصاص دارد.");
         }
 
         setRequest(json.request);
@@ -113,6 +114,9 @@ export default function TrainingRequestShowPage() {
           trainerNotes: json.request.trainerNotes || "",
           userNotes: json.request.userNotes || "",
           trainingPlan: json.request.trainingPlan || "",
+          nutritionPlan: json.request.nutritionPlan || "",
+          trainingDays: "3",
+          exercises: "",
         });
 
         // 3) گرفتن اطلاعات کامل کاربر مرتبط
@@ -179,6 +183,23 @@ export default function TrainingRequestShowPage() {
       console.log("📥 save response:", json);
 
       if (json.success) {
+        const userId = request?.userId?._id || request?.userId;
+        if (userId && trainer?._id && form.trainingPlan) {
+          const exercises = String(form.exercises || "").split("\n").map((line) => {
+            const [name, sets, reps, restTime] = line.split("|").map((part) => part?.trim());
+            return name ? { name, sets, reps, restTime } : null;
+          }).filter(Boolean);
+          await fetch(`${API_BASE}/programs/training`, {
+            method: "POST", headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ userId, trainerId: trainer._id, requestId: request._id, title: "برنامه تمرینی اختصاصی", trainingDays: Number(form.trainingDays) || 3, exercises, }),
+          });
+        }
+        if (userId && trainer?._id && form.nutritionPlan) {
+          await fetch(`${API_BASE}/programs/nutrition`, {
+            method: "POST", headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ userId, trainerId: trainer._id, requestId: request._id, title: "برنامه تغذیه اختصاصی", plan: form.nutritionPlan, }),
+          });
+        }
         // آپدیت state محلی
         setRequest(json.request ?? { ...request, ...payload });
 
@@ -289,6 +310,11 @@ export default function TrainingRequestShowPage() {
               <label className="text-xs text-gray-500">ایمیل</label>
               <div className="mt-1 text-gray-300">{user?.email ?? "—"}</div>
             </div>
+            <div><label className="text-xs text-gray-500">BMI</label><div className="mt-1 text-gray-300">{request?.bmi ?? user?.bmi ?? "—"}</div></div>
+            <div><label className="text-xs text-gray-500">اهداف</label><div className="mt-1 text-gray-300">{request?.goals?.join("، ") || "—"}</div></div>
+            <div><label className="text-xs text-gray-500">سابقه تمرین</label><div className="mt-1 text-gray-300">{request?.trainingExperience || "—"}</div></div>
+            <div><label className="text-xs text-gray-500">آسیب‌دیدگی</label><div className="mt-1 text-gray-300">{request?.injuries || "—"}</div></div>
+            <div><label className="text-xs text-gray-500">روزهای آزاد</label><div className="mt-1 text-gray-300">{request?.weeklyAvailableDays || "—"}</div></div>
           </div>
         </section>
 
@@ -386,6 +412,14 @@ export default function TrainingRequestShowPage() {
             className="w-full bg-gray-800 p-3 rounded-lg text-white mt-2 min-h-[160px] font-mono text-sm"
             placeholder='مثال: {"days":[...]} یا متن توضیحی'
           />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+            <Field label="تعداد روزهای تمرین" value={form.trainingDays} onChange={(v) => onChange("trainingDays", v)} />
+            <Field label="حرکات (هر خط: حرکت | ست | تکرار | استراحت)" value={form.exercises} onChange={(v) => onChange("exercises", v)} />
+          </div>
+        </section>
+        <section className="mb-6">
+          <label className="text-sm text-gray-400">برنامه تغذیه</label>
+          <textarea value={form.nutritionPlan} onChange={(e) => onChange("nutritionPlan", e.target.value)} className="w-full bg-gray-800 p-3 rounded-lg text-white mt-2 min-h-[140px]" placeholder="وعده‌ها، کالری، مکمل‌ها و نکات تغذیه..." />
         </section>
         <SelectField
           label="وضعیت"

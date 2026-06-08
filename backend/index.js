@@ -16,6 +16,9 @@ const cafeMenuRoutes = require("./routes/CafeMenu.routes");
 const { uploadRoot, imageRoot, documentRoot } = require("./utils/uploadPaths");
 const trainingRequestRoutes = require("./routes/trainingRequest.routes");
 const equipmentRoutes = require("./routes/equipment.routes");
+const membershipRoutes = require("./routes/membership.routes");
+const programRoutes = require("./routes/program.routes");
+const { expireMemberships } = require("./utils/membership");
 
 // --- Middleware ---
 const globalErrorHandler = require("./middleware/global-error-handler");
@@ -82,6 +85,8 @@ app.use("/api/admin", adminRoutes);
 app.use("/api/upload", uploadRoutes);
 app.use("/api/training-requests", trainingRequestRoutes);
 app.use("/api/equipment", equipmentRoutes);
+app.use("/api/memberships", membershipRoutes);
+app.use("/api/programs", programRoutes);
 app.use("/api/menu", cafeMenuRoutes);
 app.use("/menu", cafeMenuRoutes);
 
@@ -117,6 +122,11 @@ process.on("uncaughtException", (err) => {
 });
 
 // --- Start Server ---
+setInterval(() => {
+  expireMemberships().catch((err) => console.error("Membership scheduler error:", err));
+}, 60 * 60 * 1000);
+expireMemberships().catch((err) => console.error("Membership startup check error:", err));
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });

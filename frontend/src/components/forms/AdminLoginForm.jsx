@@ -138,6 +138,14 @@ export default function UnifiedLoginForm() {
     reset,
   } = useForm({
     resolver: yupResolver(schema),
+    defaultValues: { employeeCode: "", password: "" },
+  });
+
+  const employeeCodeField = register("employeeCode", {
+    setValueAs: (value) => String(value || "").replace(/[\u0600-\u06FF]/g, "").trim(),
+  });
+  const passwordField = register("password", {
+    setValueAs: (value) => String(value || "").replace(/[\u0600-\u06FF]/g, ""),
   });
 
   const onSubmit = async (data) => {
@@ -159,7 +167,11 @@ export default function UnifiedLoginForm() {
         return;
       }
 
-      const normalizedRole = activeRole.key;
+      const normalizedRole = ROLE_MAP[user.role] || String(user.role || activeRole.key).toLowerCase();
+      if (normalizedRole !== activeRole.key && activeRole.key !== "admin") {
+        notifyError("نقش انتخاب‌شده با نقش حساب کاربری هماهنگ نیست");
+        return;
+      }
 
       const safeUser = {
         _id: user._id,
@@ -230,12 +242,11 @@ export default function UnifiedLoginForm() {
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           <div>
             <input
-              {...register("employeeCode")}
+              {...employeeCodeField}
               placeholder="شناسه ورود"
               onChange={(e) => {
-                const value = e.target.value;
-                // حذف تمام کاراکترهای فارسی و عربی
-                e.target.value = value.replace(/[\u0600-\u06FF]/g, "");
+                e.target.value = e.target.value.replace(/[\u0600-\u06FF]/g, "");
+                employeeCodeField.onChange(e);
               }}
               className="w-full bg-[#0f1115] border border-gray-800 rounded-xl py-4 px-4 text-white font-bold focus:outline-none focus:border-yellow-400"
             />
@@ -244,13 +255,12 @@ export default function UnifiedLoginForm() {
 
           <div className="relative">
             <input
-              {...register("password")}
+              {...passwordField}
               type={showPass ? "text" : "password"}
               placeholder="رمز عبور"
               onChange={(e) => {
-                const value = e.target.value;
-                // حذف تمام کاراکترهای فارسی و عربی
-                e.target.value = value.replace(/[\u0600-\u06FF]/g, "");
+                e.target.value = e.target.value.replace(/[\u0600-\u06FF]/g, "");
+                passwordField.onChange(e);
               }}
               className="w-full bg-[#0f1115] border border-gray-800 rounded-xl py-4 px-4 text-white font-bold focus:outline-none focus:border-yellow-400"
             />

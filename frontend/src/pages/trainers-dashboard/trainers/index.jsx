@@ -22,7 +22,10 @@ export default function TrainingRequestsPage() {
 
   const fetchRequests = async () => {
     try {
-      const res = await fetch(`${API_BASE_URL}/training-requests`);
+      const raw = typeof window !== "undefined" ? sessionStorage.getItem("currentUser") : null;
+      const currentUser = raw ? JSON.parse(raw) : null;
+      const url = currentUser?._id ? `${API_BASE_URL}/training-requests/trainer/${currentUser._id}` : `${API_BASE_URL}/training-requests`;
+      const res = await fetch(url);
       const data = await res.json();
       if (data.success) setRequests(data.requests);
       console.log("====================================");
@@ -94,11 +97,11 @@ export default function TrainingRequestsPage() {
                 <div className="p-5 border-b border-gray-800 flex justify-between items-center">
                   <div className="flex items-center gap-3">
                     <div className="w-12 h-12 flex items-center justify-center bg-gray-800 rounded-xl text-yellow-400 font-black text-lg border border-gray-700">
-                      {req.userId.name.charAt(0)}
+                      {req.userId?.name?.charAt(0) || "؟"}
                     </div>
                     <div>
                       <p className="text-white font-black leading-tight">
-                        {req.userId.name}
+                        {req.userId?.name || "—"}
                       </p>
                       <p className="text-[11px] text-gray-500 mt-1 flex items-center gap-1">
                         <Calendar size={12} />
@@ -137,7 +140,7 @@ export default function TrainingRequestsPage() {
                   <div className="flex items-center gap-2">
                     <CreditCard size={14} className="text-yellow-400" />
                     <span>
-                      {req.paymentMethod} – {req.amount.toLocaleString()} تومان
+                      {req.paymentMethod} – {Number(req.amount || 0).toLocaleString()} تومان
                     </span>
                   </div>
 

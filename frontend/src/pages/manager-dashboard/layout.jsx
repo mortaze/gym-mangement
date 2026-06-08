@@ -9,7 +9,7 @@ export default function DashboardLayout({ children }) {
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
   return (
-    <div className="flex" dir="rtl">
+    <div className="flex bg-[#080a0f] min-h-screen" dir="rtl">
       <Sidebar
         isMobileOpen={isMobileSidebarOpen}
         onClose={() => setIsMobileSidebarOpen(false)}
@@ -17,7 +17,7 @@ export default function DashboardLayout({ children }) {
 
       <main
         id="mainContent"
-        className="flex-1 p-6 bg-gray-200 text-black min-h-screen lg:mr-56"
+        className="flex-1 p-4 md:p-6 bg-[#080a0f] text-gray-100 min-h-screen lg:mr-56 dashboard-dark-shell"
       >
         <Header onOpenSidebar={() => setIsMobileSidebarOpen(true)} />
         {children}

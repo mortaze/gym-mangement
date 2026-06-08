@@ -44,7 +44,7 @@ const userSchema = mongoose.Schema(
     // نقش کاربر
     role: {
       type: String,
-      enum: ["Member", "Trainer", "Reception", "Admin", "CafeManager", "admin", "user"],
+      enum: ["Member", "Trainer", "Reception", "Admin", "CafeManager", "Finance", "admin", "user"],
       required: [true, "Role is required"],
       default: "Member",
     },
@@ -55,6 +55,28 @@ const userSchema = mongoose.Schema(
       trim: true,
       lowercase: true,
       match: [/\S+@\S+\.\S+/, "Please provide a valid email address"],
+    },
+
+
+    age: {
+      type: Number,
+      min: 1,
+      max: 120,
+    },
+
+    height: {
+      type: Number,
+      min: 0,
+    },
+
+    weight: {
+      type: Number,
+      min: 0,
+    },
+
+    bmi: {
+      type: Number,
+      min: 0,
     },
 
     // شماره تماس
@@ -99,6 +121,17 @@ const userSchema = mongoose.Schema(
   }
 );
 
+
+userSchema.pre("validate", function (next) {
+  const height = Number(this.height);
+  const weight = Number(this.weight);
+  if (height > 0 && weight > 0) {
+    const heightInMeters = height > 3 ? height / 100 : height;
+    this.bmi = Number((weight / (heightInMeters * heightInMeters)).toFixed(1));
+  }
+  next();
+});
+
 // هش کردن پسورد قبل از ذخیره
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
@@ -133,6 +166,9 @@ userSchema.methods.generatePasswordResetToken = function () {
 userSchema.methods.hasRole = function (...roles) {
   return roles.includes(this.role);
 };
+
+userSchema.index({ role: 1, status: 1 });
+userSchema.index({ employeeCode: 1 });
 
 const User = mongoose.model("User", userSchema);
 module.exports = User;

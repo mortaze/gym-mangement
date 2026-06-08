@@ -16,23 +16,27 @@ exports.createRequest = async (req, res) => {
     const {
       userId,
       trainerId,
+      goals,
+      age,
       height,
       weight,
+      trainingExperience,
+      injuries,
+      weeklyAvailableDays,
+      notes,
       paymentMethod,
       amount,
       userNotes,
     } = req.body;
 
     // دریافت فایل‌ها از multer
-    const photos = req.files;
+    const photos = req.files || [];
 
     if (
       !userId ||
       !trainerId ||
       !height ||
       !weight ||
-      !photos ||
-      photos.length === 0 ||
       !amount
     ) {
       return res
@@ -46,8 +50,14 @@ exports.createRequest = async (req, res) => {
     const request = await TrainingRequest.create({
       userId,
       trainerId,
+      goals: Array.isArray(goals) ? goals : String(goals || "").split(",").map((goal) => goal.trim()).filter(Boolean),
+      age,
       height,
       weight,
+      trainingExperience,
+      injuries,
+      weeklyAvailableDays,
+      notes,
       photos: photoPaths,
       paymentMethod,
       amount,
@@ -82,7 +92,7 @@ exports.getAllRequests = async (req, res) => {
     if (trainerId) filter.trainerId = trainerId;
 
     const requests = await TrainingRequest.find(filter)
-      .populate("userId", "name profileImage")
+      .populate("userId", "name profileImage age height weight bmi employeeCode contactNumber email")
       .populate("trainerId", "name profileImage role")
       .sort({ createdAt: -1 });
 
@@ -103,7 +113,7 @@ exports.getRequestById = async (req, res) => {
     const { id } = req.params;
 
     const request = await TrainingRequest.findById(id)
-      .populate("userId", "name profileImage")
+      .populate("userId", "name profileImage age height weight bmi employeeCode contactNumber email")
       .populate("trainerId", "name profileImage role");
 
     if (!request)
@@ -124,7 +134,7 @@ exports.getRequestById = async (req, res) => {
 exports.updateRequest = async (req, res) => {
   try {
     const { id } = req.params;
-    const { by, status, userNotes, trainerNotes, trainingPlan } = req.body;
+    const { by, status, userNotes, trainerNotes, trainingPlan, nutritionPlan } = req.body;
 
     const request = await TrainingRequest.findById(id);
     if (!request)
@@ -150,6 +160,7 @@ exports.updateRequest = async (req, res) => {
     if (userNotes !== undefined) request.userNotes = userNotes;
     if (trainerNotes !== undefined) request.trainerNotes = trainerNotes;
     if (trainingPlan !== undefined) request.trainingPlan = trainingPlan;
+    if (nutritionPlan !== undefined) request.nutritionPlan = nutritionPlan;
 
     // اضافه کردن رکورد به تاریخچه
     request.history.push({
@@ -225,7 +236,7 @@ exports.getRequestsByTrainer = async (req, res) => {
   try {
     const { trainerId } = req.params;
     const requests = await TrainingRequest.find({ trainerId })
-      .populate("userId", "name profileImage")
+      .populate("userId", "name profileImage age height weight bmi employeeCode contactNumber email")
       .sort({ createdAt: -1 });
 
     res.json({ success: true, requests });

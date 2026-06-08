@@ -12,7 +12,8 @@ const historySchema = mongoose.Schema(
     },
     userNotes: { type: String },
     trainerNotes: { type: String },
-    trainingPlan: { type: String }, // می‌تونه JSON هم باشه
+    trainingPlan: { type: String },
+    nutritionPlan: { type: String }, // می‌تونه JSON هم باشه
   },
   { _id: false },
 );
@@ -29,9 +30,16 @@ const trainingRequestSchema = mongoose.Schema(
       ref: "User",
       required: true,
     },
+    goals: [{ type: String, trim: true }],
+    age: { type: Number, min: 1, max: 120 },
     height: { type: Number, required: true },
     weight: { type: Number, required: true },
-    photos: [{ type: String, required: true }],
+    bmi: { type: Number, min: 0 },
+    trainingExperience: { type: String, trim: true },
+    injuries: { type: String, trim: true },
+    weeklyAvailableDays: { type: Number, min: 1, max: 7 },
+    notes: { type: String, trim: true },
+    photos: [{ type: String }],
     paymentMethod: {
       type: String,
       enum: ["online", "cash"],
@@ -46,10 +54,24 @@ const trainingRequestSchema = mongoose.Schema(
     userNotes: { type: String },
     trainerNotes: { type: String },
     trainingPlan: { type: String },
+    nutritionPlan: { type: String },
     history: [historySchema], // اینجا همه تغییرات ثبت می‌شود
   },
   { timestamps: true },
 );
+
+trainingRequestSchema.pre("validate", function (next) {
+  const height = Number(this.height);
+  const weight = Number(this.weight);
+  if (height > 0 && weight > 0) {
+    const heightInMeters = height > 3 ? height / 100 : height;
+    this.bmi = Number((weight / (heightInMeters * heightInMeters)).toFixed(1));
+  }
+  next();
+});
+
+trainingRequestSchema.index({ userId: 1, createdAt: -1 });
+trainingRequestSchema.index({ trainerId: 1, status: 1, createdAt: -1 });
 
 const TrainingRequest = mongoose.model(
   "TrainingRequest",
