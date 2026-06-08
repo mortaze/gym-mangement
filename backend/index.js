@@ -85,6 +85,7 @@ app.use("/api/admin", adminRoutes);
 app.use("/api/upload", uploadRoutes);
 app.use("/api/training-requests", trainingRequestRoutes);
 app.use("/api/equipment", equipmentRoutes);
+app.use("/api/memberships", membershipRoutes);
 app.use("/api/menu", cafeMenuRoutes);
 app.use("/api/memberships", membershipRoutes);
 app.use("/api/programs", programRoutes);
@@ -92,6 +93,12 @@ app.use("/menu", cafeMenuRoutes);
 
 // و برای پوشه‌ی آپلودها
 app.use("/uploads", express.static(uploadRoot));
+// Keep membership day/session status consistent after restarts and during runtime.
+refreshMembershipStatuses().catch((err) => console.error("Membership refresh failed:", err));
+setInterval(() => {
+  refreshMembershipStatuses().catch((err) => console.error("Membership refresh failed:", err));
+}, 24 * 60 * 60 * 1000);
+
 // --- Root Route ---
 app.get("/", (req, res) => res.send("Server is running successfully"));
 

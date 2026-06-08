@@ -62,6 +62,9 @@ export default function FinanceDashboard() {
               <Activity size={14} className="text-yellow-400" /> پرداخت‌های شبیه‌سازی‌شده، تمدیدها و گزارش درآمد
             </p>
           </div>
+          <button onClick={load} className="flex items-center gap-2 rounded-2xl bg-yellow-400 px-5 py-3 font-black text-black">
+            <RefreshCcw size={18} /> بروزرسانی
+          </button>
         </div>
 
         {loading && <div className="text-yellow-400 font-black mb-6">در حال بارگذاری...</div>}
@@ -122,5 +125,14 @@ export default function FinanceDashboard() {
         </div>
       </div>
     </DashboardLayout>
+  );
+}
+
+function Stat({ icon, label, value }) {
+  return (
+    <div className="rounded-[2rem] border border-gray-800 bg-[#1a1d23] p-6">
+      <div className="mb-4 flex items-center justify-between text-yellow-400">{icon}<span className="text-[10px] font-black uppercase text-gray-500">{label}</span></div>
+      <div className="text-2xl font-black text-white">{value}</div>
+    </div>
   );
 }

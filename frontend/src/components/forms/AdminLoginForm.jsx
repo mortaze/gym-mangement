@@ -115,7 +115,7 @@ const roleRedirectMap = {
 export default function UnifiedLoginForm() {
   const [activeRole, setActiveRole] = useState(ROLES[0]);
   const [showPass, setShowPass] = useState(false);
-  const [captchaValue, setCaptchaValue] = useState(null);
+  const [loginError, setLoginError] = useState("");
 
   const router = useRouter();
   const [loginUser, { isLoading }] = useLoginUserMutation();
@@ -161,6 +161,7 @@ export default function UnifiedLoginForm() {
     //   return;
     // }
 
+    setLoginError("");
     try {
       const response = await loginUser({
         employeeCode: data.employeeCode,
@@ -201,7 +202,9 @@ export default function UnifiedLoginForm() {
 
       notifySuccess(`ورود موفق | ${activeRole.label}`);
     } catch (err) {
-      notifyError(err?.data?.message || "ورود ناموفق");
+      const message = err?.data?.message || "ورود ناموفق";
+      setLoginError(message);
+      notifyError(message);
       console.error(err);
     }
   };
@@ -245,11 +248,18 @@ export default function UnifiedLoginForm() {
           ))}
         </div>
 
+        {loginError && (
+          <div className="mb-4 rounded-xl border border-red-500/30 bg-red-500/10 p-3 text-sm font-bold text-red-300">
+            {loginError}
+          </div>
+        )}
+
         {/* Form */}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           <div>
             <input
               {...register("employeeCode")}
+              name="employeeCode"
               placeholder="شناسه ورود"
               onChange={normalizeInput("employeeCode")}
               className="w-full bg-[#0f1115] border border-gray-800 rounded-xl py-4 px-4 text-white font-bold focus:outline-none focus:border-yellow-400"
@@ -260,6 +270,7 @@ export default function UnifiedLoginForm() {
           <div className="relative">
             <input
               {...register("password")}
+              name="password"
               type={showPass ? "text" : "password"}
               placeholder="رمز عبور"
               onChange={normalizeInput("password")}

@@ -20,6 +20,11 @@ const publicUserFields = (user) => ({
   email: user.email,
   profileImage: user.profileImage,
   status: user.status,
+  age: user.age,
+  height: user.height,
+  weight: user.weight,
+  bmi: user.bmi,
+  bmiCategory: user.bmiCategory,
 });
 
 // --------------------

@@ -13,7 +13,8 @@ const historySchema = mongoose.Schema(
     },
     userNotes: { type: String },
     trainerNotes: { type: String },
-    trainingPlan: { type: String }, // می‌تونه JSON هم باشه
+    trainingPlan: { type: String },
+    nutritionPlan: { type: String }, // می‌تونه JSON هم باشه
   },
   { _id: false },
 );
