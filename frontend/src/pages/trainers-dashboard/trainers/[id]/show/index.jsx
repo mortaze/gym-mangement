@@ -18,7 +18,7 @@ export default function TrainingRequestShowPage() {
   const [request, setRequest] = useState(null);
   const [user, setUser] = useState(null);
   const [previewPhoto, setPreviewPhoto] = useState(null);
-  const [form, setForm] = useState({ status: "in_progress", trainerNotes: "", userNotes: "", title: "برنامه تمرینی اختصاصی", trainingDays: "3" });
+  const [form, setForm] = useState({ status: "approved", trainerNotes: "", userNotes: "", title: "برنامه تمرینی اختصاصی", trainingDays: "3" });
   const [exercises, setExercises] = useState([emptyExercise()]);
   const [meals, setMeals] = useState(emptyMeals);
   const [loading, setLoading] = useState(true);
@@ -39,7 +39,7 @@ export default function TrainingRequestShowPage() {
         const json = await res.json();
         if (!json.success || !json.request) throw new Error(json.message || "درخواست یافت نشد");
         setRequest(json.request);
-        setForm((prev) => ({ ...prev, status: json.request.status || "in_progress", trainerNotes: json.request.trainerNotes || "", userNotes: json.request.userNotes || "" }));
+        setForm((prev) => ({ ...prev, status: json.request.status || "approved", trainerNotes: json.request.trainerNotes || "", userNotes: json.request.userNotes || "" }));
         const userId = json.request?.userId?._id || json.request?.userId;
         if (userId) {
           const uRes = await fetch(`${API_BASE_URL}/users/${userId}`);
@@ -88,7 +88,7 @@ export default function TrainingRequestShowPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           by: "trainer",
-          status: form.status || "approved",
+          status: "approved",
           trainerNotes: form.trainerNotes,
           userNotes: form.userNotes,
           trainingPlan: JSON.stringify(trainingPayload),
@@ -180,9 +180,9 @@ export default function TrainingRequestShowPage() {
         <section className="mb-6 rounded-[2rem] border border-gray-800 bg-[#1a1d23] p-5">
           <label className="mb-2 block text-xs font-black text-gray-500">وضعیت</label>
           <select value={form.status} onChange={(e) => onChange("status", e.target.value)} className="w-full rounded-xl bg-gray-800 p-3 font-bold text-white">
-            <option value="pending">در انتظار</option>
-            <option value="in_progress">در حال پردازش</option>
-            <option value="approved">تایید شده</option>
+            <option value="pending">در انتظار صدور</option>
+            <option value="in_progress">در انتظار صدور</option>
+            <option value="approved">تأیید شده</option>
             <option value="rejected">رد شده</option>
           </select>
         </section>

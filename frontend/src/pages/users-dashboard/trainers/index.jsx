@@ -16,6 +16,12 @@ import {
 } from "lucide-react";
 import { API_BASE_URL, API_ORIGIN } from "@/config/api";
 
+const statusLabelMap = { pending: "در انتظار صدور", in_progress: "در انتظار صدور", approved: "تأیید شده", rejected: "رد شده" };
+function requestStatusLabel(req) {
+  if (req.trainingPlan) return "برنامه صادر شد";
+  return statusLabelMap[req.status] || req.status || "در انتظار صدور";
+}
+
 export default function TrainingRequestsPage() {
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -137,7 +143,7 @@ export default function TrainingRequestsPage() {
                           : "bg-red-500 text-white"
                     }`}
                   >
-                    {req.status}
+                    {requestStatusLabel(req)}
                   </span>
                 </div>
 

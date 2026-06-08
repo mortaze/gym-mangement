@@ -48,7 +48,7 @@ export default function EditCafeMenu() {
         });
 
         // نمایش تصویر فعلی
-        setPreviewImg(`${API_ORIGIN}/uploads/${product.img}`);
+        setPreviewImg(product.img ? `${API_ORIGIN}/uploads/${product.img}` : null);
       } catch (error) {
         console.error(error);
         setErrorMsg("خطا در دریافت اطلاعات محصول");
@@ -63,9 +63,9 @@ export default function EditCafeMenu() {
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     if (name === "img") {
-      const file = files[0];
-      setFormData((prev) => ({ ...prev, img: file }));
-      setPreviewImg(URL.createObjectURL(file));
+      const file = files?.[0];
+      setFormData((prev) => ({ ...prev, img: file || null }));
+      if (file) setPreviewImg(URL.createObjectURL(file));
     } else {
       setFormData((prev) => ({ ...prev, [name]: value }));
     }
@@ -124,7 +124,7 @@ export default function EditCafeMenu() {
   return (
     <DashboardLayout>
       <div
-        className="p-6 md:p-10 min-h-screen rounded-4xl bg-[#0f1115] text-right"
+        className="p-4 sm:p-6 md:p-10 min-h-screen rounded-4xl bg-[#0f1115] text-right overflow-x-hidden"
         dir="rtl"
       >
         <h1 className="text-3xl md:text-4xl font-black text-white italic mb-8">
@@ -144,7 +144,7 @@ export default function EditCafeMenu() {
 
         <form
           onSubmit={handleSubmit}
-          className="bg-[#1a1d23] p-8 rounded-3xl shadow-xl max-w-2xl mx-auto flex flex-col gap-6"
+          className="bg-[#1a1d23] p-4 sm:p-6 md:p-8 rounded-3xl shadow-xl max-w-2xl mx-auto flex flex-col gap-5 sm:gap-6"
         >
           {/* نام محصول */}
           <div className="flex flex-col">

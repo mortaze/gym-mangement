@@ -31,14 +31,11 @@ const upload = multer({ storage });
 router.post("/", upload.single("img"), async (req, res) => {
   try {
     const { name, category, price, kcal } = req.body;
-    if (!req.file)
-      return res.status(400).json({ message: "Image is required" });
-
     // تولید productId یکتا
     const lastItem = await CafeMenu.findOne().sort({ productId: -1 });
     const productId = lastItem ? lastItem.productId + 1 : 100;
 
-    const img = `CafeMenu/${req.file.filename}`;
+    const img = req.file ? `CafeMenu/${req.file.filename}` : "";
 
     const menuItem = await CafeMenu.create({
       productId,

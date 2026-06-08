@@ -13,7 +13,8 @@ import {
   Search,
 } from "lucide-react";
 import DashboardLayout from "../layout";
-import { API_BASE_URL, API_ORIGIN } from "@/config/api";
+import { API_BASE_URL } from "@/config/api";
+import { getCafeMenuImage } from "@/utils/cafe-menu";
 
 export default function CafeMenuPage() {
   const [products, setProducts] = useState([]);
@@ -70,16 +71,16 @@ export default function CafeMenuPage() {
   return (
     <DashboardLayout>
       <div
-        className="p-4 md:p-8 min-h-screen rounded-4xl bg-[#0f1115] text-right"
+        className="p-3 sm:p-4 md:p-8 min-h-screen rounded-4xl bg-[#0f1115] text-right overflow-x-hidden"
         dir="rtl"
       >
         {/* Header */}
-        <div className="mb-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+        <div className="mb-8 flex flex-col md:flex-row justify-between items-stretch md:items-center gap-4 md:gap-6">
           <div>
-            <h1 className="text-4xl md:text-5xl font-black text-white italic tracking-tighter uppercase leading-none">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-white italic tracking-tighter uppercase leading-none break-words">
               کافه <span className="text-yellow-400">نئون</span>
             </h1>
-            <p className="text-gray-500 text-[10px] font-black mt-3 flex items-center gap-2 uppercase tracking-[0.4em]">
+            <p className="text-gray-500 text-[10px] font-black mt-3 flex items-center gap-2 uppercase tracking-[0.15em] sm:tracking-[0.4em]">
               <Flame size={14} className="text-yellow-400" /> TACTICAL REFUELING
               STATION
             </p>
@@ -87,7 +88,7 @@ export default function CafeMenuPage() {
         </div>
 
         {/* Categories Bar */}
-        <div className="flex overflow-x-auto pb-4 gap-3 no-scrollbar mb-10 border-b border-gray-800/50">
+        <div className="flex max-w-full overflow-x-auto overscroll-x-contain pb-4 gap-3 no-scrollbar mb-8 sm:mb-10 border-b border-gray-800/50">
           {categories.map((cat) => (
             <button
               key={cat.id}
@@ -105,7 +106,7 @@ export default function CafeMenuPage() {
         </div>
 
         {/* Search Bar */}
-        <div className="relative mb-8 group max-w-md">
+        <div className="relative mb-8 group w-full max-w-md">
           <Search
             className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-yellow-400 transition-colors"
             size={18}
@@ -120,7 +121,7 @@ export default function CafeMenuPage() {
         </div>
 
         {/* Products Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
+        <div className="grid min-w-0 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 sm:gap-6">
           {filteredProducts.map((product) => (
             <div
               key={product._id}
@@ -129,7 +130,7 @@ export default function CafeMenuPage() {
               {/* Image */}
               <div className="relative h-48 overflow-hidden">
                 <img
-                  src={`${API_ORIGIN}/uploads/${product.img}`}
+                  src={getCafeMenuImage(product.img)}
                   alt={product.name}
                   className="w-full h-full object-cover hover:scale-110 transition-transform duration-700"
                 />
@@ -140,7 +141,7 @@ export default function CafeMenuPage() {
               </div>
 
               {/* Content */}
-              <div className="p-6">
+              <div className="p-4 sm:p-6">
                 <div className="flex justify-between items-start mb-2">
                   <p className="text-yellow-400 text-[9px] font-black uppercase tracking-widest">
                     {product.category}

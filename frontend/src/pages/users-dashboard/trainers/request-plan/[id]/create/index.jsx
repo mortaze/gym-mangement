@@ -365,8 +365,8 @@ export default function TrainingRequestPage() {
 
   return (
     <DashboardLayout>
-      <div className="p-8 bg-[#0f1115] rounded-3xl border border-gray-800">
-        <h1 className="text-2xl font-black text-white mb-6">
+      <div className="overflow-x-hidden rounded-3xl border border-gray-800 bg-[#0f1115] p-4 sm:p-6 md:p-8">
+        <h1 className="mb-6 text-xl font-black text-white sm:text-2xl">
           ثبت درخواست برنامه تمرینی فارسی
         </h1>
 
@@ -374,7 +374,7 @@ export default function TrainingRequestPage() {
         <div className="flex flex-col md:flex-row gap-4 mb-6">
           {/* مربی */}
           <div className="flex-1 p-4 bg-[#1a1d23] rounded-lg border border-gray-800">
-            <div className="flex items-center gap-4">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
               <div className="w-26 h-26 rounded-xl bg-gray-800 border-2 border-yellow-400 overflow-hidden flex items-center justify-center">
                 {trainer?.profileImage ? (
                   <img
@@ -550,16 +550,16 @@ export default function TrainingRequestPage() {
             <label className="block text-xs text-gray-500 mb-1">
               عکس‌های بدن (اختیاری)
             </label>
-            <div className="flex items-center gap-3">
+            <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-center">
               <input
                 type="file"
                 accept="image/*"
                 multiple
                 onChange={handlePhotos}
-                className="file:bg-gray-800 file:text-white file:px-3 file:py-2 file:rounded-lg cursor-pointer bg-gray-900 text-gray-300 rounded-lg p-2"
+                className="w-full cursor-pointer rounded-lg bg-gray-900 p-2 text-sm text-gray-300 file:rounded-lg file:border-0 file:bg-gray-800 file:px-3 file:py-2 file:text-white sm:w-auto"
               />
               {/* نمایش عکس‌ها */}
-              <div className="flex gap-3 overflow-x-auto">
+              <div className="flex max-w-full gap-3 overflow-x-auto pb-2">
                 {photoPreviews.length === 0 && (
                   <div className="text-gray-500">عکسی آپلود نشده</div>
                 )}
@@ -567,7 +567,7 @@ export default function TrainingRequestPage() {
                 {photoPreviews.map((p, idx) => (
                   <div
                     key={idx}
-                    className="relative w-28 h-28 rounded-md overflow-hidden border border-gray-700 cursor-pointer hover:border-yellow-400 transition"
+                    className="relative h-24 w-24 shrink-0 cursor-pointer overflow-hidden rounded-md border border-gray-700 transition hover:border-yellow-400 sm:h-28 sm:w-28"
                   >
                     <img
                       src={p}

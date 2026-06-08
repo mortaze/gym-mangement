@@ -72,14 +72,14 @@ export default function UnifiedLoginForm() {
   };
 
   return (
-    <section className="w-full max-w-2xl rounded-[2rem] border border-white/10 bg-[#151923]/95 p-5 shadow-2xl shadow-black/40 backdrop-blur sm:p-8 lg:p-10">
+    <section className="font-[Vazir] w-full max-w-2xl rounded-[2rem] border border-white/10 bg-[#151923]/95 p-5 shadow-2xl shadow-black/40 backdrop-blur sm:p-8 lg:p-10">
       <div className="mb-8 text-center">
         <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-3xl bg-yellow-400 text-black shadow-lg shadow-yellow-400/20">
           <LockKeyhole size={30} />
         </div>
         <h1 className="text-2xl font-black text-white sm:text-3xl lg:text-4xl">ورود به سامانه مدیریت باشگاه</h1>
         <p className="mx-auto mt-4 max-w-xl text-sm font-bold leading-7 text-gray-400 sm:text-base">
-          شناسه ورود و رمز عبور خود را وارد کنید. سیستم نقش شما را از دیتابیس تشخیص داده و به داشبورد مربوطه هدایت می‌کند.
+          برای ورود از بخش راهنمای ورود نقش خود را انتخاب کرده و رمز عبور Admin@123456 برای تمامی نقش‌ها استفاده کنید.
         </p>
       </div>
 
@@ -122,7 +122,7 @@ export default function UnifiedLoginForm() {
           </div>
           <div>
             <h2 className="text-base font-black text-white sm:text-lg">راهنمای ورود آزمایشی</h2>
-            <p className="text-[11px] font-bold text-gray-500">شناسه‌ها به‌صورت داینامیک از MongoDB خوانده می‌شوند؛ رمز عبور نمایش داده نمی‌شود.</p>
+            <p className="text-[11px] font-bold text-gray-500">شناسه‌ها به‌صورت داینامیک از MongoDB خوانده می‌شوند.</p>
           </div>
         </div>
 
