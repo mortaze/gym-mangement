@@ -12,7 +12,20 @@ const getUserRole = (user) => {
   return undefined;
 };
 
-const normalizeRole = (role) => String(role || "").toLowerCase();
+const ROLE_ALIASES = {
+  admin: "admin",
+  manager: "admin",
+  trainer: "trainer",
+  coach: "trainer",
+  member: "member",
+  user: "member",
+  reception: "reception",
+  cafe: "cafeManager",
+  cafemanager: "cafeManager",
+  finance: "finance",
+};
+
+const normalizeRole = (role) => ROLE_ALIASES[String(role || "").trim().toLowerCase()] || String(role || "").trim();
 
 // Middleware factory. Also supports direct Express usage: router.get('/me', protect, handler).
 function protect(roles = []) {
@@ -90,4 +103,5 @@ module.exports = {
   authorize,
   getJwtSecret,
   getUserRole,
+  normalizeRole,
 };

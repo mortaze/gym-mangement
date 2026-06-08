@@ -11,6 +11,32 @@ const {
   getUserRole,
 } = require("../middleware/authMiddleware");
 
+
+const ROLE_ALIASES = {
+  admin: "admin",
+  manager: "admin",
+  trainer: "trainer",
+  coach: "trainer",
+  member: "member",
+  user: "member",
+  reception: "reception",
+  cafe: "cafeManager",
+  cafemanager: "cafeManager",
+  finance: "finance",
+};
+
+const ROLE_LABELS = {
+  admin: "مدیر",
+  trainer: "مربی",
+  member: "ورزشکار",
+  reception: "پذیرش",
+  cafeManager: "مدیر کافه",
+};
+
+const canonicalRole = (role) => ROLE_ALIASES[String(role || "").trim().toLowerCase()] || String(role || "").trim();
+
+const selectLoginIdentifier = (user) => user.employeeCode || user.username || user.email;
+
 const ROLE_REDIRECTS = {
   admin: "/admin-dashboard",
   Admin: "/admin-dashboard",
@@ -22,6 +48,8 @@ const ROLE_REDIRECTS = {
   reception: "/reception-dashboard",
   Reception: "/reception-dashboard",
   cafe: "/cafe-dashboard",
+  cafemanager: "/cafe-dashboard",
+  cafeManager: "/cafe-dashboard",
   CafeManager: "/cafe-dashboard",
   finance: "/manager-dashboard/finance",
   Finance: "/manager-dashboard/finance",
@@ -32,7 +60,7 @@ const publicUserFields = (user) => ({
   name: user.name,
   username: user.username,
   employeeCode: user.employeeCode,
-  role: getUserRole(user),
+  role: canonicalRole(getUserRole(user)),
   email: user.email,
   profileImage: user.profileImage,
   status: user.status,
@@ -85,7 +113,7 @@ router.post("/login", async (req, res) => {
     }
 
     const token = jwt.sign(
-      { id: user._id, _id: user._id, role: getUserRole(user) },
+      { id: user._id, _id: user._id, role: canonicalRole(getUserRole(user)) },
       getJwtSecret(),
       { expiresIn: "7d" },
     );
@@ -101,7 +129,7 @@ router.post("/login", async (req, res) => {
         success: true,
         token,
         user: publicUserFields(user),
-        redirectTo: ROLE_REDIRECTS[getUserRole(user)] || ROLE_REDIRECTS[String(getUserRole(user)).toLowerCase()],
+        redirectTo: ROLE_REDIRECTS[canonicalRole(getUserRole(user))] || ROLE_REDIRECTS[String(getUserRole(user)).toLowerCase()],
       });
   } catch (error) {
     console.error("❌ Login error:", error);
@@ -160,7 +188,7 @@ router.post("/register", async (req, res) => {
     });
 
     const token = jwt.sign(
-      { id: user._id, _id: user._id, role: getUserRole(user) },
+      { id: user._id, _id: user._id, role: canonicalRole(getUserRole(user)) },
       getJwtSecret(),
       { expiresIn: "7d" },
     );
@@ -172,6 +200,44 @@ router.post("/register", async (req, res) => {
     });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
+  }
+});
+
+
+// --------------------
+// GET /api/auth/login-guides
+// --------------------
+router.get("/login-guides", async (req, res) => {
+  try {
+    const users = await User.find({
+      status: "active",
+      role: { $in: ["Admin", "admin", "Member", "member", "user", "Trainer", "trainer", "Reception", "reception", "CafeManager", "cafe", "cafeManager"] },
+    })
+      .select("employeeCode username email role createdAt")
+      .sort({ createdAt: 1 })
+      .lean();
+
+    const wantedOrder = ["admin", "trainer", "member", "reception", "cafeManager"];
+    const guideByRole = new Map();
+
+    users.forEach((user) => {
+      const role = canonicalRole(user.role);
+      const identifier = selectLoginIdentifier(user);
+      if (!wantedOrder.includes(role) || !identifier || guideByRole.has(role)) return;
+      guideByRole.set(role, {
+        role,
+        label: ROLE_LABELS[role],
+        identifier,
+      });
+    });
+
+    res.json({
+      success: true,
+      guides: wantedOrder.map((role) => guideByRole.get(role)).filter(Boolean),
+    });
+  } catch (error) {
+    console.error("❌ Login guides error:", error);
+    res.status(500).json({ success: false, message: "خطا در دریافت راهنمای ورود" });
   }
 });
 

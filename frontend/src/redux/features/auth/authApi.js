@@ -1,7 +1,5 @@
 import { apiSlice } from "@/redux/api/apiSlice";
 import { userLoggedIn } from "./authSlice";
-import Cookies from "js-cookie";
-import Swal from "sweetalert2";
 
 export const authApi = apiSlice.injectEndpoints({
   overrideExisting: true,
@@ -19,17 +17,7 @@ export const authApi = apiSlice.injectEndpoints({
         try {
           const result = await queryFulfilled;
 
-          // ذخیره در Cookies
-          Cookies.set(
-            "userInfo",
-            JSON.stringify({
-              accessToken: result.data.token,
-              user: result.data.user,
-            }),
-            { expires: 1 }
-          );
-
-          // ذخیره در Redux
+          // ذخیره در Redux و localStorage
           dispatch(
             userLoggedIn({
               accessToken: result.data.token,
@@ -37,33 +25,32 @@ export const authApi = apiSlice.injectEndpoints({
             })
           );
 
-          // پیام موفقیت
-          Swal.fire({
-            icon: "success",
-            title: "ورود موفقیت‌آمیز بود",
-          });
         } catch (err) {
-          // پیام خطا
-          Swal.fire({
-            icon: "error",
-            title: "ورود موفقیت‌آمیز نبود",
-            text: err?.error?.data?.message || "اطلاعات اشتباه است",
-          });
+          console.error("Login failed:", err);
         }
       },
+    }),
+
+    // ===============================
+    // 🔹 Dynamic Login Guide (identifiers only, no passwords)
+    // ===============================
+    getLoginGuides: builder.query({
+      query: () => "auth/login-guides",
+      providesTags: ["Auth"],
     }),
 
     // ===============================
     // 🔹 Get Current User
     // ===============================
     getUser: builder.query({
-      query: () => "user/me",
+      query: () => "auth/me",
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
         try {
           const result = await queryFulfilled;
           dispatch(
             userLoggedIn({
-              user: result.data,
+              accessToken: typeof window !== "undefined" ? localStorage.getItem("token") : undefined,
+              user: result.data.user,
             })
           );
         } catch (err) {
@@ -80,15 +67,6 @@ export const authApi = apiSlice.injectEndpoints({
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
         try {
           const result = await queryFulfilled;
-
-          Cookies.set(
-            "userInfo",
-            JSON.stringify({
-              accessToken: result.data.token,
-              user: result.data.user,
-            }),
-            { expires: 0.5 }
-          );
 
           dispatch(
             userLoggedIn({
@@ -148,15 +126,6 @@ export const authApi = apiSlice.injectEndpoints({
         try {
           const result = await queryFulfilled;
 
-          Cookies.set(
-            "userInfo",
-            JSON.stringify({
-              accessToken: result.data.token,
-              user: result.data.user,
-            }),
-            { expires: 0.5 }
-          );
-
           dispatch(
             userLoggedIn({
               accessToken: result.data.token,
@@ -173,6 +142,7 @@ export const authApi = apiSlice.injectEndpoints({
 
 export const {
   useLoginUserMutation,
+  useGetLoginGuidesQuery,
   useGetUserQuery,
   useConfirmEmailQuery,
   useResetPasswordMutation,
