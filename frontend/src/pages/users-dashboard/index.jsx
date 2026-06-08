@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   ShieldAlert,
   Clock,
@@ -11,11 +11,48 @@ import {
   Target,
   Bell,
   CheckCircle2,
+  Activity,
 } from "lucide-react";
 import DashboardLayout from "./layout";
 import Link from "next/link";
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
+import { API_BASE_URL } from "@/config/api";
+
+const bmiCategory = (bmi) => {
+  if (!bmi) return "نامشخص";
+  if (bmi < 18.5) return "Underweight";
+  if (bmi < 25) return "Normal";
+  if (bmi < 30) return "Overweight";
+  return "Obese";
+};
 
 export default function UserMainDashboard() {
+  const [summary, setSummary] = useState(null);
+  const [programs, setPrograms] = useState({ trainingPrograms: [], nutritionPrograms: [] });
+  const [currentUser, setCurrentUser] = useState(null);
+
+  useEffect(() => {
+    const raw = typeof window !== "undefined" ? sessionStorage.getItem("currentUser") : null;
+    const user = raw ? JSON.parse(raw) : null;
+    setCurrentUser(user);
+    if (!user?._id) return;
+    fetch(`${API_BASE_URL}/memberships/summary?userId=${user._id}`).then((r) => r.json()).then(setSummary).catch(console.error);
+    fetch(`${API_BASE_URL}/programs/user/${user._id}`).then((r) => r.json()).then((data) => {
+      if (data.success) setPrograms(data);
+    }).catch(console.error);
+  }, []);
+
+  const activeMembership = summary?.activeMembership;
+  const remainingDays = activeMembership?.remainingDays ?? 0;
+  const activeTraining = programs.trainingPrograms?.find((p) => p.status === "active");
+  const bmi = currentUser?.bmi || (currentUser?.weight && currentUser?.height
+    ? Number((currentUser.weight / (((currentUser.height > 3 ? currentUser.height / 100 : currentUser.height) || 1) ** 2)).toFixed(1))
+    : 0);
+  const bmiData = useMemo(() => [
+    { name: "BMI", value: bmi || 0 },
+    { name: "Remaining", value: Math.max(0, 40 - (bmi || 0)) },
+  ], [bmi]);
+
   // داده‌های واقعی بر اساس صفحات قبلی که با هم ساختیم
   const dashboardState = {
     // از بخش رزرو دستگاه
@@ -26,9 +63,9 @@ export default function UserMainDashboard() {
     },
     // از بخش مالی
     subscription: {
-      daysLeft: 8,
-      type: "ویژه (VIP)",
-      isWarning: true, // چون زیر ۱۰ روز است
+      daysLeft: remainingDays,
+      type: activeMembership?.planName || "بدون عضویت فعال",
+      isWarning: !activeMembership || remainingDays <= 7,
     },
     // از بخش کافه
     lastOrder: {
@@ -38,9 +75,9 @@ export default function UserMainDashboard() {
     },
     // از بخش مربی
     trainingPlan: {
-      title: "عضلات سینه و جلو بازو",
-      progress: "۳ از ۸ تمرین انجام شده",
-      coach: "کاپیتان فلاح",
+      title: activeTraining?.title || "برنامه فعالی ثبت نشده",
+      progress: activeTraining ? `${activeTraining.exercises?.length || 0} حرکت برنامه‌ریزی شده` : "در انتظار برنامه",
+      coach: activeTraining?.trainerId?.name || "—",
     },
   };
 
@@ -93,28 +130,27 @@ export default function UserMainDashboard() {
             <p className="text-gray-500 text-[10px] font-bold mt-1">
               تا پایان اعتبار سطح {dashboardState.subscription.type}
             </p>
-            <button className="w-full mt-4 py-2 bg-white/5 hover:bg-white/10 text-white text-[10px] font-black rounded-xl transition-all">
+            <Link href="/users-dashboard/finance" className="block text-center w-full mt-4 py-2 bg-white/5 hover:bg-white/10 text-white text-[10px] font-black rounded-xl transition-all">
               تمدید سریع
-            </button>
+            </Link>
           </div>
 
-          {/* کارت ۲: رزرو بعدی (برگرفته از صفحه هوازی) */}
+          {/* کارت ۲: جلسات عضویت */}
           <div className="bg-[#1a1d23] border border-gray-800 p-6 rounded-[2rem]">
             <div className="flex justify-between items-start mb-4">
               <Clock className="text-blue-400" />
               <span className="text-[9px] font-black text-gray-500 uppercase tracking-tighter">
-                Next Session
+                Sessions
               </span>
             </div>
             <h3 className="text-white text-lg font-black italic">
-              {dashboardState.nextReservation.device}
+              {activeMembership?.remainingSessions ?? 0} جلسه باقی‌مانده
             </h3>
             <p className="text-blue-400 text-[11px] font-black mt-1">
-              {dashboardState.nextReservation.time}
+              انجام‌شده: {activeMembership?.completedSessions ?? 0} از {activeMembership?.totalSessions ?? 0}
             </p>
             <div className="mt-4 flex items-center gap-2 text-[9px] text-gray-500 font-bold uppercase">
-              <Zap size={12} className="text-yellow-400" /> شروع تا{" "}
-              {dashboardState.nextReservation.remains}
+              <Zap size={12} className="text-yellow-400" /> انقضا: {activeMembership?.membershipEndDate ? new Date(activeMembership.membershipEndDate).toLocaleDateString("fa-IR") : "—"}
             </div>
           </div>
 
@@ -211,6 +247,22 @@ export default function UserMainDashboard() {
                 </div>
               </div>
             ))}
+          </div>
+
+          <div className="bg-[#1a1d23] border border-gray-800 p-6 rounded-[2rem]">
+            <h2 className="text-white font-black italic text-xl mb-3 flex items-center gap-2"><Activity className="text-yellow-400" /> شاخص BMI</h2>
+            <div className="h-44">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie data={bmiData} innerRadius={45} outerRadius={65} dataKey="value" startAngle={180} endAngle={-180}>
+                    <Cell fill="#facc15" />
+                    <Cell fill="#283241" />
+                  </Pie>
+                  <Tooltip />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+            <div className="text-center"><span className="text-3xl text-white font-black">{bmi || "—"}</span><p className="text-yellow-400 font-bold text-xs mt-1">{bmiCategory(bmi)}</p></div>
           </div>
 
           {/* کارت دسترسی سریع به بخش‌های عملیاتی */}

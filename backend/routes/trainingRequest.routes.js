@@ -86,6 +86,11 @@ router.put(
   upload.array("photos"),
   TrainingRequestController.updateRequest
 );
+router.patch(
+  "/:id",
+  upload.array("photos"),
+  TrainingRequestController.updateRequest
+);
 
 /**
  * @route   DELETE /api/training-requests/:id
