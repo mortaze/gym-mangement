@@ -1,6 +1,7 @@
 // backend/model/User.js
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
+const { calculateBmi, getBmiCategory } = require("../utils/membershipUtils");
 
 const userSchema = mongoose.Schema(
   {
@@ -44,7 +45,7 @@ const userSchema = mongoose.Schema(
     // نقش کاربر
     role: {
       type: String,
-      enum: ["Member", "Trainer", "Reception", "Admin", "CafeManager", "admin", "user"],
+      enum: ["Member", "Trainer", "Reception", "Admin", "CafeManager", "Finance", "admin", "user", "finance"],
       required: [true, "Role is required"],
       default: "Member",
     },
@@ -87,6 +88,13 @@ const userSchema = mongoose.Schema(
       match: [/^\d{4}\/\d{2}\/\d{2}$/, "Birthday must be in YYYY/MM/DD format"],
     },
 
+    // اطلاعات بدنی برای BMI و درخواست‌های تمرینی
+    age: { type: Number, min: 1, max: 120 },
+    height: { type: Number, min: 30, max: 260 },
+    weight: { type: Number, min: 1, max: 400 },
+    bmi: { type: Number, min: 0 },
+    bmiCategory: { type: String, enum: ["Underweight", "Normal", "Overweight", "Obese", "نامشخص"], default: "نامشخص" },
+
     // تاریخ آخرین تغییر رمز عبور
     passwordChangedAt: Date,
 
@@ -98,6 +106,16 @@ const userSchema = mongoose.Schema(
     timestamps: true,
   }
 );
+
+// محاسبه BMI قبل از ذخیره
+userSchema.pre("validate", function (next) {
+  const bmi = calculateBmi(this.height, this.weight);
+  if (bmi !== undefined) {
+    this.bmi = bmi;
+    this.bmiCategory = getBmiCategory(bmi);
+  }
+  next();
+});
 
 // هش کردن پسورد قبل از ذخیره
 userSchema.pre("save", async function (next) {
@@ -133,6 +151,9 @@ userSchema.methods.generatePasswordResetToken = function () {
 userSchema.methods.hasRole = function (...roles) {
   return roles.includes(this.role);
 };
+
+userSchema.index({ role: 1, status: 1 });
+userSchema.index({ employeeCode: 1 });
 
 const User = mongoose.model("User", userSchema);
 module.exports = User;

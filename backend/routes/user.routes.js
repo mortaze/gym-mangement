@@ -4,6 +4,7 @@ const router = express.Router();
 const User = require("../model/User");
 const createUploader = require("../middleware/uploader");
 const bcrypt = require("bcryptjs");
+const { calculateBmi, getBmiCategory } = require("../utils/membershipUtils");
 
 // Middleware ساده (بعداً JWT و نقش‌ها اضافه می‌کنیم)
 const authMiddleware = (req, res, next) => next();
@@ -99,6 +100,16 @@ router.put(
       if (role) rest.role = role;
       if (birthday) rest.birthday = birthday;
       if (req.file) rest.profileImage = `/images/users/${req.file.filename}`;
+      const nextHeight = rest.height !== undefined ? rest.height : undefined;
+      const nextWeight = rest.weight !== undefined ? rest.weight : undefined;
+      if (nextHeight !== undefined || nextWeight !== undefined) {
+        const existing = await User.findById(req.params.id);
+        const bmi = calculateBmi(nextHeight ?? existing?.height, nextWeight ?? existing?.weight);
+        if (bmi !== undefined) {
+          rest.bmi = bmi;
+          rest.bmiCategory = getBmiCategory(bmi);
+        }
+      }
 
       const updatedUser = await User.findByIdAndUpdate(req.params.id, rest, {
         new: true,

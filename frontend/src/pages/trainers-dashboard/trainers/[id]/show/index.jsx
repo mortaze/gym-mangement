@@ -92,15 +92,13 @@ export default function TrainingRequestShowPage() {
           console.warn("درخواست مربی نداشت — دسترسی بررسی نشد");
         } else if (
           String(reqTrainerId) !== String(trainer._id) &&
-          trainer.role !== "Admin"
+          !["Admin", "admin"].includes(trainer.role)
         ) {
           console.warn("⛔ trainer mismatch", {
             reqTrainerId,
             trainerId: trainer._id,
           });
-          // اگر می‌خواهی redirect کن:
-          router.replace("/403");
-          return;
+          throw new Error("این درخواست به مربی دیگری اختصاص دارد.");
         }
 
         setRequest(json.request);
@@ -123,7 +121,7 @@ export default function TrainingRequestShowPage() {
           console.log("📡 user response:", uJson);
           if (uJson && (uJson.user || uJson.success)) {
             // بعضی endpointها ممکنه ساختار متفاوت برگردانند (users vs user)
-            const u = uJson.user ?? (uJson.users && uJson.users[0]) ?? null;
+            const u = uJson.user ?? uJson.data ?? (uJson.users && uJson.users[0]) ?? null;
             setUser(u);
           } else {
             console.warn("کاربر یافت نشد یا پاسخ نامتعارف:", uJson);

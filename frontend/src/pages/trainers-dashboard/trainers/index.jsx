@@ -22,7 +22,9 @@ export default function TrainingRequestsPage() {
 
   const fetchRequests = async () => {
     try {
-      const res = await fetch(`${API_BASE_URL}/training-requests`);
+      const currentUser = JSON.parse(sessionStorage.getItem("currentUser") || "null");
+      const trainerQuery = currentUser?._id ? `?trainerId=${currentUser._id}` : "";
+      const res = await fetch(`${API_BASE_URL}/training-requests${trainerQuery}`);
       const data = await res.json();
       if (data.success) setRequests(data.requests);
       console.log("====================================");

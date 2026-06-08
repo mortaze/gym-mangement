@@ -45,3 +45,64 @@ body {
 .scrollbar-hide::-webkit-scrollbar {
   display: none; /* Chrome, Safari and Opera */
 }
+
+/* Unified professional dark dashboard theme */
+:root {
+  --dashboard-bg: #080b10;
+  --dashboard-surface: #0f141b;
+  --dashboard-card: #151b24;
+  --dashboard-card-soft: #1a2230;
+  --dashboard-border: rgba(148, 163, 184, 0.16);
+  --dashboard-text: #f8fafc;
+  --dashboard-muted: #94a3b8;
+  --dashboard-accent: #facc15;
+}
+
+body:has([class*="dashboard"]),
+body:has(a[href*="dashboard"]),
+body:has(div[class*="Dashboard"]) {
+  background: var(--dashboard-bg) !important;
+  color: var(--dashboard-text) !important;
+}
+
+:is([class*="manager-dashboard"], [class*="trainers-dashboard"], [class*="users-dashboard"], [class*="reception-dashboard"], [class*="cafe-dashboard"]),
+#__next > div:has(nav),
+#__next > div:has(aside),
+main:has(a[href*="dashboard"]),
+section:has(a[href*="dashboard"]) {
+  background: radial-gradient(circle at top, #111827 0, var(--dashboard-bg) 42rem) !important;
+  color: var(--dashboard-text) !important;
+}
+
+:is(aside, nav, header, main, section, article, form, table, .ReactModal__Content):has(a[href*="dashboard"]),
+:is(aside, nav, header):has(img),
+[class*="rounded"]:has(table),
+[class*="shadow"]:has(input),
+[class*="shadow"]:has(select),
+[class*="shadow"]:has(textarea) {
+  border-color: var(--dashboard-border) !important;
+}
+
+:is(table, thead, tbody, tr, td, th) {
+  border-color: var(--dashboard-border) !important;
+}
+
+:is(input, select, textarea) {
+  background-color: #0b1017 !important;
+  color: var(--dashboard-text) !important;
+  border-color: var(--dashboard-border) !important;
+}
+
+:is(input, select, textarea)::placeholder {
+  color: #64748b !important;
+}
+
+:is(.ReactModal__Overlay) {
+  background: rgba(2, 6, 23, 0.8) !important;
+  backdrop-filter: blur(6px);
+}
+
+:is(.ReactModal__Content) {
+  background: var(--dashboard-card) !important;
+  color: var(--dashboard-text) !important;
+}
