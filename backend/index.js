@@ -17,7 +17,8 @@ const { uploadRoot, imageRoot, documentRoot } = require("./utils/uploadPaths");
 const trainingRequestRoutes = require("./routes/trainingRequest.routes");
 const equipmentRoutes = require("./routes/equipment.routes");
 const membershipRoutes = require("./routes/membership.routes");
-const { refreshMembershipStatuses } = require("./services/membership.service");
+const programRoutes = require("./routes/program.routes");
+const { refreshMembershipStatuses } = require("./controller/membership.controller");
 
 // --- Middleware ---
 const globalErrorHandler = require("./middleware/global-error-handler");
@@ -86,6 +87,8 @@ app.use("/api/training-requests", trainingRequestRoutes);
 app.use("/api/equipment", equipmentRoutes);
 app.use("/api/memberships", membershipRoutes);
 app.use("/api/menu", cafeMenuRoutes);
+app.use("/api/memberships", membershipRoutes);
+app.use("/api/programs", programRoutes);
 app.use("/menu", cafeMenuRoutes);
 
 // و برای پوشه‌ی آپلودها
@@ -126,6 +129,15 @@ process.on("uncaughtException", (err) => {
 });
 
 // --- Start Server ---
+const runMembershipMaintenance = () => {
+  refreshMembershipStatuses().catch((err) =>
+    console.error("Membership maintenance error:", err),
+  );
+};
+
+runMembershipMaintenance();
+setInterval(runMembershipMaintenance, 24 * 60 * 60 * 1000);
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });

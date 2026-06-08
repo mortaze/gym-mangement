@@ -93,12 +93,13 @@ export default function TrainingRequestShowPage() {
           console.warn("درخواست مربی نداشت — دسترسی بررسی نشد");
         } else if (
           String(reqTrainerId) !== String(trainer._id) &&
-          !["admin", "trainer"].includes(String(trainer.role || "").toLowerCase())
+          !["Admin", "admin"].includes(trainer.role)
         ) {
-          console.warn("⛔ trainer mismatch", { reqTrainerId, trainerId: trainer._id });
-          setRequest(null);
-          setUser(null);
-          return;
+          console.warn("⛔ trainer mismatch", {
+            reqTrainerId,
+            trainerId: trainer._id,
+          });
+          throw new Error("این درخواست به مربی دیگری اختصاص دارد.");
         }
 
         setRequest(json.request);
@@ -122,8 +123,15 @@ export default function TrainingRequestShowPage() {
         } else if (userId) {
           const uRes = await fetch(`${API_BASE}/users/${userId}`);
           const uJson = await uRes.json();
-          const u = uJson.user ?? uJson.data ?? (uJson.users && uJson.users[0]) ?? null;
-          setUser(u);
+          console.log("📡 user response:", uJson);
+          if (uJson && (uJson.user || uJson.success)) {
+            // بعضی endpointها ممکنه ساختار متفاوت برگردانند (users vs user)
+            const u = uJson.user ?? uJson.data ?? (uJson.users && uJson.users[0]) ?? null;
+            setUser(u);
+          } else {
+            console.warn("کاربر یافت نشد یا پاسخ نامتعارف:", uJson);
+            setUser(null);
+          }
         } else {
           setUser(null);
         }

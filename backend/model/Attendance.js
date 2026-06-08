@@ -4,12 +4,15 @@ const attendanceSchema = new mongoose.Schema(
   {
     userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true, index: true },
     membershipId: { type: mongoose.Schema.Types.ObjectId, ref: "Membership", required: true, index: true },
-    checkedInBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-    checkInAt: { type: Date, default: Date.now, index: true },
-    note: { type: String, trim: true },
+    checkedInAt: { type: Date, default: Date.now, index: true },
+    checkedOutAt: Date,
+    source: { type: String, enum: ["manual", "scan", "system"], default: "manual" },
+    notes: { type: String, trim: true },
+    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   },
   { timestamps: true },
 );
 
-attendanceSchema.index({ userId: 1, checkInAt: -1 });
+attendanceSchema.index({ userId: 1, checkedInAt: -1 });
+
 module.exports = mongoose.model("Attendance", attendanceSchema);

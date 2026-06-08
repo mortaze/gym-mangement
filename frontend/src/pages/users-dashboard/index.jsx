@@ -1,55 +1,78 @@
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
-import { ShieldAlert, Clock, Coffee, Zap, Target, Bell, CheckCircle2, Activity } from "lucide-react";
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, BarChart, Bar, XAxis, YAxis } from "recharts";
+import {
+  ShieldAlert,
+  Clock,
+  CreditCard,
+  Coffee,
+  ChevronLeft,
+  Zap,
+  Target,
+  Bell,
+  CheckCircle2,
+  Activity,
+} from "lucide-react";
 import DashboardLayout from "./layout";
+import Link from "next/link";
+import { RadialBarChart, RadialBar, ResponsiveContainer } from "recharts";
 import { API_BASE_URL } from "@/config/api";
-
-const bmiBands = [
-  { name: "Underweight", min: 0, max: 18.5, color: "#60a5fa" },
-  { name: "Normal", min: 18.5, max: 25, color: "#22c55e" },
-  { name: "Overweight", min: 25, max: 30, color: "#facc15" },
-  { name: "Obese", min: 30, max: 40, color: "#ef4444" },
-];
 
 export default function UserMainDashboard() {
   const [currentUser, setCurrentUser] = useState(null);
-  const [summary, setSummary] = useState(null);
+  const [membership, setMembership] = useState(null);
+  const [programs, setPrograms] = useState({ trainingPrograms: [], nutritionPrograms: [] });
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
 
   useEffect(() => {
-    const raw = typeof window !== "undefined" ? sessionStorage.getItem("currentUser") : null;
+    const raw = sessionStorage.getItem("currentUser");
     const parsed = raw ? JSON.parse(raw) : null;
     setCurrentUser(parsed);
     if (!parsed?._id) {
       setLoading(false);
       return;
     }
-    fetch(`${API_BASE_URL}/memberships/summary/${parsed._id}`)
-      .then((res) => res.json())
-      .then((data) => {
-        if (!data.success) throw new Error(data.message || "خطا در دریافت اطلاعات عضویت");
-        setSummary(data);
-      })
-      .catch((err) => setError(err.message))
-      .finally(() => setLoading(false));
+    Promise.all([
+      fetch(`${API_BASE_URL}/memberships/active/${parsed._id}`, { credentials: "include" }).then((res) => res.json()).catch(() => null),
+      fetch(`${API_BASE_URL}/programs/member/${parsed._id}`, { credentials: "include" }).then((res) => res.json()).catch(() => null),
+      fetch(`${API_BASE_URL}/users/${parsed._id}`).then((res) => res.json()).catch(() => null),
+    ]).then(([membershipRes, programRes, userRes]) => {
+      if (membershipRes?.success) setMembership(membershipRes.membership);
+      if (programRes?.success) setPrograms(programRes);
+      if (userRes?.user) setCurrentUser((prev) => ({ ...prev, ...userRes.user }));
+    }).finally(() => setLoading(false));
   }, []);
 
-  const activeMembership = summary?.activeMembership;
-  const bmi = Number(currentUser?.bmi || summary?.activeMembership?.userId?.bmi || 0);
-  const bmiCategory = currentUser?.bmiCategory || "Unknown";
-  const sessionChart = useMemo(() => {
-    const completed = activeMembership?.completedSessions || 0;
-    const remaining = activeMembership?.remainingSessions || 0;
-    return [
-      { name: "Completed", value: completed, color: "#22c55e" },
-      { name: "Remaining", value: remaining, color: "#facc15" },
-    ];
-  }, [activeMembership]);
+  const bmi = Number(currentUser?.bmi || 0);
+  const bmiData = useMemo(() => [{ name: "BMI", value: Math.min(bmi || 0, 40), fill: bmi < 18.5 ? "#38bdf8" : bmi < 25 ? "#22c55e" : bmi < 30 ? "#facc15" : "#ef4444" }], [bmi]);
 
-  const bmiChart = bmiBands.map((band) => ({ ...band, value: band.max - band.min }));
+  // داده‌های واقعی بر اساس صفحات قبلی که با هم ساختیم
+  const dashboardState = {
+    // از بخش رزرو دستگاه
+    nextReservation: {
+      device: "تردمیل نئون - شماره ۴",
+      time: "۱۸:۳۰ امروز",
+      remains: "۲ ساعت دیگر",
+    },
+    // از بخش مالی
+    subscription: {
+      daysLeft: membership?.remainingDays ?? 0,
+      type: membership?.planName || "بدون عضویت فعال",
+      isWarning: !membership || membership.remainingDays <= 7,
+    },
+    // از بخش کافه
+    lastOrder: {
+      item: "شیک پروتئین + فیله",
+      status: "در حال آماده‌سازی",
+      location: "تحویل در بوفه",
+    },
+    // از بخش مربی
+    trainingPlan: {
+      title: programs.trainingPrograms?.[0]?.title || "برنامه فعالی ثبت نشده",
+      progress: membership ? `${membership.completedSessions} از ${membership.totalSessions} جلسه انجام شده` : "—",
+      coach: programs.trainingPrograms?.[0]?.trainerId?.name || "—",
+    },
+  };
 
   return (
     <DashboardLayout>
@@ -69,15 +92,68 @@ export default function UserMainDashboard() {
           </div>
         </div>
 
-        {loading && <div className="rounded-3xl border border-gray-800 bg-[#1a1d23] p-6 text-yellow-400">در حال بارگذاری...</div>}
-        {error && <div className="rounded-3xl border border-red-500/30 bg-red-500/10 p-6 text-red-300">{error}</div>}
+        {loading && <div className="mb-4 text-yellow-400 text-xs font-black">در حال بروزرسانی داشبورد...</div>}
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-          <InfoCard icon={<ShieldAlert />} label="Active Membership" value={activeMembership?.planName || "بدون عضویت فعال"} sub={activeMembership?.membershipEndDate ? `انقضا: ${new Date(activeMembership.membershipEndDate).toLocaleDateString("fa-IR")}` : "در انتظار تمدید"} warn={!activeMembership} />
-          <InfoCard icon={<Clock />} label="Remaining Sessions" value={activeMembership?.remainingSessions ?? "—"} sub={`انجام‌شده: ${activeMembership?.completedSessions ?? 0}`} />
-          <InfoCard icon={<Activity />} label="Remaining Days" value={activeMembership?.remainingDays ?? "—"} sub="به‌روزرسانی خودکار روزانه" />
-          <InfoCard icon={<Target />} label="BMI" value={bmi || "—"} sub={bmiCategory} />
-        </div>
+          {/* کارت ۱: وضعیت اشتراک (بسیار مهم) */}
+          <div
+            className={`p-6 rounded-[2rem] border-2 transition-all ${
+              dashboardState.subscription.isWarning
+                ? "bg-red-950/20 border-red-900/50 shadow-[0_0_30px_rgba(220,38,38,0.1)]"
+                : "bg-[#1a1d23] border-gray-800"
+            }`}
+          >
+            <div className="flex justify-between items-start mb-4">
+              <ShieldAlert
+                className={
+                  dashboardState.subscription.isWarning
+                    ? "text-red-500"
+                    : "text-yellow-400"
+                }
+              />
+              <span className="text-[9px] font-black text-gray-500 uppercase tracking-tighter">
+                Subscription
+              </span>
+            </div>
+            <h3 className="text-white text-2xl font-black italic">
+              {dashboardState.subscription.daysLeft} روز
+            </h3>
+            <p className="text-gray-500 text-[10px] font-bold mt-1">
+              تا پایان اعتبار سطح {dashboardState.subscription.type}
+            </p>
+            <p className="text-yellow-400 text-[10px] font-black mt-2">
+              جلسات: {membership?.remainingSessions ?? 0} باقی‌مانده / {membership?.completedSessions ?? 0} انجام‌شده
+            </p>
+            <p className="text-gray-500 text-[10px] font-bold mt-1">
+              انقضا: {membership?.membershipEndDate ? new Date(membership.membershipEndDate).toLocaleDateString("fa-IR") : "—"}
+            </p>
+            <button className="w-full mt-4 py-2 bg-white/5 hover:bg-white/10 text-white text-[10px] font-black rounded-xl transition-all">
+              تمدید سریع
+            </button>
+          </div>
+
+          {/* کارت ۲: BMI خودکار */}
+          <div className="bg-[#1a1d23] border border-gray-800 p-6 rounded-[2rem]">
+            <div className="flex justify-between items-start mb-4">
+              <Activity className="text-blue-400" />
+              <span className="text-[9px] font-black text-gray-500 uppercase tracking-tighter">
+                BMI
+              </span>
+            </div>
+            <div className="h-20">
+              <ResponsiveContainer width="100%" height="100%">
+                <RadialBarChart innerRadius="65%" outerRadius="100%" data={bmiData} startAngle={180} endAngle={0}>
+                  <RadialBar dataKey="value" background />
+                </RadialBarChart>
+              </ResponsiveContainer>
+            </div>
+            <h3 className="text-white text-lg font-black italic">
+              {bmi ? bmi.toFixed(1) : "—"}
+            </h3>
+            <p className="text-blue-400 text-[11px] font-black mt-1">
+              {currentUser?.bmiCategory || "نامشخص"}
+            </p>
+          </div>
 
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-8">
           <div className="xl:col-span-2 bg-[#1a1d23] border border-gray-800 rounded-[2rem] p-6">

@@ -46,52 +46,63 @@ body {
   display: none; /* Chrome, Safari and Opera */
 }
 
-/* Unified production dark dashboard theme */
-[class*="-dashboard"] body,
-body:has(#__next) {
-  background: #07090d;
+/* Unified professional dark dashboard theme */
+:root {
+  --dashboard-bg: #080b10;
+  --dashboard-surface: #0f141b;
+  --dashboard-card: #151b24;
+  --dashboard-card-soft: #1a2230;
+  --dashboard-border: rgba(148, 163, 184, 0.16);
+  --dashboard-text: #f8fafc;
+  --dashboard-muted: #94a3b8;
+  --dashboard-accent: #facc15;
 }
 
-.dashboard-shell,
-main,
-[class$="dashboard"],
-[class*="dashboard"] {
-  color-scheme: dark;
+body:has([class*="dashboard"]),
+body:has(a[href*="dashboard"]),
+body:has(div[class*="Dashboard"]) {
+  background: var(--dashboard-bg) !important;
+  color: var(--dashboard-text) !important;
 }
 
-[class*="dashboard"] .bg-gray-100,
-[class*="dashboard"] .bg-gray-50,
-[class*="dashboard"] .bg-white,
-[class*="dashboard"] .bg-slate-50,
-[class*="dashboard"] .bg-slate-100 {
-  background-color: #111827 !important;
-  color: #f8fafc !important;
+:is([class*="manager-dashboard"], [class*="trainers-dashboard"], [class*="users-dashboard"], [class*="reception-dashboard"], [class*="cafe-dashboard"]),
+#__next > div:has(nav),
+#__next > div:has(aside),
+main:has(a[href*="dashboard"]),
+section:has(a[href*="dashboard"]) {
+  background: radial-gradient(circle at top, #111827 0, var(--dashboard-bg) 42rem) !important;
+  color: var(--dashboard-text) !important;
 }
 
-[class*="dashboard"] input,
-[class*="dashboard"] select,
-[class*="dashboard"] textarea {
-  background-color: #111827 !important;
-  border-color: #374151 !important;
-  color: #f9fafb !important;
+:is(aside, nav, header, main, section, article, form, table, .ReactModal__Content):has(a[href*="dashboard"]),
+:is(aside, nav, header):has(img),
+[class*="rounded"]:has(table),
+[class*="shadow"]:has(input),
+[class*="shadow"]:has(select),
+[class*="shadow"]:has(textarea) {
+  border-color: var(--dashboard-border) !important;
 }
 
-[class*="dashboard"] table {
-  background: #111827;
-  color: #e5e7eb;
+:is(table, thead, tbody, tr, td, th) {
+  border-color: var(--dashboard-border) !important;
 }
 
-[class*="dashboard"] th {
-  background: rgba(31, 41, 55, 0.85);
-  color: #9ca3af;
+:is(input, select, textarea) {
+  background-color: #0b1017 !important;
+  color: var(--dashboard-text) !important;
+  border-color: var(--dashboard-border) !important;
 }
 
-[class*="dashboard"] td {
-  border-color: #1f2937;
+:is(input, select, textarea)::placeholder {
+  color: #64748b !important;
 }
 
-[class*="dashboard"] .modal,
-[class*="dashboard"] [role="dialog"] {
-  background-color: #111827;
-  color: #f9fafb;
+:is(.ReactModal__Overlay) {
+  background: rgba(2, 6, 23, 0.8) !important;
+  backdrop-filter: blur(6px);
+}
+
+:is(.ReactModal__Content) {
+  background: var(--dashboard-card) !important;
+  color: var(--dashboard-text) !important;
 }

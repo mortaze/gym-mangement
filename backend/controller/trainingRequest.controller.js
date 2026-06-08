@@ -6,7 +6,7 @@ const User = require("../model/User");
 const path = require("path");
 const fs = require("fs");
 const { getUploadDir, uploadRoot } = require("../utils/uploadPaths");
-const { calculateBmi, getBmiCategory } = require("../utils/gymCalculations");
+const { calculateBmi, getBmiCategory } = require("../utils/membershipUtils");
 
 getUploadDir("TrainingRequest");
 
@@ -36,14 +36,31 @@ exports.createRequest = async (req, res) => {
       paymentMethod,
       amount = 0,
       userNotes,
+      goals,
+      age,
+      trainingExperience,
+      injuries,
+      weeklyAvailableDays,
       notes,
     } = req.body;
 
-    if (!userId || !trainerId || !height || !weight) {
-      return res.status(400).json({ success: false, message: "فیلدهای ضروری ناقص هستند." });
+    // دریافت فایل‌ها از multer
+    const photos = req.files;
+
+    if (
+      !userId ||
+      !trainerId ||
+      !height ||
+      !weight ||
+      !amount
+    ) {
+      return res
+        .status(400)
+        .json({ success: false, message: "فیلدهای ضروری ناقص هستند." });
     }
 
-    const photoPaths = (req.files || []).map((file) => `TrainingRequest/${file.filename}`);
+    // مسیر عکس‌ها برای دیتابیس
+    const photoPaths = (photos || []).map((file) => `TrainingRequest/${file.filename}`);
     const bmi = calculateBmi(height, weight);
 
     const request = await TrainingRequest.create({
@@ -54,7 +71,7 @@ exports.createRequest = async (req, res) => {
       weight,
       bmi,
       bmiCategory: getBmiCategory(bmi),
-      goals: parseGoals(goals),
+      goals: Array.isArray(goals) ? goals : String(goals || "").split(",").map((goal) => goal.trim()).filter(Boolean),
       trainingExperience,
       injuries,
       weeklyAvailableDays,
@@ -62,16 +79,15 @@ exports.createRequest = async (req, res) => {
       paymentMethod,
       amount: Number(amount) || 0,
       status: "pending",
-      userNotes: userNotes || notes || "",
-      notes,
-      history: [{ by: "user", status: "pending", userNotes: userNotes || notes || "", trainingPlan: "" }],
-    });
-
-    await User.findByIdAndUpdate(userId, {
-      ...(age ? { age } : {}),
-      height,
-      weight,
-      ...(bmi ? { bmi, bmiCategory: getBmiCategory(bmi) } : {}),
+      userNotes: userNotes || notes,
+      history: [
+        {
+          by: "user",
+          status: "pending",
+          userNotes: userNotes || notes || "",
+          trainingPlan: "",
+        },
+      ],
     });
 
     res.status(201).json({ success: true, request });
@@ -89,7 +105,7 @@ exports.getAllRequests = async (req, res) => {
     if (trainerId) filter.trainerId = trainerId;
     if (status) filter.status = status;
     const requests = await TrainingRequest.find(filter)
-      .populate("userId", "name employeeCode contactNumber profileImage age height weight bmi bmiCategory")
+      .populate("userId", "name profileImage age height weight bmi bmiCategory")
       .populate("trainerId", "name profileImage role")
       .sort({ createdAt: -1 });
     res.json({ success: true, requests });
@@ -101,10 +117,19 @@ exports.getAllRequests = async (req, res) => {
 
 exports.getRequestById = async (req, res) => {
   try {
-    const request = await TrainingRequest.findById(req.params.id)
-      .populate("userId", "name employeeCode contactNumber email profileImage age height weight bmi bmiCategory")
-      .populate("trainerId", "name profileImage role");
-    if (!request) return res.status(404).json({ success: false, message: "درخواست یافت نشد." });
+    const { id } = req.params;
+
+    const request = await TrainingRequest.findById(id)
+      .populate("userId", "name profileImage age height weight bmi bmiCategory")
+      .populate("trainerId", "name profileImage role")
+      .populate("trainingProgramId")
+      .populate("nutritionProgramId");
+
+    if (!request)
+      return res
+        .status(404)
+        .json({ success: false, message: "درخواست یافت نشد." });
+
     res.json({ success: true, request });
   } catch (err) {
     console.error(err);
@@ -115,18 +140,7 @@ exports.getRequestById = async (req, res) => {
 exports.updateRequest = async (req, res) => {
   try {
     const { id } = req.params;
-    const {
-      by,
-      status,
-      userNotes,
-      trainerNotes,
-      trainingPlan,
-      nutritionPlan,
-      title,
-      trainingDays,
-      exercises,
-      nutritionDetails,
-    } = req.body;
+    const { by, status, userNotes, trainerNotes, trainingPlan, goals, age, height, weight, trainingExperience, injuries, weeklyAvailableDays } = req.body;
 
     const request = await TrainingRequest.findById(id);
     if (!request) return res.status(404).json({ success: false, message: "درخواست یافت نشد." });
@@ -143,7 +157,18 @@ exports.updateRequest = async (req, res) => {
     if (userNotes !== undefined) request.userNotes = userNotes;
     if (trainerNotes !== undefined) request.trainerNotes = trainerNotes;
     if (trainingPlan !== undefined) request.trainingPlan = trainingPlan;
-    if (nutritionPlan !== undefined) request.nutritionPlan = nutritionPlan;
+    if (goals !== undefined) request.goals = Array.isArray(goals) ? goals : String(goals || "").split(",").map((goal) => goal.trim()).filter(Boolean);
+    if (age !== undefined) request.age = age;
+    if (height !== undefined) request.height = height;
+    if (weight !== undefined) request.weight = weight;
+    if (trainingExperience !== undefined) request.trainingExperience = trainingExperience;
+    if (injuries !== undefined) request.injuries = injuries;
+    if (weeklyAvailableDays !== undefined) request.weeklyAvailableDays = weeklyAvailableDays;
+    const bmi = calculateBmi(request.height, request.weight);
+    if (bmi !== undefined) {
+      request.bmi = bmi;
+      request.bmiCategory = getBmiCategory(bmi);
+    }
 
     request.history.push({
       by: by || "trainer",
@@ -221,8 +246,9 @@ exports.getRequestsByUser = async (req, res) => {
 
 exports.getRequestsByTrainer = async (req, res) => {
   try {
-    const requests = await TrainingRequest.find({ trainerId: req.params.trainerId })
-      .populate("userId", "name employeeCode contactNumber profileImage age height weight bmi bmiCategory")
+    const { trainerId } = req.params;
+    const requests = await TrainingRequest.find({ trainerId })
+      .populate("userId", "name profileImage age height weight bmi bmiCategory")
       .sort({ createdAt: -1 });
     res.json({ success: true, requests });
   } catch (err) {
