@@ -32,8 +32,13 @@ export default function TrainingRequestPage() {
   const [currentUser, setCurrentUser] = useState(null);
 
   const [form, setForm] = useState({
+    age: "",
     height: "",
     weight: "",
+    goals: [],
+    trainingExperience: "",
+    injuries: "",
+    weeklyAvailableDays: "",
     userNotes: "",
   });
 
@@ -70,6 +75,12 @@ export default function TrainingRequestPage() {
 
         if (json?.user) {
           setCurrentUser(json.user);
+          setForm((prev) => ({
+            ...prev,
+            age: json.user.age || calcAgeFromBirthday(json.user.birthday) || "",
+            height: json.user.height || "",
+            weight: json.user.weight || "",
+          }));
         } else {
           console.warn("user api response invalid:", json);
         }
@@ -254,17 +265,6 @@ export default function TrainingRequestPage() {
       return;
     }
 
-    if (photos.length === 0) {
-      Swal.fire({
-        title: "عکس مورد نیاز",
-        text: "لطفاً حداقل یک عکس آپلود کنید.",
-        icon: "warning",
-        background: "#1a1d23",
-        color: "#fff",
-      });
-      return;
-    }
-
     if (!isPaid) {
       Swal.fire({
         title: "پرداخت انجام نشده",
@@ -282,8 +282,13 @@ export default function TrainingRequestPage() {
       const fd = new FormData();
       fd.append("userId", currentUser._id);
       fd.append("trainerId", trainer._id);
+      fd.append("age", String(form.age || ""));
       fd.append("height", String(form.height));
       fd.append("weight", String(form.weight));
+      fd.append("goals", JSON.stringify(form.goals || []));
+      fd.append("trainingExperience", form.trainingExperience || "");
+      fd.append("injuries", form.injuries || "");
+      fd.append("weeklyAvailableDays", String(form.weeklyAvailableDays || ""));
       fd.append("paymentMethod", "online");
       fd.append("amount", String(PRICE));
       // یادداشت کاربر (userNotes)
@@ -498,9 +503,11 @@ export default function TrainingRequestPage() {
               <label className="block text-xs text-gray-500 mb-1">سن</label>
               <input
                 type="number"
-                value={calcAgeFromBirthday(currentUser?.birthday)}
-                readOnly
-                className="w-full bg-gray-800 p-3 rounded-lg text-white cursor-not-allowed"
+                name="age"
+                value={form.age}
+                onChange={handleChange}
+                readOnly={Boolean(currentUser?.age || currentUser?.birthday)}
+                className="w-full bg-gray-800 p-3 rounded-lg text-white"
                 placeholder="—"
               />
             </div>
@@ -508,7 +515,7 @@ export default function TrainingRequestPage() {
 
           <div className="mt-4">
             <label className="block text-xs text-gray-500 mb-1">
-              عکس‌های بدن (حداقل 1)
+              عکس‌های بدن (اختیاری)
             </label>
             <div className="flex items-center gap-3">
               <input
@@ -571,6 +578,42 @@ export default function TrainingRequestPage() {
                   </div>
                 </div>
               )}
+            </div>
+          </div>
+
+
+          <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs text-gray-500 mb-2">اهداف تمرینی</label>
+              <div className="grid grid-cols-2 gap-2">
+                {["Weight loss", "Fat loss", "Muscle gain", "Strength", "Bodybuilding", "Fitness", "Rehabilitation", "Endurance", "Flexibility"].map((goal) => (
+                  <label key={goal} className="flex items-center gap-2 rounded-xl bg-gray-900 p-2 text-xs text-gray-300">
+                    <input
+                      type="checkbox"
+                      checked={form.goals.includes(goal)}
+                      onChange={(e) => setForm((prev) => ({
+                        ...prev,
+                        goals: e.target.checked ? [...prev.goals, goal] : prev.goals.filter((item) => item !== goal),
+                      }))}
+                    />
+                    {goal}
+                  </label>
+                ))}
+              </div>
+            </div>
+            <div className="space-y-3">
+              <div>
+                <label className="block text-xs text-gray-500 mb-1">سابقه تمرین</label>
+                <input name="trainingExperience" value={form.trainingExperience} onChange={handleChange} className="w-full bg-gray-800 p-3 rounded-lg text-white" placeholder="مثلاً ۲ سال" />
+              </div>
+              <div>
+                <label className="block text-xs text-gray-500 mb-1">آسیب‌دیدگی‌ها</label>
+                <input name="injuries" value={form.injuries} onChange={handleChange} className="w-full bg-gray-800 p-3 rounded-lg text-white" placeholder="در صورت وجود" />
+              </div>
+              <div>
+                <label className="block text-xs text-gray-500 mb-1">روزهای آزاد هفتگی</label>
+                <input type="number" min="1" max="7" name="weeklyAvailableDays" value={form.weeklyAvailableDays} onChange={handleChange} className="w-full bg-gray-800 p-3 rounded-lg text-white" />
+              </div>
             </div>
           </div>
 

@@ -28,6 +28,9 @@ router.post("/", userUpload.single("profileImage"), async (req, res) => {
       address,
       status = "active",
       birthday,
+      age,
+      height,
+      weight,
     } = req.body;
 
     // بررسی یکتا بودن کد کارمند
@@ -67,6 +70,9 @@ router.post("/", userUpload.single("profileImage"), async (req, res) => {
       address,
       status,
       birthday,
+      age,
+      height,
+      weight,
       profileImage: req.file ? `/images/users/${req.file.filename}` : undefined,
     });
 
@@ -88,7 +94,7 @@ router.put(
   userUpload.single("profileImage"),
   async (req, res) => {
     try {
-      const { role, password, birthday, ...rest } = req.body;
+      const { role, password, birthday, age, height, weight, ...rest } = req.body;
 
       // هش کردن پسورد در صورت وجود
       if (password && password.trim() !== "") {
@@ -98,6 +104,20 @@ router.put(
 
       if (role) rest.role = role;
       if (birthday) rest.birthday = birthday;
+      if (age !== undefined) rest.age = age;
+      if (height !== undefined) rest.height = height;
+      if (weight !== undefined) rest.weight = weight;
+      if (height !== undefined || weight !== undefined) {
+        const { calculateBmi, getBmiCategory } = require("../utils/gymCalculations");
+        const current = await User.findById(req.params.id).select("height weight");
+        const nextHeight = height !== undefined ? height : current?.height;
+        const nextWeight = weight !== undefined ? weight : current?.weight;
+        const bmi = calculateBmi(nextHeight, nextWeight);
+        if (bmi) {
+          rest.bmi = bmi;
+          rest.bmiCategory = getBmiCategory(bmi);
+        }
+      }
       if (req.file) rest.profileImage = `/images/users/${req.file.filename}`;
 
       const updatedUser = await User.findByIdAndUpdate(req.params.id, rest, {

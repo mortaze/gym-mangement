@@ -16,6 +16,8 @@ const cafeMenuRoutes = require("./routes/CafeMenu.routes");
 const { uploadRoot, imageRoot, documentRoot } = require("./utils/uploadPaths");
 const trainingRequestRoutes = require("./routes/trainingRequest.routes");
 const equipmentRoutes = require("./routes/equipment.routes");
+const membershipRoutes = require("./routes/membership.routes");
+const { refreshMembershipStatuses } = require("./services/membership.service");
 
 // --- Middleware ---
 const globalErrorHandler = require("./middleware/global-error-handler");
@@ -82,11 +84,18 @@ app.use("/api/admin", adminRoutes);
 app.use("/api/upload", uploadRoutes);
 app.use("/api/training-requests", trainingRequestRoutes);
 app.use("/api/equipment", equipmentRoutes);
+app.use("/api/memberships", membershipRoutes);
 app.use("/api/menu", cafeMenuRoutes);
 app.use("/menu", cafeMenuRoutes);
 
 // و برای پوشه‌ی آپلودها
 app.use("/uploads", express.static(uploadRoot));
+// Keep membership day/session status consistent after restarts and during runtime.
+refreshMembershipStatuses().catch((err) => console.error("Membership refresh failed:", err));
+setInterval(() => {
+  refreshMembershipStatuses().catch((err) => console.error("Membership refresh failed:", err));
+}, 24 * 60 * 60 * 1000);
+
 // --- Root Route ---
 app.get("/", (req, res) => res.send("Server is running successfully"));
 

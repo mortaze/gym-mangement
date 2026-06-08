@@ -15,7 +15,6 @@ import {
   User,
   Eye,
   EyeOff,
-  User2,
   Book,
 } from "lucide-react";
 
@@ -91,10 +90,17 @@ const ACCENT_CLASSES = {
 // نقش‌های API به کلیدهای فرانت
 const ROLE_MAP = {
   Member: "user",
+  user: "user",
   Trainer: "trainer",
+  trainer: "trainer",
   Admin: "admin",
+  admin: "admin",
+  Finance: "finance",
+  finance: "finance",
   Reception: "reception", // اگر لازم شد
+  reception: "reception",
   CafeManager: "cafe",
+  cafe: "cafe",
 };
 
 // مسیر ریدایرکت بر اساس کلید فرانت
@@ -109,7 +115,7 @@ const roleRedirectMap = {
 export default function UnifiedLoginForm() {
   const [activeRole, setActiveRole] = useState(ROLES[0]);
   const [showPass, setShowPass] = useState(false);
-  const [captchaValue, setCaptchaValue] = useState(null);
+  const [loginError, setLoginError] = useState("");
 
   const router = useRouter();
   const [loginUser, { isLoading }] = useLoginUserMutation();
@@ -136,8 +142,11 @@ export default function UnifiedLoginForm() {
     handleSubmit,
     formState: { errors },
     reset,
+    setValue,
   } = useForm({
     resolver: yupResolver(schema),
+    defaultValues: { employeeCode: "", password: "" },
+    mode: "onSubmit",
   });
 
   const onSubmit = async (data) => {
@@ -146,6 +155,7 @@ export default function UnifiedLoginForm() {
     //   return;
     // }
 
+    setLoginError("");
     try {
       const response = await loginUser({
         employeeCode: data.employeeCode,
@@ -159,7 +169,11 @@ export default function UnifiedLoginForm() {
         return;
       }
 
-      const normalizedRole = activeRole.key;
+      const normalizedRole = ROLE_MAP[user.role] || String(user.role || "").toLowerCase();
+      if (normalizedRole !== activeRole.key) {
+        notifyError("نقش انتخاب‌شده با نقش کاربر مطابقت ندارد");
+        return;
+      }
 
       const safeUser = {
         _id: user._id,
@@ -182,7 +196,9 @@ export default function UnifiedLoginForm() {
 
       notifySuccess(`ورود موفق | ${activeRole.label}`);
     } catch (err) {
-      notifyError(err?.data?.message || "ورود ناموفق");
+      const message = err?.data?.message || "ورود ناموفق";
+      setLoginError(message);
+      notifyError(message);
       console.error(err);
     }
   };
@@ -226,16 +242,22 @@ export default function UnifiedLoginForm() {
           ))}
         </div>
 
+        {loginError && (
+          <div className="mb-4 rounded-xl border border-red-500/30 bg-red-500/10 p-3 text-sm font-bold text-red-300">
+            {loginError}
+          </div>
+        )}
+
         {/* Form */}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           <div>
             <input
               {...register("employeeCode")}
+              name="employeeCode"
               placeholder="شناسه ورود"
               onChange={(e) => {
-                const value = e.target.value;
-                // حذف تمام کاراکترهای فارسی و عربی
-                e.target.value = value.replace(/[\u0600-\u06FF]/g, "");
+                const sanitized = e.target.value.replace(/[\u0600-\u06FF]/g, "");
+                setValue("employeeCode", sanitized, { shouldValidate: false, shouldDirty: true });
               }}
               className="w-full bg-[#0f1115] border border-gray-800 rounded-xl py-4 px-4 text-white font-bold focus:outline-none focus:border-yellow-400"
             />
@@ -245,12 +267,12 @@ export default function UnifiedLoginForm() {
           <div className="relative">
             <input
               {...register("password")}
+              name="password"
               type={showPass ? "text" : "password"}
               placeholder="رمز عبور"
               onChange={(e) => {
-                const value = e.target.value;
-                // حذف تمام کاراکترهای فارسی و عربی
-                e.target.value = value.replace(/[\u0600-\u06FF]/g, "");
+                const sanitized = e.target.value.replace(/[\u0600-\u06FF]/g, "");
+                setValue("password", sanitized, { shouldValidate: false, shouldDirty: true });
               }}
               className="w-full bg-[#0f1115] border border-gray-800 rounded-xl py-4 px-4 text-white font-bold focus:outline-none focus:border-yellow-400"
             />
