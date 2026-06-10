@@ -19,11 +19,7 @@ export default function Document() {
                     return;
                   }
                 } catch(e) {}
-                if (window.matchMedia("(prefers-color-scheme: light)").matches) {
-                  document.documentElement.className = "light";
-                } else {
-                  document.documentElement.className = "dark";
-                }
+                document.documentElement.className = "dark";
               })();
             `,
           }}

@@ -221,7 +221,7 @@ export default function WorkoutCalendarPage() {
     const exs = getExercisesForDate(jDate);
     if (exs.length === 0) return "";
     if (log?.completed) return "bg-green-500/20 border-green-500/50";
-    return "border-yellow-400/40 bg-yellow-400/5";
+    return "border-yellow-400/50 bg-yellow-400/10";
   };
 
   if (loading) {
@@ -293,7 +293,7 @@ export default function WorkoutCalendarPage() {
                 {progressStats.percent}%
               </span>
             </div>
-            <div className="h-3 overflow-hidden rounded-full bg-gray-800">
+            <div className="h-3 overflow-hidden rounded-full bg-[var(--bg-hover)]">
               <div
                 className="h-full rounded-full bg-gradient-to-l from-yellow-400 to-yellow-500 transition-all duration-500"
                 style={{ width: `${Math.min(progressStats.percent, 100)}%` }}
@@ -314,14 +314,14 @@ export default function WorkoutCalendarPage() {
 
         {/* Calendar header */}
         <div className="mb-4 flex items-center justify-between rounded-2xl bg-[var(--bg-card)] px-5 py-3">
-          <button onClick={prevMonth} className="rounded-xl p-2 text-[var(--text-dim)] transition-all hover:bg-gray-800 hover:text-[var(--text-body)]">
+          <button onClick={prevMonth} className="rounded-xl p-2 text-[var(--text-dim)] transition-all hover:bg-gray-200 dark:hover:bg-gray-800 hover:text-[var(--text-body)]">
             <ChevronRight size={20} />
           </button>
           <div className="flex items-center gap-2">
             <span className="text-lg font-black text-[var(--text-body)]">{currentMonthName}</span>
-            <span className="rounded-lg bg-gray-800 px-3 py-1 text-sm font-black text-yellow-400">{curYear}</span>
+            <span className="rounded-lg bg-[var(--bg-hover)] px-3 py-1 text-sm font-black text-yellow-400">{curYear}</span>
           </div>
-          <button onClick={nextMonth} className="rounded-xl p-2 text-[var(--text-dim)] transition-all hover:bg-gray-800 hover:text-[var(--text-body)]">
+          <button onClick={nextMonth} className="rounded-xl p-2 text-[var(--text-dim)] transition-all hover:bg-gray-200 dark:hover:bg-gray-800 hover:text-[var(--text-body)]">
             <ChevronLeft size={20} />
           </button>
         </div>
@@ -502,21 +502,21 @@ function DayDetailPanel({ jDate, dayName, year, month, exercises, log, onToggle,
                 </div>
               </div>
               <div className="mt-3 grid grid-cols-3 gap-2 text-center">
-                <div className="rounded-xl bg-gray-800/50 p-2">
+                <div className="rounded-xl bg-[var(--bg-hover)] p-2">
                   <p className="text-lg font-black text-yellow-400">{ex.sets || "—"}</p>
                   <p className="text-[10px] font-bold text-[var(--text-muted)]">ست</p>
                 </div>
-                <div className="rounded-xl bg-gray-800/50 p-2">
+                <div className="rounded-xl bg-[var(--bg-hover)] p-2">
                   <p className="text-lg font-black text-yellow-400">{ex.reps || "—"}</p>
                   <p className="text-[10px] font-bold text-[var(--text-muted)]">تکرار</p>
                 </div>
-                <div className="rounded-xl bg-gray-800/50 p-2">
+                <div className="rounded-xl bg-[var(--bg-hover)] p-2">
                   <p className="text-lg font-black text-yellow-400">{ex.restTime || "—"}</p>
                   <p className="text-[10px] font-bold text-[var(--text-muted)]">استراحت (ثانیه)</p>
                 </div>
               </div>
               {ex.notes && (
-                <p className="mt-2 rounded-xl bg-blue-500/10 px-3 py-2 text-xs font-bold text-blue-400">
+                <p className="mt-2 rounded-xl bg-blue-500/15 dark:bg-blue-500/10 px-3 py-2 text-xs font-bold text-blue-400">
                   نکته: {ex.notes}
                 </p>
               )}
@@ -526,7 +526,7 @@ function DayDetailPanel({ jDate, dayName, year, month, exercises, log, onToggle,
       )}
 
       {log?.notes && (
-        <div className="mt-3 rounded-xl bg-gray-800/30 p-3">
+        <div className="mt-3 rounded-xl bg-[var(--bg-hover)] p-3">
           <p className="text-xs font-bold text-[var(--text-dim)]">یادداشت: {log.notes}</p>
         </div>
       )}

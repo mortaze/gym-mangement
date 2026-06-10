@@ -110,11 +110,11 @@ export default function MembershipPlansPage() {
                 </div>
 
                 <div className="flex flex-wrap gap-2">
-                  <button onClick={() => { setEditing(p); setShowModal(true); }} className="bg-gray-800 hover:bg-gray-700 text-[var(--text-body)] p-2 rounded-xl transition-all"><Edit3 size={16} /></button>
-                  <button onClick={() => toggle(p._id)} className="bg-gray-800 hover:bg-gray-700 text-[var(--text-body)] p-2 rounded-xl transition-all">{p.isActive ? <ToggleRight size={16} /> : <ToggleLeft size={16} />}</button>
-                  <button onClick={() => duplicate(p._id)} className="bg-gray-800 hover:bg-gray-700 text-[var(--text-body)] p-2 rounded-xl transition-all"><Copy size={16} /></button>
-                  <button onClick={() => remove(p._id)} className="bg-gray-800 hover:bg-red-500/20 text-red-400 p-2 rounded-xl transition-all"><Trash2 size={16} /></button>
-                  <button onClick={() => viewHistory(p._id)} className="bg-gray-800 hover:bg-gray-700 text-[var(--text-body)] p-2 rounded-xl transition-all"><History size={16} /></button>
+                  <button onClick={() => { setEditing(p); setShowModal(true); }} className="bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 text-[var(--text-body)] p-2 rounded-xl transition-all"><Edit3 size={16} /></button>
+                  <button onClick={() => toggle(p._id)} className="bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 text-[var(--text-body)] p-2 rounded-xl transition-all">{p.isActive ? <ToggleRight size={16} /> : <ToggleLeft size={16} />}</button>
+                  <button onClick={() => duplicate(p._id)} className="bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 text-[var(--text-body)] p-2 rounded-xl transition-all"><Copy size={16} /></button>
+                  <button onClick={() => remove(p._id)} className="bg-gray-200 dark:bg-gray-800 hover:bg-red-500/20 text-red-400 p-2 rounded-xl transition-all"><Trash2 size={16} /></button>
+                  <button onClick={() => viewHistory(p._id)} className="bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 text-[var(--text-body)] p-2 rounded-xl transition-all"><History size={16} /></button>
                 </div>
               </div>
             ))}

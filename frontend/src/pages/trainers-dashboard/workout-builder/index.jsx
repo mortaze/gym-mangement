@@ -239,7 +239,7 @@ export default function WorkoutBuilderPage() {
             <p className="text-[var(--text-muted)] text-xs mt-1 uppercase tracking-widest">Workout Program Builder</p>
           </div>
           {templates.length > 0 && (
-            <button onClick={() => setShowTemplates(true)} className="bg-gray-800 hover:bg-gray-700 text-[var(--text-body)] px-4 py-3 rounded-2xl font-black text-sm flex items-center gap-2 transition-all">
+            <button onClick={() => setShowTemplates(true)} className="bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 text-[var(--text-body)] px-4 py-3 rounded-2xl font-black text-sm flex items-center gap-2 transition-all">
               <FileText size={16} /> قالب‌ها ({templates.length})
             </button>
           )}
@@ -348,7 +348,7 @@ export default function WorkoutBuilderPage() {
             <button
               onClick={() => submit(true)}
               disabled={saving || !form.title.trim()}
-              className="bg-gray-800 text-[var(--text-body)] py-4 px-6 rounded-2xl font-black flex items-center justify-center gap-2 hover:bg-gray-700 disabled:opacity-50 transition-all"
+              className="bg-gray-200 dark:bg-gray-800 text-[var(--text-body)] py-4 px-6 rounded-2xl font-black flex items-center justify-center gap-2 hover:bg-gray-300 dark:hover:bg-gray-700 disabled:opacity-50 transition-all"
             >
               <Save size={18} /> ذخیره به عنوان قالب
             </button>
@@ -373,10 +373,10 @@ function ExerciseRow({ exercise, index, total, onUpdate, onRemove, onMoveUp, onM
       <div className="flex items-center justify-between mb-3">
         <span className="text-[var(--text-muted)] text-xs font-black">تمرین {index + 1}</span>
         <div className="flex items-center gap-1">
-          <button onClick={onMoveUp} disabled={index === 0} className="p-1.5 rounded-lg hover:bg-gray-800 text-[var(--text-muted)] hover:text-[var(--text-body)] disabled:opacity-30 transition-all">
+          <button onClick={onMoveUp} disabled={index === 0} className="p-1.5 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800 text-[var(--text-muted)] hover:text-[var(--text-body)] disabled:opacity-30 transition-all">
             <ChevronUp size={16} />
           </button>
-          <button onClick={onMoveDown} disabled={index === total - 1} className="p-1.5 rounded-lg hover:bg-gray-800 text-[var(--text-muted)] hover:text-[var(--text-body)] disabled:opacity-30 transition-all">
+          <button onClick={onMoveDown} disabled={index === total - 1} className="p-1.5 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800 text-[var(--text-muted)] hover:text-[var(--text-body)] disabled:opacity-30 transition-all">
             <ChevronDown size={16} />
           </button>
           <button onClick={onRemove} className="p-1.5 rounded-lg hover:bg-red-500/20 text-red-400 transition-all">
@@ -463,11 +463,11 @@ function AthleteSelector({ students, value, onSelect }) {
                 <button
                   key={s._id}
                   onClick={() => { onSelect(s._id, s.name); setOpen(false); setSearch(""); }}
-                  className={`w-full text-right px-4 py-3 text-sm hover:bg-gray-800 transition-all flex items-center gap-3 ${
+                  className={`w-full text-right px-4 py-3 text-sm hover:bg-gray-200 dark:hover:bg-gray-800 transition-all flex items-center gap-3 ${
                     s._id === value ? "bg-yellow-400/10 text-yellow-400" : "text-[var(--text-dim)]"
                   }`}
                 >
-                  <div className="w-8 h-8 rounded-lg bg-gray-800 flex items-center justify-center text-yellow-400 font-black text-xs border border-[var(--border)]">
+                  <div className="w-8 h-8 rounded-lg bg-gray-200 dark:bg-gray-800 flex items-center justify-center text-yellow-400 font-black text-xs border border-[var(--border)]">
                     {s.name?.charAt(0) || "?"}
                   </div>
                   <div>

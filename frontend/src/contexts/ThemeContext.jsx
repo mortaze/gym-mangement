@@ -9,7 +9,6 @@ function getInitialTheme() {
     const stored = localStorage.getItem("gym-theme");
     if (stored === "light" || stored === "dark") return stored;
   } catch {}
-  if (window.matchMedia("(prefers-color-scheme: light)").matches) return "light";
   return "dark";
 }
 
