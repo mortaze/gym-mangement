@@ -76,7 +76,19 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/:id",
+  [
+    body("title").optional().trim().notEmpty().withMessage("Title is required"),
+    body("date").optional().isISO8601().withMessage("Valid date is required"),
+    body("time").optional().trim().notEmpty().withMessage("Time is required"),
+    body("capacity").optional().isInt({ min: 1 }).withMessage("Capacity must be at least 1"),
+    body("duration").optional().isInt({ min: 15 }).withMessage("Duration must be at least 15 minutes"),
+    body("description").optional().trim(),
+    body("location").optional().trim(),
+    body("status").optional().isIn(["scheduled", "ongoing", "completed", "cancelled"]).withMessage("Invalid status"),
+    validate,
+  ],
+  async (req, res) => {
   try {
     const { title, date, time, capacity, duration, description, location, status } = req.body;
     const update = {};
