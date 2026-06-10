@@ -1,9 +1,24 @@
 import { NextResponse } from "next/server";
 
-export function middleware(req) {
-  const token = req.cookies.get("accessToken");
+const PROTECTED_ROUTES = [
+  "/admin-dashboard",
+  "/manager-dashboard",
+  "/trainers-dashboard",
+  "/member-dashboard",
+  "/users-dashboard",
+  "/cafe-dashboard",
+  "/reception-dashboard",
+];
 
-  if (!token && req.nextUrl.pathname.startsWith("/dashboard")) {
+export function middleware(req) {
+  const token = req.cookies.get("accessToken") || req.cookies.get("token");
+  const { pathname } = req.nextUrl;
+
+  const isProtected = PROTECTED_ROUTES.some((route) =>
+    pathname === route || pathname.startsWith(`${route}/`),
+  );
+
+  if (!token && isProtected) {
     return NextResponse.redirect(new URL("/", req.url));
   }
 
@@ -11,5 +26,13 @@ export function middleware(req) {
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*"],
+  matcher: [
+    "/admin-dashboard/:path*",
+    "/manager-dashboard/:path*",
+    "/trainers-dashboard/:path*",
+    "/member-dashboard/:path*",
+    "/users-dashboard/:path*",
+    "/cafe-dashboard/:path*",
+    "/reception-dashboard/:path*",
+  ],
 };

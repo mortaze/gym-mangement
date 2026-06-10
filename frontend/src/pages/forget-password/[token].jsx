@@ -6,7 +6,7 @@ import * as Yup from "yup";
 // internal
 import ErrorMsg from "@/components/common/error-msg";
 import { useConfirmForgotPasswordMutation } from "@/redux/features/auth/authApi";
-import { CloseEye, OpenEye } from "@/svg";
+import { Eye, EyeOff } from "lucide-react";
 import { notifyError, notifySuccess } from "@/utils/toast";
 
 // schema
@@ -86,7 +86,7 @@ const ForgotPassword = ({ params }) => {
                             className="open-eye"
                             onClick={() => setShowPass(!showPass)}
                           >
-                            {showPass ? <CloseEye /> : <OpenEye />}
+                            {showPass ? <EyeOff size={18} /> : <Eye size={18} />}
                           </span>
                         </div>
                         <div className="tp-login-input-title">
@@ -115,7 +115,7 @@ const ForgotPassword = ({ params }) => {
                             className="open-eye"
                             onClick={() => setShowConPass(!showConPass)}
                           >
-                            {showConPass ? <CloseEye /> : <OpenEye />}
+                            {showConPass ? <EyeOff size={18} /> : <Eye size={18} />}
                           </span>
                         </div>
                         <div className="tp-login-input-title">
