@@ -229,17 +229,17 @@ export default function WorkoutBuilderPage() {
 
   return (
     <DashboardLayout>
-      <div className="p-4 sm:p-8 min-h-screen bg-[#0f1115] rounded-[2.5rem] border border-gray-800 shadow-2xl" dir="rtl">
+      <div className="p-4 sm:p-8 min-h-screen bg-[var(--bg-body)] rounded-[2.5rem] border border-[var(--border)] shadow-2xl" dir="rtl">
         <div className="flex items-center gap-4 mb-8">
-          <div className="p-4 bg-yellow-400 text-black rounded-2xl shadow-lg">
+          <div className="p-4 bg-yellow-400 text-[var(--text-body)] rounded-2xl shadow-lg">
             <Dumbbell size={28} />
           </div>
           <div className="flex-1">
-            <h2 className="text-3xl font-black text-white uppercase tracking-tight">برنامه‌ساز تمرینی</h2>
-            <p className="text-gray-500 text-xs mt-1 uppercase tracking-widest">Workout Program Builder</p>
+            <h2 className="text-3xl font-black text-[var(--text-body)] uppercase tracking-tight">برنامه‌ساز تمرینی</h2>
+            <p className="text-[var(--text-muted)] text-xs mt-1 uppercase tracking-widest">Workout Program Builder</p>
           </div>
           {templates.length > 0 && (
-            <button onClick={() => setShowTemplates(true)} className="bg-gray-800 hover:bg-gray-700 text-white px-4 py-3 rounded-2xl font-black text-sm flex items-center gap-2 transition-all">
+            <button onClick={() => setShowTemplates(true)} className="bg-gray-800 hover:bg-gray-700 text-[var(--text-body)] px-4 py-3 rounded-2xl font-black text-sm flex items-center gap-2 transition-all">
               <FileText size={16} /> قالب‌ها ({templates.length})
             </button>
           )}
@@ -249,34 +249,34 @@ export default function WorkoutBuilderPage() {
           <Section title="مشخصات برنامه" icon={<FileText size={18} />}>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
-                <label className="block text-gray-400 text-sm font-bold mb-1.5">ورزشکار *</label>
+                <label className="block text-[var(--text-dim)] text-sm font-bold mb-1.5">ورزشکار *</label>
                 <AthleteSelector students={students} value={form.athleteId} onSelect={selectAthlete} />
               </div>
               <div>
-                <label className="block text-gray-400 text-sm font-bold mb-1.5">عنوان برنامه *</label>
+                <label className="block text-[var(--text-dim)] text-sm font-bold mb-1.5">عنوان برنامه *</label>
                 <input
                   type="text"
                   value={form.title}
                   onChange={(e) => set("title", e.target.value)}
                   placeholder="مثال: برنامه حرفه ای حجمی"
-                  className="w-full bg-[#1a1d23] border border-gray-800 rounded-2xl py-3 px-4 text-white text-sm outline-none focus:border-yellow-400 transition-all"
+                  className="w-full bg-[var(--bg-card)] border border-[var(--border)] rounded-2xl py-3 px-4 text-[var(--text-body)] text-sm outline-none focus:border-yellow-400 transition-all"
                 />
               </div>
               <div>
-                <label className="block text-gray-400 text-sm font-bold mb-1.5">مدت (هفته)</label>
+                <label className="block text-[var(--text-dim)] text-sm font-bold mb-1.5">مدت (هفته)</label>
                 <input
                   type="number"
                   min="1"
                   max="52"
                   value={form.durationWeeks}
                   onChange={(e) => set("durationWeeks", Math.max(1, Number(e.target.value)))}
-                  className="w-full bg-[#1a1d23] border border-gray-800 rounded-2xl py-3 px-4 text-white text-sm outline-none focus:border-yellow-400 transition-all"
+                  className="w-full bg-[var(--bg-card)] border border-[var(--border)] rounded-2xl py-3 px-4 text-[var(--text-body)] text-sm outline-none focus:border-yellow-400 transition-all"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-gray-400 text-sm font-bold mb-2 mt-4">روزهای تمرین *</label>
+              <label className="block text-[var(--text-dim)] text-sm font-bold mb-2 mt-4">روزهای تمرین *</label>
               <div className="flex flex-wrap gap-2">
                 {ALL_DAYS.map((day) => {
                   const active = selectedDays.includes(day);
@@ -286,8 +286,8 @@ export default function WorkoutBuilderPage() {
                       onClick={() => toggleDay(day)}
                       className={`px-4 py-2.5 rounded-xl text-sm font-black transition-all ${
                         active
-                          ? "bg-yellow-400 text-black shadow-lg"
-                          : "bg-[#1a1d23] text-gray-400 border border-gray-800 hover:border-yellow-400/40"
+                          ? "bg-yellow-400 text-[var(--text-body)] shadow-lg"
+                          : "bg-[var(--bg-card)] text-[var(--text-dim)] border border-[var(--border)] hover:border-yellow-400/40"
                       }`}
                     >
                       {day}
@@ -303,7 +303,7 @@ export default function WorkoutBuilderPage() {
             return (
               <Section key={day} title={`تمرین‌های روز ${day}`} icon={<Dumbbell size={18} />}>
                 {dayExs.length === 0 && (
-                  <p className="text-gray-500 text-sm mb-4">هنوز تمرینی اضافه نشده</p>
+                  <p className="text-[var(--text-muted)] text-sm mb-4">هنوز تمرینی اضافه نشده</p>
                 )}
                 <div className="space-y-3">
                   {dayExs.map((ex, idx) => (
@@ -330,10 +330,10 @@ export default function WorkoutBuilderPage() {
           })}
 
           {selectedDays.length === 0 && (
-            <div className="flex flex-col items-center justify-center py-16 text-gray-500 bg-[#1a1d23] rounded-[2.5rem] border border-gray-800">
+            <div className="flex flex-col items-center justify-center py-16 text-[var(--text-muted)] bg-[var(--bg-card)] rounded-[2.5rem] border border-[var(--border)]">
               <Dumbbell size={48} className="mb-4 opacity-40" />
               <p className="font-black text-lg">روزهای تمرینی را انتخاب کنید</p>
-              <p className="text-sm mt-1 text-gray-600">با کلیک روی روزهای بالا، تمرینات روزانه را وارد کنید</p>
+              <p className="text-sm mt-1 text-[var(--text-muted)]">با کلیک روی روزهای بالا، تمرینات روزانه را وارد کنید</p>
             </div>
           )}
 
@@ -341,14 +341,14 @@ export default function WorkoutBuilderPage() {
             <button
               onClick={() => submit(false)}
               disabled={saving}
-              className="flex-1 bg-yellow-400 text-black py-4 rounded-2xl font-black flex items-center justify-center gap-2 hover:bg-yellow-500 disabled:opacity-50 transition-all text-lg"
+              className="flex-1 bg-yellow-400 text-[var(--text-body)] py-4 rounded-2xl font-black flex items-center justify-center gap-2 hover:bg-yellow-500 disabled:opacity-50 transition-all text-lg"
             >
               <UserCheck size={20} /> {saving ? "در حال ثبت..." : `اختصاص برنامه به ${form.athleteName || "ورزشکار"}`}
             </button>
             <button
               onClick={() => submit(true)}
               disabled={saving || !form.title.trim()}
-              className="bg-gray-800 text-white py-4 px-6 rounded-2xl font-black flex items-center justify-center gap-2 hover:bg-gray-700 disabled:opacity-50 transition-all"
+              className="bg-gray-800 text-[var(--text-body)] py-4 px-6 rounded-2xl font-black flex items-center justify-center gap-2 hover:bg-gray-700 disabled:opacity-50 transition-all"
             >
               <Save size={18} /> ذخیره به عنوان قالب
             </button>
@@ -369,14 +369,14 @@ export default function WorkoutBuilderPage() {
 
 function ExerciseRow({ exercise, index, total, onUpdate, onRemove, onMoveUp, onMoveDown }) {
   return (
-    <div className="bg-gray-900/70 border border-gray-800 rounded-2xl p-4">
+    <div className="bg-[var(--bg-hover)]/70 border border-[var(--border)] rounded-2xl p-4">
       <div className="flex items-center justify-between mb-3">
-        <span className="text-gray-500 text-xs font-black">تمرین {index + 1}</span>
+        <span className="text-[var(--text-muted)] text-xs font-black">تمرین {index + 1}</span>
         <div className="flex items-center gap-1">
-          <button onClick={onMoveUp} disabled={index === 0} className="p-1.5 rounded-lg hover:bg-gray-800 text-gray-500 hover:text-white disabled:opacity-30 transition-all">
+          <button onClick={onMoveUp} disabled={index === 0} className="p-1.5 rounded-lg hover:bg-gray-800 text-[var(--text-muted)] hover:text-[var(--text-body)] disabled:opacity-30 transition-all">
             <ChevronUp size={16} />
           </button>
-          <button onClick={onMoveDown} disabled={index === total - 1} className="p-1.5 rounded-lg hover:bg-gray-800 text-gray-500 hover:text-white disabled:opacity-30 transition-all">
+          <button onClick={onMoveDown} disabled={index === total - 1} className="p-1.5 rounded-lg hover:bg-gray-800 text-[var(--text-muted)] hover:text-[var(--text-body)] disabled:opacity-30 transition-all">
             <ChevronDown size={16} />
           </button>
           <button onClick={onRemove} className="p-1.5 rounded-lg hover:bg-red-500/20 text-red-400 transition-all">
@@ -386,28 +386,28 @@ function ExerciseRow({ exercise, index, total, onUpdate, onRemove, onMoveUp, onM
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
         <div>
-          <label className="block text-gray-600 text-[10px] font-bold mb-0.5">نام تمرین *</label>
-          <input type="text" value={exercise.name} onChange={(e) => onUpdate("name", e.target.value)} placeholder="پرس سینه" className="w-full bg-[#0f1115] border border-gray-800 rounded-xl py-2 px-3 text-white text-sm outline-none focus:border-yellow-400" />
+          <label className="block text-[var(--text-muted)] text-[10px] font-bold mb-0.5">نام تمرین *</label>
+          <input type="text" value={exercise.name} onChange={(e) => onUpdate("name", e.target.value)} placeholder="پرس سینه" className="w-full bg-[var(--bg-body)] border border-[var(--border)] rounded-xl py-2 px-3 text-[var(--text-body)] text-sm outline-none focus:border-yellow-400" />
         </div>
         <div>
-          <label className="block text-gray-600 text-[10px] font-bold mb-0.5">عضله</label>
-          <input type="text" value={exercise.muscleGroup} onChange={(e) => onUpdate("muscleGroup", e.target.value)} placeholder="سینه" className="w-full bg-[#0f1115] border border-gray-800 rounded-xl py-2 px-3 text-white text-sm outline-none focus:border-yellow-400" />
+          <label className="block text-[var(--text-muted)] text-[10px] font-bold mb-0.5">عضله</label>
+          <input type="text" value={exercise.muscleGroup} onChange={(e) => onUpdate("muscleGroup", e.target.value)} placeholder="سینه" className="w-full bg-[var(--bg-body)] border border-[var(--border)] rounded-xl py-2 px-3 text-[var(--text-body)] text-sm outline-none focus:border-yellow-400" />
         </div>
         <div>
-          <label className="block text-gray-600 text-[10px] font-bold mb-0.5">ست</label>
-          <input type="text" value={exercise.sets} onChange={(e) => onUpdate("sets", e.target.value)} className="w-full bg-[#0f1115] border border-gray-800 rounded-xl py-2 px-3 text-white text-sm outline-none focus:border-yellow-400" />
+          <label className="block text-[var(--text-muted)] text-[10px] font-bold mb-0.5">ست</label>
+          <input type="text" value={exercise.sets} onChange={(e) => onUpdate("sets", e.target.value)} className="w-full bg-[var(--bg-body)] border border-[var(--border)] rounded-xl py-2 px-3 text-[var(--text-body)] text-sm outline-none focus:border-yellow-400" />
         </div>
         <div>
-          <label className="block text-gray-600 text-[10px] font-bold mb-0.5">تکرار</label>
-          <input type="text" value={exercise.reps} onChange={(e) => onUpdate("reps", e.target.value)} className="w-full bg-[#0f1115] border border-gray-800 rounded-xl py-2 px-3 text-white text-sm outline-none focus:border-yellow-400" />
+          <label className="block text-[var(--text-muted)] text-[10px] font-bold mb-0.5">تکرار</label>
+          <input type="text" value={exercise.reps} onChange={(e) => onUpdate("reps", e.target.value)} className="w-full bg-[var(--bg-body)] border border-[var(--border)] rounded-xl py-2 px-3 text-[var(--text-body)] text-sm outline-none focus:border-yellow-400" />
         </div>
         <div>
-          <label className="block text-gray-600 text-[10px] font-bold mb-0.5">استراحت (ثانیه)</label>
-          <input type="text" value={exercise.restTime} onChange={(e) => onUpdate("restTime", e.target.value)} className="w-full bg-[#0f1115] border border-gray-800 rounded-xl py-2 px-3 text-white text-sm outline-none focus:border-yellow-400" />
+          <label className="block text-[var(--text-muted)] text-[10px] font-bold mb-0.5">استراحت (ثانیه)</label>
+          <input type="text" value={exercise.restTime} onChange={(e) => onUpdate("restTime", e.target.value)} className="w-full bg-[var(--bg-body)] border border-[var(--border)] rounded-xl py-2 px-3 text-[var(--text-body)] text-sm outline-none focus:border-yellow-400" />
         </div>
         <div className="sm:col-span-3 lg:col-span-1">
-          <label className="block text-gray-600 text-[10px] font-bold mb-0.5">توضیحات</label>
-          <input type="text" value={exercise.notes} onChange={(e) => onUpdate("notes", e.target.value)} placeholder="نکته..." className="w-full bg-[#0f1115] border border-gray-800 rounded-xl py-2 px-3 text-white text-sm outline-none focus:border-yellow-400" />
+          <label className="block text-[var(--text-muted)] text-[10px] font-bold mb-0.5">توضیحات</label>
+          <input type="text" value={exercise.notes} onChange={(e) => onUpdate("notes", e.target.value)} placeholder="نکته..." className="w-full bg-[var(--bg-body)] border border-[var(--border)] rounded-xl py-2 px-3 text-[var(--text-body)] text-sm outline-none focus:border-yellow-400" />
         </div>
       </div>
     </div>
@@ -431,48 +431,48 @@ function AthleteSelector({ students, value, onSelect }) {
       <button
         type="button"
         onClick={() => setOpen(!open)}
-        className="w-full bg-[#1a1d23] border border-gray-800 rounded-2xl py-3 px-4 text-right text-sm outline-none focus:border-yellow-400 transition-all flex items-center justify-between"
+        className="w-full bg-[var(--bg-card)] border border-[var(--border)] rounded-2xl py-3 px-4 text-right text-sm outline-none focus:border-yellow-400 transition-all flex items-center justify-between"
       >
         {selected ? (
-          <span className="text-white font-black">{selected.name}</span>
+          <span className="text-[var(--text-body)] font-black">{selected.name}</span>
         ) : (
-          <span className="text-gray-500">انتخاب ورزشکار...</span>
+          <span className="text-[var(--text-muted)]">انتخاب ورزشکار...</span>
         )}
-        <ChevronDown size={16} className={`text-gray-500 transition-transform ${open ? "rotate-180" : ""}`} />
+        <ChevronDown size={16} className={`text-[var(--text-muted)] transition-transform ${open ? "rotate-180" : ""}`} />
       </button>
       {open && (
-        <div className="absolute top-full mt-2 left-0 right-0 z-20 bg-[#1a1d23] border border-gray-800 rounded-2xl shadow-2xl overflow-hidden">
-          <div className="p-3 border-b border-gray-800">
+        <div className="absolute top-full mt-2 left-0 right-0 z-20 bg-[var(--bg-card)] border border-[var(--border)] rounded-2xl shadow-2xl overflow-hidden">
+          <div className="p-3 border-b border-[var(--border)]">
             <div className="relative">
-              <Search size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500" />
+              <Search size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)]" />
               <input
                 type="text"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="جستجوی ورزشکار..."
-                className="w-full bg-[#0f1115] border border-gray-800 rounded-xl py-2 pr-9 pl-3 text-white text-sm outline-none focus:border-yellow-400"
+                className="w-full bg-[var(--bg-body)] border border-[var(--border)] rounded-xl py-2 pr-9 pl-3 text-[var(--text-body)] text-sm outline-none focus:border-yellow-400"
                 autoFocus
               />
             </div>
           </div>
           <div className="max-h-48 overflow-y-auto">
             {filtered.length === 0 ? (
-              <p className="p-4 text-gray-500 text-sm text-center">نتیجه‌ای یافت نشد</p>
+              <p className="p-4 text-[var(--text-muted)] text-sm text-center">نتیجه‌ای یافت نشد</p>
             ) : (
               filtered.map((s) => (
                 <button
                   key={s._id}
                   onClick={() => { onSelect(s._id, s.name); setOpen(false); setSearch(""); }}
                   className={`w-full text-right px-4 py-3 text-sm hover:bg-gray-800 transition-all flex items-center gap-3 ${
-                    s._id === value ? "bg-yellow-400/10 text-yellow-400" : "text-gray-300"
+                    s._id === value ? "bg-yellow-400/10 text-yellow-400" : "text-[var(--text-dim)]"
                   }`}
                 >
-                  <div className="w-8 h-8 rounded-lg bg-gray-800 flex items-center justify-center text-yellow-400 font-black text-xs border border-gray-700">
+                  <div className="w-8 h-8 rounded-lg bg-gray-800 flex items-center justify-center text-yellow-400 font-black text-xs border border-[var(--border)]">
                     {s.name?.charAt(0) || "?"}
                   </div>
                   <div>
                     <p className="font-black">{s.name}</p>
-                    <p className="text-[10px] text-gray-500">{s.employeeCode}</p>
+                    <p className="text-[10px] text-[var(--text-muted)]">{s.employeeCode}</p>
                   </div>
                   {s._id === value && <Check size={16} className="mr-auto text-yellow-400" />}
                 </button>
@@ -487,8 +487,8 @@ function AthleteSelector({ students, value, onSelect }) {
 
 function Section({ title, icon, children }) {
   return (
-    <div className="bg-[#1a1d23] border border-gray-800 rounded-[2rem] p-6">
-      <h3 className="text-white font-black text-lg flex items-center gap-2 mb-5">
+    <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-[2rem] p-6">
+      <h3 className="text-[var(--text-body)] font-black text-lg flex items-center gap-2 mb-5">
         <span className="text-yellow-400">{icon}</span> {title}
       </h3>
       {children}
@@ -498,26 +498,26 @@ function Section({ title, icon, children }) {
 
 function TemplateModal({ templates, onSelect, onClose }) {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4" onClick={onClose}>
-      <div className="bg-[#1a1d23] border border-gray-800 rounded-[2rem] p-6 w-full max-w-lg max-h-[80vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--bg-overlay)]/60 backdrop-blur-sm p-4" onClick={onClose}>
+      <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-[2rem] p-6 w-full max-w-lg max-h-[80vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-center justify-between mb-6">
-          <h3 className="text-xl font-black text-white">قالب‌های ذخیره شده</h3>
-          <button onClick={onClose} className="text-gray-400 hover:text-white p-1"><X size={20} /></button>
+          <h3 className="text-xl font-black text-[var(--text-body)]">قالب‌های ذخیره شده</h3>
+          <button onClick={onClose} className="text-[var(--text-dim)] hover:text-[var(--text-body)] p-1"><X size={20} /></button>
         </div>
         {templates.length === 0 ? (
-          <p className="text-gray-500 text-center py-8">هنوز قالبی ذخیره نشده</p>
+          <p className="text-[var(--text-muted)] text-center py-8">هنوز قالبی ذخیره نشده</p>
         ) : (
           <div className="space-y-3">
             {templates.map((t) => (
               <button
                 key={t._id}
                 onClick={() => onSelect(t)}
-                className="w-full text-right bg-gray-900 rounded-2xl p-4 border border-gray-800 hover:border-yellow-400/40 transition-all"
+                className="w-full text-right bg-[var(--bg-hover)] rounded-2xl p-4 border border-[var(--border)] hover:border-yellow-400/40 transition-all"
               >
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-white font-black">{t.title}</p>
-                    <p className="text-gray-500 text-xs mt-1">
+                    <p className="text-[var(--text-body)] font-black">{t.title}</p>
+                    <p className="text-[var(--text-muted)] text-xs mt-1">
                       {t.weekDays?.length || t.trainingDays || 0} روز • {t.exercises?.length || 0} تمرین
                     </p>
                   </div>

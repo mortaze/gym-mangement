@@ -75,13 +75,13 @@ export default function MembershipPlansPage() {
 
   return (
     <DashboardLayout>
-      <div className="p-4 md:p-8 min-h-screen bg-[#0f1115] rounded-[2rem]" dir="rtl">
+      <div className="p-4 md:p-8 min-h-screen bg-[var(--bg-body)] rounded-[2rem]" dir="rtl">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
           <div>
-            <h1 className="text-3xl font-black text-white">مدیریت طرح‌های عضویت</h1>
-            <p className="text-gray-500 text-sm mt-1">ایجاد، ویرایش و مدیریت طرح‌های فروش باشگاه</p>
+            <h1 className="text-3xl font-black text-[var(--text-body)]">مدیریت طرح‌های عضویت</h1>
+            <p className="text-[var(--text-muted)] text-sm mt-1">ایجاد، ویرایش و مدیریت طرح‌های فروش باشگاه</p>
           </div>
-          <button onClick={() => { setEditing(null); setShowModal(true); }} className="bg-yellow-400 text-black px-6 py-3 rounded-2xl font-black flex items-center gap-2 hover:bg-yellow-500 transition-all">
+          <button onClick={() => { setEditing(null); setShowModal(true); }} className="bg-yellow-400 text-[var(--text-body)] px-6 py-3 rounded-2xl font-black flex items-center gap-2 hover:bg-yellow-500 transition-all">
             <Plus size={18} /> طرح جدید
           </button>
         </div>
@@ -89,11 +89,11 @@ export default function MembershipPlansPage() {
         {loading ? <p className="text-yellow-400">در حال بارگذاری...</p> : (
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
             {plans.map((p) => (
-              <div key={p._id} className={`bg-[#1a1d23] border rounded-[2rem] p-6 ${p.isActive ? "border-gray-800" : "border-red-900/50 opacity-70"}`}>
+              <div key={p._id} className={`bg-[var(--bg-card)] border rounded-[2rem] p-6 ${p.isActive ? "border-[var(--border)]" : "border-red-900/50 opacity-70"}`}>
                 <div className="flex items-start justify-between mb-4">
                   <div>
-                    <h3 className="text-white font-black text-lg">{p.title}</h3>
-                    {p.subtitle && <p className="text-gray-500 text-xs mt-0.5">{p.subtitle}</p>}
+                    <h3 className="text-[var(--text-body)] font-black text-lg">{p.title}</h3>
+                    {p.subtitle && <p className="text-[var(--text-muted)] text-xs mt-0.5">{p.subtitle}</p>}
                   </div>
                   <span className={`px-2 py-1 rounded-lg text-[10px] font-black ${p.isActive ? "bg-green-500/20 text-green-400" : "bg-red-500/20 text-red-400"}`}>
                     {p.isActive ? "فعال" : "غیرفعال"}
@@ -101,20 +101,20 @@ export default function MembershipPlansPage() {
                 </div>
 
                 <div className="space-y-2 mb-4">
-                  <div className="flex justify-between text-sm"><span className="text-gray-500">قیمت</span><span className="text-white font-black">{p.price.toLocaleString()} تومان</span></div>
-                  {p.discount > 0 && <div className="flex justify-between text-sm"><span className="text-gray-500">تخفیف</span><span className="text-green-400 font-black">{p.discount.toLocaleString()} تومان</span></div>}
-                  <div className="flex justify-between text-sm"><span className="text-gray-500">قیمت نهایی</span><span className="text-yellow-400 font-black">{p.effectivePrice.toLocaleString()} تومان</span></div>
-                  <div className="flex justify-between text-sm"><span className="text-gray-500">مدت</span><span className="text-white font-black">{p.durationMonths} ماه</span></div>
-                  <div className="flex justify-between text-sm"><span className="text-gray-500">جلسات</span><span className="text-white font-black">{p.totalSessions}</span></div>
+                  <div className="flex justify-between text-sm"><span className="text-[var(--text-muted)]">قیمت</span><span className="text-[var(--text-body)] font-black">{p.price.toLocaleString()} تومان</span></div>
+                  {p.discount > 0 && <div className="flex justify-between text-sm"><span className="text-[var(--text-muted)]">تخفیف</span><span className="text-green-400 font-black">{p.discount.toLocaleString()} تومان</span></div>}
+                  <div className="flex justify-between text-sm"><span className="text-[var(--text-muted)]">قیمت نهایی</span><span className="text-yellow-400 font-black">{p.effectivePrice.toLocaleString()} تومان</span></div>
+                  <div className="flex justify-between text-sm"><span className="text-[var(--text-muted)]">مدت</span><span className="text-[var(--text-body)] font-black">{p.durationMonths} ماه</span></div>
+                  <div className="flex justify-between text-sm"><span className="text-[var(--text-muted)]">جلسات</span><span className="text-[var(--text-body)] font-black">{p.totalSessions}</span></div>
                   {p.badge && <span className="inline-block mt-1 bg-yellow-400/10 text-yellow-400 text-[10px] px-2 py-0.5 rounded-full font-black">{p.badge}</span>}
                 </div>
 
                 <div className="flex flex-wrap gap-2">
-                  <button onClick={() => { setEditing(p); setShowModal(true); }} className="bg-gray-800 hover:bg-gray-700 text-white p-2 rounded-xl transition-all"><Edit3 size={16} /></button>
-                  <button onClick={() => toggle(p._id)} className="bg-gray-800 hover:bg-gray-700 text-white p-2 rounded-xl transition-all">{p.isActive ? <ToggleRight size={16} /> : <ToggleLeft size={16} />}</button>
-                  <button onClick={() => duplicate(p._id)} className="bg-gray-800 hover:bg-gray-700 text-white p-2 rounded-xl transition-all"><Copy size={16} /></button>
+                  <button onClick={() => { setEditing(p); setShowModal(true); }} className="bg-gray-800 hover:bg-gray-700 text-[var(--text-body)] p-2 rounded-xl transition-all"><Edit3 size={16} /></button>
+                  <button onClick={() => toggle(p._id)} className="bg-gray-800 hover:bg-gray-700 text-[var(--text-body)] p-2 rounded-xl transition-all">{p.isActive ? <ToggleRight size={16} /> : <ToggleLeft size={16} />}</button>
+                  <button onClick={() => duplicate(p._id)} className="bg-gray-800 hover:bg-gray-700 text-[var(--text-body)] p-2 rounded-xl transition-all"><Copy size={16} /></button>
                   <button onClick={() => remove(p._id)} className="bg-gray-800 hover:bg-red-500/20 text-red-400 p-2 rounded-xl transition-all"><Trash2 size={16} /></button>
-                  <button onClick={() => viewHistory(p._id)} className="bg-gray-800 hover:bg-gray-700 text-white p-2 rounded-xl transition-all"><History size={16} /></button>
+                  <button onClick={() => viewHistory(p._id)} className="bg-gray-800 hover:bg-gray-700 text-[var(--text-body)] p-2 rounded-xl transition-all"><History size={16} /></button>
                 </div>
               </div>
             ))}
@@ -147,11 +147,11 @@ function PlanModal({ editing, onSave, onClose }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4" onClick={onClose}>
-      <div className="bg-[#1a1d23] border border-gray-800 rounded-[2rem] p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--bg-overlay)]/60 backdrop-blur-sm p-4" onClick={onClose}>
+      <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-[2rem] p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-black text-white">{editing ? "ویرایش طرح" : "طرح جدید"}</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-white"><X size={20} /></button>
+          <h2 className="text-xl font-black text-[var(--text-body)]">{editing ? "ویرایش طرح" : "طرح جدید"}</h2>
+          <button onClick={onClose} className="text-[var(--text-dim)] hover:text-[var(--text-body)]"><X size={20} /></button>
         </div>
         <form onSubmit={submit} className="space-y-4">
           <Input label="عنوان طرح" value={form.title} onChange={(v) => setForm({ ...form, title: v })} required />
@@ -169,14 +169,14 @@ function PlanModal({ editing, onSave, onClose }) {
             <Input label="اولویت" type="number" value={form.priority} onChange={(v) => setForm({ ...form, priority: Number(v) })} />
           </div>
           <div>
-            <label className="block text-gray-400 text-sm font-bold mb-1">توضیحات</label>
-            <textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} className="w-full bg-gray-900 border border-gray-800 rounded-2xl p-3 text-white text-sm focus:border-yellow-400 outline-none" rows={2} />
+            <label className="block text-[var(--text-dim)] text-sm font-bold mb-1">توضیحات</label>
+            <textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} className="w-full bg-[var(--bg-hover)] border border-[var(--border)] rounded-2xl p-3 text-[var(--text-body)] text-sm focus:border-yellow-400 outline-none" rows={2} />
           </div>
           <div>
-            <label className="block text-gray-400 text-sm font-bold mb-1">ویژگی‌ها (هر خط یک ویژگی)</label>
-            <textarea value={form.features} onChange={(e) => setForm({ ...form, features: e.target.value })} className="w-full bg-gray-900 border border-gray-800 rounded-2xl p-3 text-white text-sm focus:border-yellow-400 outline-none" rows={3} placeholder="دسترسی به تمام دستگاه‌ها&#10;مربی شخصی&#10;برنامه تغذیه" />
+            <label className="block text-[var(--text-dim)] text-sm font-bold mb-1">ویژگی‌ها (هر خط یک ویژگی)</label>
+            <textarea value={form.features} onChange={(e) => setForm({ ...form, features: e.target.value })} className="w-full bg-[var(--bg-hover)] border border-[var(--border)] rounded-2xl p-3 text-[var(--text-body)] text-sm focus:border-yellow-400 outline-none" rows={3} placeholder="دسترسی به تمام دستگاه‌ها&#10;مربی شخصی&#10;برنامه تغذیه" />
           </div>
-          <button type="submit" className="w-full bg-yellow-400 text-black py-3 rounded-2xl font-black flex items-center justify-center gap-2 hover:bg-yellow-500 transition-all">
+          <button type="submit" className="w-full bg-yellow-400 text-[var(--text-body)] py-3 rounded-2xl font-black flex items-center justify-center gap-2 hover:bg-yellow-500 transition-all">
             <Save size={18} /> {editing ? "به‌روزرسانی" : "ایجاد طرح"}
           </button>
         </form>
@@ -188,28 +188,28 @@ function PlanModal({ editing, onSave, onClose }) {
 function Input({ label, value, onChange, type = "text", required }) {
   return (
     <div>
-      <label className="block text-gray-400 text-sm font-bold mb-1">{label}</label>
-      <input type={type} value={value} onChange={(e) => onChange(e.target.value)} required={required} className="w-full bg-gray-900 border border-gray-800 rounded-2xl p-3 text-white text-sm focus:border-yellow-400 outline-none" />
+      <label className="block text-[var(--text-dim)] text-sm font-bold mb-1">{label}</label>
+      <input type={type} value={value} onChange={(e) => onChange(e.target.value)} required={required} className="w-full bg-[var(--bg-hover)] border border-[var(--border)] rounded-2xl p-3 text-[var(--text-body)] text-sm focus:border-yellow-400 outline-none" />
     </div>
   );
 }
 
 function HistoryModal({ history, onClose }) {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4" onClick={onClose}>
-      <div className="bg-[#1a1d23] border border-gray-800 rounded-[2rem] p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--bg-overlay)]/60 backdrop-blur-sm p-4" onClick={onClose}>
+      <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-[2rem] p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-black text-white">تاریخچه قیمت</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-white"><X size={20} /></button>
+          <h2 className="text-xl font-black text-[var(--text-body)]">تاریخچه قیمت</h2>
+          <button onClick={onClose} className="text-[var(--text-dim)] hover:text-[var(--text-body)]"><X size={20} /></button>
         </div>
-        {history.length === 0 ? <p className="text-gray-500">تغییری ثبت نشده</p> : (
+        {history.length === 0 ? <p className="text-[var(--text-muted)]">تغییری ثبت نشده</p> : (
           <div className="space-y-3">
             {history.map((h, i) => (
-              <div key={i} className="bg-gray-900 rounded-2xl p-4 border border-gray-800">
-                <div className="flex justify-between text-sm"><span className="text-gray-500">قبلی</span><span className="text-red-400 font-black line-through">{h.oldPrice.toLocaleString()}</span></div>
-                <div className="flex justify-between text-sm"><span className="text-gray-500">جدید</span><span className="text-green-400 font-black">{h.newPrice.toLocaleString()}</span></div>
-                {h.reason && <p className="text-gray-500 text-xs mt-2">دلیل: {h.reason}</p>}
-                <p className="text-gray-600 text-[10px] mt-1">{new Date(h.createdAt).toLocaleDateString("fa-IR")}</p>
+              <div key={i} className="bg-[var(--bg-hover)] rounded-2xl p-4 border border-[var(--border)]">
+                <div className="flex justify-between text-sm"><span className="text-[var(--text-muted)]">قبلی</span><span className="text-red-400 font-black line-through">{h.oldPrice.toLocaleString()}</span></div>
+                <div className="flex justify-between text-sm"><span className="text-[var(--text-muted)]">جدید</span><span className="text-green-400 font-black">{h.newPrice.toLocaleString()}</span></div>
+                {h.reason && <p className="text-[var(--text-muted)] text-xs mt-2">دلیل: {h.reason}</p>}
+                <p className="text-[var(--text-muted)] text-[10px] mt-1">{new Date(h.createdAt).toLocaleDateString("fa-IR")}</p>
               </div>
             ))}
           </div>

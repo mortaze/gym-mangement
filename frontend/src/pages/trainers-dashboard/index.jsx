@@ -109,30 +109,30 @@ export default function GlobalGymDashboard() {
   return (
     <DashboardLayout>
       <div
-        className="p-4 sm:p-8 min-h-screen bg-[#0f1115] rounded-[2.5rem] border border-gray-800 shadow-2xl"
+        className="p-4 sm:p-8 min-h-screen bg-[var(--bg-body)] rounded-[2.5rem] border border-[var(--border)] shadow-2xl"
         dir="rtl"
       >
         {/* Header - استایل فرماندهی فلاح */}
-        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 mb-12 pb-8 border-b border-gray-800">
+        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 mb-12 pb-8 border-b border-[var(--border)]">
           <div>
-            <h1 className="text-4xl font-black text-white italic tracking-tighter uppercase leading-none">
+            <h1 className="text-4xl font-black text-[var(--text-body)] italic tracking-tighter uppercase leading-none">
               داشبورد مدیریتی{" "}
               <span className="text-yellow-400 text-5xl">IRON GYM</span>
             </h1>
-            <p className="text-gray-500 text-xs uppercase tracking-[0.5em] mt-3 flex items-center gap-2">
+            <p className="text-[var(--text-muted)] text-xs uppercase tracking-[0.5em] mt-3 flex items-center gap-2">
               <Zap size={14} className="text-yellow-400" />
               Full Enterprise Management System v2.0
             </p>
           </div>
 
           <div className="flex items-center gap-4">
-            <div className="bg-[#1a1d23] border border-gray-700 p-2 px-4 rounded-2xl hidden md:block">
-              <p className="text-[10px] text-gray-500 font-bold uppercase">
+            <div className="bg-[var(--bg-card)] border border-[var(--border)] p-2 px-4 rounded-2xl hidden md:block">
+              <p className="text-[10px] text-[var(--text-muted)] font-bold uppercase">
                 آخرین آپدیت سیستم
               </p>
-              <p className="text-white font-mono text-sm">2025/12/31 - 23:15</p>
+              <p className="text-[var(--text-body)] font-mono text-sm">2025/12/31 - 23:15</p>
             </div>
-            <button className="bg-yellow-400 hover:bg-yellow-500 text-black font-black px-6 py-4 rounded-2xl flex items-center gap-2 transition-all active:scale-95 italic text-sm">
+            <button className="bg-yellow-400 hover:bg-yellow-500 text-[var(--text-body)] font-black px-6 py-4 rounded-2xl flex items-center gap-2 transition-all active:scale-95 italic text-sm">
               <Activity size={18} /> گزارش جامع نهایی
             </button>
           </div>
@@ -143,16 +143,16 @@ export default function GlobalGymDashboard() {
           {kpiStats.map((stat, i) => (
             <div
               key={i}
-              className="bg-[#1a1d23] p-6 rounded-[2rem] border border-gray-800 relative overflow-hidden group hover:border-yellow-400/40 transition-all"
+              className="bg-[var(--bg-card)] p-6 rounded-[2rem] border border-[var(--border)] relative overflow-hidden group hover:border-yellow-400/40 transition-all"
             >
               <div className="relative z-10">
-                <p className="text-gray-500 text-[10px] uppercase font-black mb-1 tracking-widest">
+                <p className="text-[var(--text-muted)] text-[10px] uppercase font-black mb-1 tracking-widest">
                   {stat.label}
                 </p>
-                <h3 className="text-3xl font-black text-white italic">
+                <h3 className="text-3xl font-black text-[var(--text-body)] italic">
                   {stat.val}
                 </h3>
-                <p className="text-[10px] mt-2 text-gray-400 font-bold flex items-center gap-1">
+                <p className="text-[10px] mt-2 text-[var(--text-dim)] font-bold flex items-center gap-1">
                   <ArrowUpRight size={12} className="text-green-400" />{" "}
                   {stat.sub}
                 </p>
@@ -169,14 +169,14 @@ export default function GlobalGymDashboard() {
         {/* Main Analytics Section */}
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-8 mb-10">
           {/* نمودار پیشرفته - تحلیل حضور و درآمد */}
-          <div className="xl:col-span-2 bg-[#1a1d23] p-8 rounded-[2.5rem] border border-gray-800 shadow-inner">
+          <div className="xl:col-span-2 bg-[var(--bg-card)] p-8 rounded-[2.5rem] border border-[var(--border)] shadow-inner">
             <div className="flex items-center justify-between mb-10">
               <div>
-                <h3 className="text-white text-xl font-black italic uppercase tracking-tighter flex items-center gap-2">
+                <h3 className="text-[var(--text-body)] text-xl font-black italic uppercase tracking-tighter flex items-center gap-2">
                   <BarChart3 className="text-yellow-400" size={24} /> آنالیز
                   عملکرد کل مجموعه
                 </h3>
-                <p className="text-gray-500 text-[10px] mt-1">
+                <p className="text-[var(--text-muted)] text-[10px] mt-1">
                   تطبیق تعداد ورزشکاران با درآمد ناخالص هفتگی
                 </p>
               </div>
@@ -247,7 +247,7 @@ export default function GlobalGymDashboard() {
 
           {/* Quick Access Menu - دسترسی سریع بخش‌ها */}
           <div className="space-y-4">
-            <h3 className="text-white font-black italic uppercase tracking-widest text-sm mb-6 flex items-center gap-2">
+            <h3 className="text-[var(--text-body)] font-black italic uppercase tracking-widest text-sm mb-6 flex items-center gap-2">
               <Settings className="text-yellow-400" size={18} /> دسترسی به
               واحدها
             </h3>
@@ -255,17 +255,17 @@ export default function GlobalGymDashboard() {
               <Link
                 key={section.id}
                 href={section.link}
-                className="block p-5 bg-[#1a1d23] border border-gray-800 rounded-3xl hover:bg-yellow-400 group transition-all duration-300"
+                className="block p-5 bg-[var(--bg-card)] border border-[var(--border)] rounded-3xl hover:bg-yellow-400 group transition-all duration-300"
               >
                 <div className="flex items-center gap-5">
-                  <div className="p-4 bg-gray-900 rounded-2xl text-yellow-400 group-hover:bg-black group-hover:text-yellow-400 transition-colors">
+                  <div className="p-4 bg-[var(--bg-hover)] rounded-2xl text-yellow-400 group-hover:bg-[var(--bg-overlay)] group-hover:text-yellow-400 transition-colors">
                     {section.icon}
                   </div>
                   <div>
-                    <h4 className="text-white group-hover:text-black font-black text-lg italic uppercase tracking-tighter leading-none">
+                    <h4 className="text-[var(--text-body)] group-hover:text-[var(--text-body)] font-black text-lg italic uppercase tracking-tighter leading-none">
                       {section.title}
                     </h4>
-                    <p className="text-gray-500 group-hover:text-black/70 text-xs mt-1 font-bold">
+                    <p className="text-[var(--text-muted)] group-hover:text-[var(--text-body)]/70 text-xs mt-1 font-bold">
                       {section.desc}
                     </p>
                   </div>
@@ -278,9 +278,9 @@ export default function GlobalGymDashboard() {
         {/* Bottom Section: Equipment Status & Recent Logs */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* وضعیت سلامت دستگاه‌ها */}
-          <div className="bg-[#1a1d23] rounded-[2.5rem] border border-gray-800 overflow-hidden shadow-2xl">
-            <div className="p-6 border-b border-gray-800 bg-gray-800/30">
-              <h3 className="text-white font-black italic flex items-center gap-2 uppercase tracking-widest text-sm">
+          <div className="bg-[var(--bg-card)] rounded-[2.5rem] border border-[var(--border)] overflow-hidden shadow-2xl">
+            <div className="p-6 border-b border-[var(--border)] bg-gray-800/30">
+              <h3 className="text-[var(--text-body)] font-black italic flex items-center gap-2 uppercase tracking-widest text-sm">
                 <Dumbbell className="text-yellow-400" size={18} /> مانیتورینگ
                 سلامت تجهیزات
               </h3>
@@ -306,14 +306,14 @@ export default function GlobalGymDashboard() {
               ].map((item, i) => (
                 <div key={i}>
                   <div className="flex justify-between mb-2">
-                    <span className="text-gray-300 text-xs font-bold italic uppercase tracking-tighter">
+                    <span className="text-[var(--text-dim)] text-xs font-bold italic uppercase tracking-tighter">
                       {item.name}
                     </span>
-                    <span className="text-white text-xs font-black">
+                    <span className="text-[var(--text-body)] text-xs font-black">
                       {item.status}%
                     </span>
                   </div>
-                  <div className="h-2 w-full bg-gray-900 rounded-full overflow-hidden">
+                  <div className="h-2 w-full bg-[var(--bg-hover)] rounded-full overflow-hidden">
                     <div
                       className={`h-full ${item.color} shadow-[0_0_10px_rgba(250,204,21,0.2)]`}
                       style={{ width: `${item.status}%` }}
@@ -325,39 +325,39 @@ export default function GlobalGymDashboard() {
           </div>
 
           {/* آخرین فعالیت‌های مدیریتی */}
-          <div className="bg-[#1a1d23] rounded-[2.5rem] border border-gray-800 overflow-hidden shadow-2xl">
-            <div className="p-6 border-b border-gray-800 bg-gray-800/30">
-              <h3 className="text-white font-black italic flex items-center gap-2 uppercase tracking-widest text-sm">
+          <div className="bg-[var(--bg-card)] rounded-[2.5rem] border border-[var(--border)] overflow-hidden shadow-2xl">
+            <div className="p-6 border-b border-[var(--border)] bg-gray-800/30">
+              <h3 className="text-[var(--text-body)] font-black italic flex items-center gap-2 uppercase tracking-widest text-sm">
                 <Activity className="text-yellow-400" size={18} /> لاگ
                 فعالیت‌های اخیر سیستم
               </h3>
             </div>
             <div className="p-6">
               <div className="space-y-4 font-bold">
-                <div className="flex items-center gap-4 text-xs p-3 bg-gray-900/50 rounded-2xl border-r-4 border-yellow-400 text-gray-400">
+                <div className="flex items-center gap-4 text-xs p-3 bg-[var(--bg-hover)]/50 rounded-2xl border-r-4 border-yellow-400 text-[var(--text-dim)]">
                   <span className="text-yellow-400 shrink-0">۱۰:۴۵</span>
                   <p>
                     خرید{" "}
-                    <span className="text-white font-black italic uppercase">
+                    <span className="text-[var(--text-body)] font-black italic uppercase">
                       ۳ دستگاه پرس پا
                     </span>{" "}
                     جدید توسط مدیریت ثبت شد.
                   </p>
                 </div>
-                <div className="flex items-center gap-4 text-xs p-3 bg-gray-900/50 rounded-2xl border-r-4 border-blue-400 text-gray-400">
+                <div className="flex items-center gap-4 text-xs p-3 bg-[var(--bg-hover)]/50 rounded-2xl border-r-4 border-blue-400 text-[var(--text-dim)]">
                   <span className="text-blue-400 shrink-0">۰۹:۳۰</span>
                   <p>
-                    <span className="text-white font-black italic uppercase italic">
+                    <span className="text-[var(--text-body)] font-black italic uppercase italic">
                       ۴۵ نفر
                     </span>{" "}
                     عضو جدید در شعبه مرکزی ثبت‌نام کردند.
                   </p>
                 </div>
-                <div className="flex items-center gap-4 text-xs p-3 bg-gray-900/50 rounded-2xl border-r-4 border-red-500 text-gray-400">
+                <div className="flex items-center gap-4 text-xs p-3 bg-[var(--bg-hover)]/50 rounded-2xl border-r-4 border-red-500 text-[var(--text-dim)]">
                   <span className="text-red-500 shrink-0">۰۸:۱۵</span>
                   <p>
                     اخطار:{" "}
-                    <span className="text-white font-black italic uppercase">
+                    <span className="text-[var(--text-body)] font-black italic uppercase">
                       سیستم تهویه
                     </span>{" "}
                     سالن ۲ نیاز به بررسی فنی دارد.

@@ -356,7 +356,7 @@ export default function TrainingRequestPage() {
   if (loading) {
     return (
       <DashboardLayout>
-        <div className="p-10 text-yellow-400 bg-black rounded-3xl">
+        <div className="p-10 text-yellow-400 bg-[var(--bg-overlay)] rounded-3xl">
           در حال بارگذاری...
         </div>
       </DashboardLayout>
@@ -365,15 +365,15 @@ export default function TrainingRequestPage() {
 
   return (
     <DashboardLayout>
-      <div className="overflow-x-hidden rounded-3xl border border-gray-800 bg-[#0f1115] p-4 sm:p-6 md:p-8">
-        <h1 className="mb-6 text-xl font-black text-white sm:text-2xl">
+      <div className="overflow-x-hidden rounded-3xl border border-[var(--border)] bg-[var(--bg-body)] p-4 sm:p-6 md:p-8">
+        <h1 className="mb-6 text-xl font-black text-[var(--text-body)] sm:text-2xl">
           ثبت درخواست برنامه تمرینی فارسی
         </h1>
 
         {/* بالای صفحه: اطلاعات مربی و پرداخت خلاصه */}
         <div className="flex flex-col md:flex-row gap-4 mb-6">
           {/* مربی */}
-          <div className="flex-1 p-4 bg-[#1a1d23] rounded-lg border border-gray-800">
+          <div className="flex-1 p-4 bg-[var(--bg-card)] rounded-lg border border-[var(--border)]">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
               <div className="w-26 h-26 rounded-xl bg-gray-800 border-2 border-yellow-400 overflow-hidden flex items-center justify-center">
                 {trainer?.profileImage ? (
@@ -389,10 +389,10 @@ export default function TrainingRequestPage() {
                 )}
               </div>
               <div className="flex-1 min-w-0 text-right">
-                <div className="text-white font-black text-2xl">
+                <div className="text-[var(--text-body)] font-black text-2xl">
                   {trainer?.name || "—"}
                 </div>
-                <div className="text-gray-400 text-sm mt-2">
+                <div className="text-[var(--text-dim)] text-sm mt-2">
                   نقش: {trainer?.role || "—"}
                 </div>
               </div>
@@ -400,13 +400,13 @@ export default function TrainingRequestPage() {
           </div>
 
           {/* پرداخت / خلاصه */}
-          <div className="w-full md:w-64 p-4 bg-[#1a1d23] rounded-lg border border-gray-800 flex flex-col items-center justify-between">
+          <div className="w-full md:w-64 p-4 bg-[var(--bg-card)] rounded-lg border border-[var(--border)] flex flex-col items-center justify-between">
             <div className="text-right w-full">
-              <div className="text-gray-400 text-xs">مبلغ (ثابت)</div>
+              <div className="text-[var(--text-dim)] text-xs">مبلغ (ثابت)</div>
               <div className="text-yellow-400 font-black text-lg">
                 {PRICE.toLocaleString()} تومان
               </div>
-              <div className="text-gray-400 text-xs mt-2">
+              <div className="text-[var(--text-dim)] text-xs mt-2">
                 روش پرداخت: آنلاین (نمادین)
               </div>
             </div>
@@ -419,7 +419,7 @@ export default function TrainingRequestPage() {
               ) : (
                 <button
                   onClick={handlePay}
-                  className="w-full py-2 rounded-xl bg-yellow-400 text-black font-black hover:bg-yellow-500"
+                  className="w-full py-2 rounded-xl bg-yellow-400 text-[var(--text-body)] font-black hover:bg-yellow-500"
                 >
                   پرداخت
                 </button>
@@ -429,44 +429,44 @@ export default function TrainingRequestPage() {
         </div>
 
         {/* اطلاعات کاربر (ورود شده) */}
-        <section className="mb-6 p-4 bg-[#1a1d23] rounded-lg border border-gray-800">
+        <section className="mb-6 p-4 bg-[var(--bg-card)] rounded-lg border border-[var(--border)]">
           <h3 className="text-yellow-400 font-bold mb-3">اطلاعات شما</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-gray-300">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-[var(--text-dim)]">
             <div>
-              <label className="text-xs text-gray-500">نام</label>
-              <div className="mt-1 text-white font-black">
+              <label className="text-xs text-[var(--text-muted)]">نام</label>
+              <div className="mt-1 text-[var(--text-body)] font-black">
                 {currentUser?.name || "—"}
               </div>
             </div>
             <div>
-              <label className="text-xs text-gray-500">کد عضویت</label>
-              <div className="mt-1 text-gray-300">
+              <label className="text-xs text-[var(--text-muted)]">کد عضویت</label>
+              <div className="mt-1 text-[var(--text-dim)]">
                 {currentUser?.employeeCode || "—"}
               </div>
             </div>
             <div>
-              <label className="text-xs text-gray-500">تماس</label>
-              <div className="mt-1 text-gray-300">
+              <label className="text-xs text-[var(--text-muted)]">تماس</label>
+              <div className="mt-1 text-[var(--text-dim)]">
                 {currentUser?.contactNumber || "—"}
               </div>
             </div>
             <div>
-              <label className="text-xs text-gray-500">ایمیل</label>
-              <div className="mt-1 text-gray-300">
+              <label className="text-xs text-[var(--text-muted)]">ایمیل</label>
+              <div className="mt-1 text-[var(--text-dim)]">
                 {currentUser?.email || "—"}
               </div>
             </div>
             <div>
-              <label className="text-xs text-gray-500">تاریخ عضویت</label>
-              <div className="mt-1 text-gray-300">
+              <label className="text-xs text-[var(--text-muted)]">تاریخ عضویت</label>
+              <div className="mt-1 text-[var(--text-dim)]">
                 {currentUser?.createdAt
                   ? moment(currentUser.createdAt).format("jYYYY/jMM/jDD")
                   : "—"}
               </div>
             </div>
             <div>
-              <label className="text-xs text-gray-500">وضعیت</label>
-              <div className="mt-1 text-gray-300">
+              <label className="text-xs text-[var(--text-muted)]">وضعیت</label>
+              <div className="mt-1 text-[var(--text-dim)]">
                 {currentUser?.status || "—"}
               </div>
             </div>
@@ -474,14 +474,14 @@ export default function TrainingRequestPage() {
         </section>
 
         {/* فرم درخواست */}
-        <section className="mb-6 p-4 bg-[#1a1d23] rounded-lg border border-gray-800">
+        <section className="mb-6 p-4 bg-[var(--bg-card)] rounded-lg border border-[var(--border)]">
           <h3 className="text-yellow-400 font-bold mb-3">
             اطلاعات بدنی و جزئیات
           </h3>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-xs text-gray-500 mb-1">
+              <label className="block text-xs text-[var(--text-muted)] mb-1">
                 قد (cm)
               </label>
               <input
@@ -489,13 +489,13 @@ export default function TrainingRequestPage() {
                 value={form.height}
                 onChange={handleChange}
                 type="number"
-                className="w-full bg-gray-800 p-3 rounded-lg text-white"
+                className="w-full bg-gray-800 p-3 rounded-lg text-[var(--text-body)]"
                 placeholder="مثال: 175"
               />
             </div>
 
             <div>
-              <label className="block text-xs text-gray-500 mb-1">
+              <label className="block text-xs text-[var(--text-muted)] mb-1">
                 وزن (kg)
               </label>
               <input
@@ -503,20 +503,20 @@ export default function TrainingRequestPage() {
                 value={form.weight}
                 onChange={handleChange}
                 type="number"
-                className="w-full bg-gray-800 p-3 rounded-lg text-white"
+                className="w-full bg-gray-800 p-3 rounded-lg text-[var(--text-body)]"
                 placeholder="مثال: 78"
               />
             </div>
 
             <div>
-              <label className="block text-xs text-gray-500 mb-1">سن</label>
+              <label className="block text-xs text-[var(--text-muted)] mb-1">سن</label>
               <input
                 name="age"
                 type="number"
                 value={form.age}
                 onChange={handleChange}
                 readOnly={Boolean(currentUser?.age || currentUser?.birthday)}
-                className="w-full bg-gray-800 p-3 rounded-lg text-white"
+                className="w-full bg-gray-800 p-3 rounded-lg text-[var(--text-body)]"
                 placeholder="مثال: 28"
               />
             </div>
@@ -524,30 +524,30 @@ export default function TrainingRequestPage() {
 
           <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-xs text-gray-500 mb-1">سابقه تمرین</label>
-              <input name="trainingExperience" value={form.trainingExperience} onChange={handleChange} className="w-full bg-gray-800 p-3 rounded-lg text-white" placeholder="مبتدی، متوسط، حرفه‌ای" />
+              <label className="block text-xs text-[var(--text-muted)] mb-1">سابقه تمرین</label>
+              <input name="trainingExperience" value={form.trainingExperience} onChange={handleChange} className="w-full bg-gray-800 p-3 rounded-lg text-[var(--text-body)]" placeholder="مبتدی، متوسط، حرفه‌ای" />
             </div>
             <div>
-              <label className="block text-xs text-gray-500 mb-1">آسیب‌دیدگی‌ها</label>
-              <input name="injuries" value={form.injuries} onChange={handleChange} className="w-full bg-gray-800 p-3 rounded-lg text-white" placeholder="در صورت وجود" />
+              <label className="block text-xs text-[var(--text-muted)] mb-1">آسیب‌دیدگی‌ها</label>
+              <input name="injuries" value={form.injuries} onChange={handleChange} className="w-full bg-gray-800 p-3 rounded-lg text-[var(--text-body)]" placeholder="در صورت وجود" />
             </div>
             <div>
-              <label className="block text-xs text-gray-500 mb-1">روزهای آزاد هفتگی</label>
-              <input name="weeklyAvailableDays" type="number" min="1" max="7" value={form.weeklyAvailableDays} onChange={handleChange} className="w-full bg-gray-800 p-3 rounded-lg text-white" placeholder="مثال: 4" />
+              <label className="block text-xs text-[var(--text-muted)] mb-1">روزهای آزاد هفتگی</label>
+              <input name="weeklyAvailableDays" type="number" min="1" max="7" value={form.weeklyAvailableDays} onChange={handleChange} className="w-full bg-gray-800 p-3 rounded-lg text-[var(--text-body)]" placeholder="مثال: 4" />
             </div>
           </div>
 
           <div className="mt-4">
-            <label className="block text-xs text-gray-500 mb-2">اهداف تمرینی</label>
+            <label className="block text-xs text-[var(--text-muted)] mb-2">اهداف تمرینی</label>
             <div className="flex flex-wrap gap-2">
               {["چربی سوزی", "عضله سازی", "افزایش وزن", "کاهش وزن", "افزایش قدرت", "بدنسازی حرفه‌ای", "تناسب اندام", "آمادگی جسمانی", "توانبخشی", "اصلاح فرم بدن"].map((goal) => (
-                <button key={goal} type="button" onClick={() => toggleGoal(goal)} className={`px-3 py-2 rounded-xl text-xs font-black border ${form.goals.includes(goal) ? "bg-yellow-400 text-black border-yellow-400" : "bg-gray-900 text-gray-300 border-gray-700"}`}>{goal}</button>
+                <button key={goal} type="button" onClick={() => toggleGoal(goal)} className={`px-3 py-2 rounded-xl text-xs font-black border ${form.goals.includes(goal) ? "bg-yellow-400 text-[var(--text-body)] border-yellow-400" : "bg-gray-900 text-[var(--text-dim)] border-[var(--border)]"}`}>{goal}</button>
               ))}
             </div>
           </div>
 
           <div className="mt-4">
-            <label className="block text-xs text-gray-500 mb-1">
+            <label className="block text-xs text-[var(--text-muted)] mb-1">
               عکس‌های بدن (اختیاری)
             </label>
             <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-center">
@@ -556,18 +556,18 @@ export default function TrainingRequestPage() {
                 accept="image/*"
                 multiple
                 onChange={handlePhotos}
-                className="w-full cursor-pointer rounded-lg bg-gray-900 p-2 text-sm text-gray-300 file:rounded-lg file:border-0 file:bg-gray-800 file:px-3 file:py-2 file:text-white sm:w-auto"
+                className="w-full cursor-pointer rounded-lg bg-gray-900 p-2 text-sm text-[var(--text-dim)] file:rounded-lg file:border-0 file:bg-gray-800 file:px-3 file:py-2 file:text-[var(--text-body)] sm:w-auto"
               />
               {/* نمایش عکس‌ها */}
               <div className="flex max-w-full gap-3 overflow-x-auto pb-2">
                 {photoPreviews.length === 0 && (
-                  <div className="text-gray-500">عکسی آپلود نشده</div>
+                  <div className="text-[var(--text-muted)]">عکسی آپلود نشده</div>
                 )}
 
                 {photoPreviews.map((p, idx) => (
                   <div
                     key={idx}
-                    className="relative h-24 w-24 shrink-0 cursor-pointer overflow-hidden rounded-md border border-gray-700 transition hover:border-yellow-400 sm:h-28 sm:w-28"
+                    className="relative h-24 w-24 shrink-0 cursor-pointer overflow-hidden rounded-md border border-[var(--border)] transition hover:border-yellow-400 sm:h-28 sm:w-28"
                   >
                     <img
                       src={p}
@@ -578,7 +578,7 @@ export default function TrainingRequestPage() {
                     <button
                       onClick={() => removePhoto(idx)}
                       type="button"
-                      className="absolute top-1 left-1 bg-black/60 text-red-400 rounded-full w-6 h-6 flex items-center justify-center text-xs"
+                      className="absolute top-1 left-1 bg-[var(--bg-overlay)]/60 text-red-400 rounded-full w-6 h-6 flex items-center justify-center text-xs"
                       title="حذف"
                     >
                       ×
@@ -590,7 +590,7 @@ export default function TrainingRequestPage() {
               {/* مودال بزرگنمایی */}
               {previewPhoto && (
                 <div
-                  className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center"
+                  className="fixed inset-0 z-50 bg-[var(--bg-overlay)]/80 flex items-center justify-center"
                   onClick={() => setPreviewPhoto(null)}
                 >
                   <div
@@ -599,7 +599,7 @@ export default function TrainingRequestPage() {
                   >
                     <button
                       onClick={() => setPreviewPhoto(null)}
-                      className="absolute -top-10 right-0 text-white text-3xl font-black hover:text-yellow-400"
+                      className="absolute -top-10 right-0 text-[var(--text-body)] text-3xl font-black hover:text-yellow-400"
                     >
                       ×
                     </button>
@@ -615,7 +615,7 @@ export default function TrainingRequestPage() {
           </div>
 
           <div className="mt-4">
-            <label className="block text-xs text-gray-500 mb-1">
+            <label className="block text-xs text-[var(--text-muted)] mb-1">
               یادداشت پزشکی/تمرینی تکمیلی
             </label>
             <textarea
@@ -623,15 +623,15 @@ export default function TrainingRequestPage() {
               value={form.notes}
               onChange={handleChange}
               placeholder="محدودیت‌ها، هدف دقیق، زمان‌بندی یا توضیحات دیگر..."
-              className="w-full bg-gray-800 p-3 rounded-lg text-white min-h-[100px] mb-4"
+              className="w-full bg-gray-800 p-3 rounded-lg text-[var(--text-body)] min-h-[100px] mb-4"
             />
-            <label className="block text-xs text-gray-500 mb-1">پیام به مربی</label>
+            <label className="block text-xs text-[var(--text-muted)] mb-1">پیام به مربی</label>
             <textarea
               name="userNotes"
               value={form.userNotes}
               onChange={handleChange}
               placeholder="درخواست یا توضیحات خود را بنویسید..."
-              className="w-full bg-gray-800 p-3 rounded-lg text-white min-h-[120px]"
+              className="w-full bg-gray-800 p-3 rounded-lg text-[var(--text-body)] min-h-[120px]"
             />
           </div>
         </section>
@@ -641,14 +641,14 @@ export default function TrainingRequestPage() {
           <button
             onClick={handleSubmit}
             disabled={submitting}
-            className="w-full md:w-auto px-6 py-3 bg-yellow-400 text-black rounded-2xl font-black disabled:opacity-50"
+            className="w-full md:w-auto px-6 py-3 bg-yellow-400 text-[var(--text-body)] rounded-2xl font-black disabled:opacity-50"
           >
             {submitting ? "در حال ارسال..." : "ثبت درخواست"}
           </button>
 
           <button
             onClick={() => router.back()}
-            className="w-full md:w-auto px-6 py-3 border border-gray-700 text-gray-300 rounded-2xl"
+            className="w-full md:w-auto px-6 py-3 border border-[var(--border)] text-[var(--text-dim)] rounded-2xl"
           >
             بازگشت
           </button>

@@ -6,7 +6,7 @@ import { Dumbbell, Home, AlertOctagon, ChevronLeft } from "lucide-react";
 
 const ErrorPage = () => {
   return (
-    <section className="min-h-screen bg-[#0f1115] flex items-center justify-center p-6 overflow-hidden relative">
+    <section className="min-h-screen bg-[var(--bg-body)] flex items-center justify-center p-6 overflow-hidden relative">
       {/* المان‌های گرافیکی پس‌زمینه (تزئینی) */}
       <div className="absolute top-[-10%] left-[-5%] w-96 h-96 bg-yellow-400/5 rounded-full blur-[120px]"></div>
       <div className="absolute bottom-[-10%] right-[-5%] w-96 h-96 bg-yellow-400/5 rounded-full blur-[120px]"></div>
@@ -29,17 +29,17 @@ const ErrorPage = () => {
 
           {/* محتوای متنی */}
           <div className="space-y-4 -mt-10 md:-mt-20">
-            <h2 className="text-4xl md:text-6xl font-black text-white italic uppercase tracking-tighter">
+            <h2 className="text-4xl md:text-6xl font-black text-[var(--text-body)] italic uppercase tracking-tighter">
               مسیر رو <span className="text-yellow-400">اشتباه اومدی!</span>
             </h2>
 
-            <div className="flex items-center justify-center gap-2 text-gray-500 uppercase tracking-[0.3em] text-xs font-bold mb-6">
+            <div className="flex items-center justify-center gap-2 text-[var(--text-muted)] uppercase tracking-[0.3em] text-xs font-bold mb-6">
               <Dumbbell size={14} className="text-yellow-400" />
               <span>Wrong Training Zone</span>
               <Dumbbell size={14} className="text-yellow-400" />
             </div>
 
-            <p className="text-gray-400 text-lg max-w-md mx-auto leading-relaxed font-medium">
+            <p className="text-[var(--text-dim)] text-lg max-w-md mx-auto leading-relaxed font-medium">
               قهرمان، صفحه‌ای که دنبالش می‌گردی توی لیست تمرینات امروز نیست.
               شاید جابجاش کردیم یا کلاً از برنامه حذف شده!
             </p>
@@ -58,7 +58,7 @@ const ErrorPage = () => {
 
             <button
               onClick={() => window.history.back()}
-              className="w-full sm:w-auto bg-transparent hover:bg-gray-800 text-white border border-gray-700 px-10 py-5 rounded-2xl font-black text-sm italic uppercase transition-all flex items-center justify-center gap-2"
+              className="w-full sm:w-auto bg-transparent hover:bg-[var(--bg-hover)] text-[var(--text-body)] border border-[var(--border)] px-10 py-5 rounded-2xl font-black text-sm italic uppercase transition-all flex items-center justify-center gap-2"
             >
               <ChevronLeft size={18} />
               <span>برگشت به عقب</span>
@@ -66,7 +66,7 @@ const ErrorPage = () => {
           </div>
 
           {/* فوتر کوچک */}
-          <p className="mt-16 text-gray-600 text-[10px] uppercase tracking-widest font-bold">
+          <p className="mt-16 text-[var(--text-muted)] text-[10px] uppercase tracking-widest font-bold">
             Iron Gym Management System • Version 2025
           </p>
         </div>

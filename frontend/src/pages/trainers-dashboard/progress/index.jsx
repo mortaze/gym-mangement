@@ -100,14 +100,14 @@ export default function ProgressPage() {
 
   return (
     <DashboardLayout>
-      <div className="p-4 sm:p-8 min-h-screen bg-[#0f1115] rounded-[2.5rem] border border-gray-800 shadow-2xl" dir="rtl">
+      <div className="p-4 sm:p-8 min-h-screen bg-[var(--bg-body)] rounded-[2.5rem] border border-[var(--border)] shadow-2xl" dir="rtl">
         <div className="flex items-center gap-4 mb-8">
-          <div className="p-4 bg-yellow-400 text-black rounded-2xl shadow-lg">
+          <div className="p-4 bg-yellow-400 text-[var(--text-body)] rounded-2xl shadow-lg">
             <TrendingUp size={28} />
           </div>
           <div>
-            <h2 className="text-3xl font-black text-white uppercase tracking-tight">پیگیری پیشرفت</h2>
-            <p className="text-gray-500 text-xs mt-1 uppercase tracking-widest">Progress Tracking</p>
+            <h2 className="text-3xl font-black text-[var(--text-body)] uppercase tracking-tight">پیگیری پیشرفت</h2>
+            <p className="text-[var(--text-muted)] text-xs mt-1 uppercase tracking-widest">Progress Tracking</p>
           </div>
         </div>
 
@@ -115,19 +115,19 @@ export default function ProgressPage() {
           <StudentSelector students={students} onSelect={selectStudent} loading={loading} />
         ) : (
           <div className="space-y-6">
-            <div className="flex items-center justify-between bg-[#1a1d23] rounded-[2rem] p-4 border border-gray-800">
+            <div className="flex items-center justify-between bg-[var(--bg-card)] rounded-[2rem] p-4 border border-[var(--border)]">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-xl bg-gray-800 flex items-center justify-center text-yellow-400 font-black text-lg border border-gray-700">
+                <div className="w-12 h-12 rounded-xl bg-gray-800 flex items-center justify-center text-yellow-400 font-black text-lg border border-[var(--border)]">
                   {selectedStudent.name?.charAt(0) || "?"}
                 </div>
                 <div>
-                  <p className="text-white font-black">{selectedStudent.name}</p>
-                  <p className="text-xs text-gray-500">{selectedStudent.employeeCode}</p>
+                  <p className="text-[var(--text-body)] font-black">{selectedStudent.name}</p>
+                  <p className="text-xs text-[var(--text-muted)]">{selectedStudent.employeeCode}</p>
                 </div>
               </div>
               <button
                 onClick={() => { setSelectedStudent(null); setWeightLogs([]); setPrograms([]); }}
-                className="text-gray-400 hover:text-white text-sm font-black flex items-center gap-1"
+                className="text-[var(--text-dim)] hover:text-[var(--text-body)] text-sm font-black flex items-center gap-1"
               >
                 <ChevronRight size={16} /> تغییر
               </button>
@@ -135,7 +135,7 @@ export default function ProgressPage() {
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <StatCard icon={<Weight size={18} />} label="وزن فعلی" value={latestWeight !== "—" ? `${latestWeight} kg` : "—"} />
-              <StatCard icon={<TrendingUp size={18} />} label="تغییر وزن" value={weightChange ? `${weightChange > 0 ? "+" : ""}${weightChange} kg` : "—"} color={weightChange > 0 ? "text-red-400" : weightChange < 0 ? "text-green-400" : "text-gray-400"} />
+              <StatCard icon={<TrendingUp size={18} />} label="تغییر وزن" value={weightChange ? `${weightChange > 0 ? "+" : ""}${weightChange} kg` : "—"} color={weightChange > 0 ? "text-red-400" : weightChange < 0 ? "text-green-400" : "text-[var(--text-dim)]"} />
               <StatCard icon={<Target size={18} />} label="BMI" value={selectedStudent?.bmi || "—"} />
               <StatCard icon={<Activity size={18} />} label="امتیاز پیشرفت" value={`${selectedStudent?.progressScore || 0}%`} />
             </div>
@@ -145,8 +145,8 @@ export default function ProgressPage() {
             ) : (
               <>
                 {weightChartData.length > 1 && (
-                  <div className="bg-[#1a1d23] rounded-[2rem] p-6 border border-gray-800">
-                    <h3 className="text-white font-black text-lg flex items-center gap-2 mb-6">
+                  <div className="bg-[var(--bg-card)] rounded-[2rem] p-6 border border-[var(--border)]">
+                    <h3 className="text-[var(--text-body)] font-black text-lg flex items-center gap-2 mb-6">
                       <Weight className="text-yellow-400" size={20} /> روند وزن
                     </h3>
                     <div className="h-72">
@@ -174,25 +174,25 @@ export default function ProgressPage() {
                 )}
 
                 {programs.length > 0 && (
-                  <div className="bg-[#1a1d23] rounded-[2rem] p-6 border border-gray-800">
-                    <h3 className="text-white font-black text-lg flex items-center gap-2 mb-6">
+                  <div className="bg-[var(--bg-card)] rounded-[2rem] p-6 border border-[var(--border)]">
+                    <h3 className="text-[var(--text-body)] font-black text-lg flex items-center gap-2 mb-6">
                       <Dumbbell className="text-yellow-400" size={20} /> برنامه‌های تمرینی
                     </h3>
                     <div className="space-y-4">
                       {programs.slice(0, 5).map((p) => {
                         const score = p.progressScore || 0;
                         return (
-                          <div key={p._id} className="bg-gray-900/70 rounded-2xl p-4 border border-gray-800">
+                          <div key={p._id} className="bg-[var(--bg-hover)]/70 rounded-2xl p-4 border border-[var(--border)]">
                             <div className="flex items-center justify-between mb-2">
                               <div>
-                                <p className="text-white font-black text-sm">{p.title}</p>
-                                <p className="text-gray-500 text-xs">{p.weekDays?.length || p.trainingDays} روز • {p.exercises?.length} تمرین</p>
+                                <p className="text-[var(--text-body)] font-black text-sm">{p.title}</p>
+                                <p className="text-[var(--text-muted)] text-xs">{p.weekDays?.length || p.trainingDays} روز • {p.exercises?.length} تمرین</p>
                               </div>
                               <span className={`text-sm font-black ${score >= 70 ? "text-green-400" : score >= 40 ? "text-yellow-400" : "text-red-400"}`}>
                                 {score}%
                               </span>
                             </div>
-                            <div className="h-1.5 w-full bg-gray-900 rounded-full overflow-hidden">
+                            <div className="h-1.5 w-full bg-[var(--bg-hover)] rounded-full overflow-hidden">
                               <div
                                 className={`h-full rounded-full ${score >= 70 ? "bg-green-400" : score >= 40 ? "bg-yellow-400" : "bg-red-400"}`}
                                 style={{ width: `${score}%` }}
@@ -206,10 +206,10 @@ export default function ProgressPage() {
                 )}
 
                 {weightChartData.length <= 1 && programs.length === 0 && (
-                  <div className="flex flex-col items-center justify-center py-16 text-gray-500 bg-[#1a1d23] rounded-[2rem] border border-gray-800">
+                  <div className="flex flex-col items-center justify-center py-16 text-[var(--text-muted)] bg-[var(--bg-card)] rounded-[2rem] border border-[var(--border)]">
                     <Activity size={48} className="mb-4 opacity-40" />
                     <p className="font-black text-lg">هنوز داده‌ای ثبت نشده</p>
-                    <p className="text-sm mt-1 text-gray-600">پس از ثبت وزن و شروع برنامه، اطلاعات اینجا نمایش داده می‌شود</p>
+                    <p className="text-sm mt-1 text-[var(--text-muted)]">پس از ثبت وزن و شروع برنامه، اطلاعات اینجا نمایش داده می‌شود</p>
                   </div>
                 )}
               </>
@@ -239,33 +239,33 @@ function StudentSelector({ students, onSelect, loading }) {
   }
 
   return (
-    <div className="bg-[#1a1d23] rounded-[2rem] border border-gray-800 p-6">
-      <h3 className="text-white font-black text-lg mb-4">انتخاب ورزشکار</h3>
+    <div className="bg-[var(--bg-card)] rounded-[2rem] border border-[var(--border)] p-6">
+      <h3 className="text-[var(--text-body)] font-black text-lg mb-4">انتخاب ورزشکار</h3>
       <input
         type="text"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
         placeholder="جستجوی ورزشکار..."
-        className="w-full bg-[#0f1115] border border-gray-800 rounded-2xl py-3 px-4 text-white text-sm outline-none focus:border-yellow-400 mb-4"
+        className="w-full bg-[var(--bg-body)] border border-[var(--border)] rounded-2xl py-3 px-4 text-[var(--text-body)] text-sm outline-none focus:border-yellow-400 mb-4"
       />
       {filtered.length === 0 ? (
-        <p className="text-gray-500 text-center py-8">نتیجه‌ای یافت نشد</p>
+        <p className="text-[var(--text-muted)] text-center py-8">نتیجه‌ای یافت نشد</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {filtered.map((s) => (
             <button
               key={s._id}
               onClick={() => onSelect(s)}
-              className="flex items-center gap-3 bg-gray-900 rounded-2xl p-4 border border-gray-800 hover:border-yellow-400/40 transition-all text-right"
+              className="flex items-center gap-3 bg-[var(--bg-hover)] rounded-2xl p-4 border border-[var(--border)] hover:border-yellow-400/40 transition-all text-right"
             >
-              <div className="w-10 h-10 rounded-xl bg-gray-800 flex items-center justify-center text-yellow-400 font-black border border-gray-700">
+              <div className="w-10 h-10 rounded-xl bg-gray-800 flex items-center justify-center text-yellow-400 font-black border border-[var(--border)]">
                 {s.name?.charAt(0) || "?"}
               </div>
               <div>
-                <p className="text-white font-black text-sm">{s.name}</p>
-                <p className="text-[10px] text-gray-500">{s.employeeCode}</p>
+                <p className="text-[var(--text-body)] font-black text-sm">{s.name}</p>
+                <p className="text-[10px] text-[var(--text-muted)]">{s.employeeCode}</p>
               </div>
-              <ChevronLeft size={16} className="mr-auto text-gray-500" />
+              <ChevronLeft size={16} className="mr-auto text-[var(--text-muted)]" />
             </button>
           ))}
         </div>
@@ -274,11 +274,11 @@ function StudentSelector({ students, onSelect, loading }) {
   );
 }
 
-function StatCard({ icon, label, value, color = "text-white" }) {
+function StatCard({ icon, label, value, color = "text-[var(--text-body)]" }) {
   return (
-    <div className="bg-[#1a1d23] border border-gray-800 rounded-2xl p-4">
+    <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-2xl p-4">
       <div className="text-yellow-400 mb-2">{icon}</div>
-      <p className="text-gray-500 text-[10px] font-bold uppercase tracking-wider">{label}</p>
+      <p className="text-[var(--text-muted)] text-[10px] font-bold uppercase tracking-wider">{label}</p>
       <p className={`text-xl font-black mt-0.5 ${color}`}>{value}</p>
     </div>
   );

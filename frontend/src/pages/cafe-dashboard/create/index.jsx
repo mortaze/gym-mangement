@@ -83,10 +83,10 @@ export default function CreateCafeMenu() {
   return (
     <DashboardLayout>
       <div
-        className="p-4 sm:p-6 md:p-10 min-h-screen rounded-4xl bg-[#0f1115] text-right overflow-x-hidden"
+        className="p-4 sm:p-6 md:p-10 min-h-screen rounded-4xl bg-[var(--bg-body)] text-right overflow-x-hidden"
         dir="rtl"
       >
-        <h1 className="text-3xl md:text-4xl font-black text-white italic mb-8">
+        <h1 className="text-3xl md:text-4xl font-black text-[var(--text-body)] italic mb-8">
           ایجاد آیتم جدید <span className="text-yellow-400">کافه منو</span>
         </h1>
 
@@ -103,11 +103,11 @@ export default function CreateCafeMenu() {
 
         <form
           onSubmit={handleSubmit}
-          className="bg-[#1a1d23] p-4 sm:p-6 md:p-8 rounded-3xl shadow-xl max-w-2xl mx-auto flex flex-col gap-5 sm:gap-6"
+          className="bg-[var(--bg-card)] p-4 sm:p-6 md:p-8 rounded-3xl shadow-xl max-w-2xl mx-auto flex flex-col gap-5 sm:gap-6"
         >
           {/* نام محصول */}
           <div className="flex flex-col">
-            <label className="text-gray-500 text-xs mb-1 font-black uppercase">
+            <label className="text-[var(--text-muted)] text-xs mb-1 font-black uppercase">
               نام محصول
             </label>
             <input
@@ -116,21 +116,21 @@ export default function CreateCafeMenu() {
               value={formData.name}
               onChange={handleChange}
               placeholder="مثال: شیک وی ایزوله"
-              className="rounded-xl bg-[#0f1115] border border-gray-800 text-white px-4 py-3 focus:outline-none focus:border-yellow-400 transition-all italic"
+              className="rounded-xl bg-[var(--bg-body)] border border-[var(--border)] text-[var(--text-body)] px-4 py-3 focus:outline-none focus:border-yellow-400 transition-all italic"
               required
             />
           </div>
 
           {/* دسته‌بندی */}
           <div className="flex flex-col">
-            <label className="text-gray-500 text-xs mb-1 font-black uppercase">
+            <label className="text-[var(--text-muted)] text-xs mb-1 font-black uppercase">
               دسته‌بندی
             </label>
             <select
               name="category"
               value={formData.category}
               onChange={handleChange}
-              className="rounded-xl bg-[#0f1115] border border-gray-800 text-white px-4 py-3 focus:outline-none focus:border-yellow-400 transition-all italic"
+              className="rounded-xl bg-[var(--bg-body)] border border-[var(--border)] text-[var(--text-body)] px-4 py-3 focus:outline-none focus:border-yellow-400 transition-all italic"
               required
             >
               <option value="">انتخاب دسته</option>
@@ -144,7 +144,7 @@ export default function CreateCafeMenu() {
 
           {/* قیمت */}
           <div className="flex flex-col">
-            <label className="text-gray-500 text-xs mb-1 font-black uppercase">
+            <label className="text-[var(--text-muted)] text-xs mb-1 font-black uppercase">
               قیمت (تومان)
             </label>
             <input
@@ -160,14 +160,14 @@ export default function CreateCafeMenu() {
                   setFormData((prev) => ({ ...prev, price: numericValue }));
                 }
               }}
-              className="rounded-xl bg-[#0f1115] border border-gray-800 text-white px-4 py-3 focus:outline-none focus:border-yellow-400 transition-all italic"
+              className="rounded-xl bg-[var(--bg-body)] border border-[var(--border)] text-[var(--text-body)] px-4 py-3 focus:outline-none focus:border-yellow-400 transition-all italic"
               required
             />
           </div>
 
           {/* کالری */}
           <div className="flex flex-col">
-            <label className="text-gray-500 text-xs mb-1 font-black uppercase">
+            <label className="text-[var(--text-muted)] text-xs mb-1 font-black uppercase">
               کالری (KCAL)
             </label>
             <input
@@ -187,20 +187,20 @@ export default function CreateCafeMenu() {
                   setFormData((prev) => ({ ...prev, kcal: numericValue }));
                 }
               }}
-              className="rounded-xl bg-[#0f1115] border border-gray-800 text-white px-4 py-3 focus:outline-none focus:border-yellow-400 transition-all italic"
+              className="rounded-xl bg-[var(--bg-body)] border border-[var(--border)] text-[var(--text-body)] px-4 py-3 focus:outline-none focus:border-yellow-400 transition-all italic"
             />
           </div>
 
           {/* وضعیت */}
           <div className="flex flex-col">
-            <label className="text-gray-500 text-xs mb-1 font-black uppercase">
+            <label className="text-[var(--text-muted)] text-xs mb-1 font-black uppercase">
               وضعیت
             </label>
             <select
               name="status"
               value={formData.status}
               onChange={handleChange}
-              className="rounded-xl bg-[#0f1115] border border-gray-800 text-white px-4 py-3 focus:outline-none focus:border-yellow-400 transition-all italic"
+              className="rounded-xl bg-[var(--bg-body)] border border-[var(--border)] text-[var(--text-body)] px-4 py-3 focus:outline-none focus:border-yellow-400 transition-all italic"
             >
               <option value="available">موجود</option>
               <option value="unavailable">ناموجود</option>
@@ -209,7 +209,7 @@ export default function CreateCafeMenu() {
 
           {/* آپلود عکس */}
           <div className="flex flex-col">
-            <label className="text-gray-500 text-xs mb-1 font-black uppercase">
+            <label className="text-[var(--text-muted)] text-xs mb-1 font-black uppercase">
               عکس محصول
             </label>
 
@@ -224,8 +224,8 @@ export default function CreateCafeMenu() {
               />
 
               {/* ظاهر سفارشی */}
-              <div className="flex justify-between items-center bg-[#0f1115] border border-gray-800 rounded-xl px-4 py-3 cursor-pointer hover:border-yellow-400 transition-all">
-                <span className="text-gray-300 text-sm italic">
+              <div className="flex justify-between items-center bg-[var(--bg-body)] border border-[var(--border)] rounded-xl px-4 py-3 cursor-pointer hover:border-yellow-400 transition-all">
+                <span className="text-[var(--text-dim)] text-sm italic">
                   {formData.img ? formData.img.name : "بدون تصویر (Placeholder نمایش داده می‌شود)"}
                 </span>
                 <Upload size={18} className="text-yellow-400" />
@@ -237,7 +237,7 @@ export default function CreateCafeMenu() {
               <img
                 src={previewImg}
                 alt="Preview"
-                className="mt-4 w-48 h-48 object-cover rounded-2xl border border-gray-800"
+                className="mt-4 w-48 h-48 object-cover rounded-2xl border border-[var(--border)]"
               />
             )}
           </div>
@@ -246,7 +246,7 @@ export default function CreateCafeMenu() {
           <button
             type="submit"
             disabled={loading}
-            className="bg-yellow-400 hover:bg-yellow-500 text-black font-bold uppercase px-6 py-3 rounded-2xl shadow-lg transition-all duration-200 mt-4"
+            className="bg-yellow-400 hover:bg-yellow-500 text-[var(--text-body)] font-bold uppercase px-6 py-3 rounded-2xl shadow-lg transition-all duration-200 mt-4"
           >
             {loading ? "در حال ارسال..." : "ایجاد آیتم"}
           </button>

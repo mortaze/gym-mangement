@@ -198,7 +198,7 @@ export default function EditPropertyPage() {
   if (loading)
     return (
       <div className="flex justify-center items-center min-h-screen">
-        <p className="text-gray-500 text-lg animate-pulse">
+        <p className="text-[var(--text-muted)] text-lg animate-pulse">
           در حال بارگذاری اطلاعات ملک...
         </p>
       </div>
@@ -206,9 +206,9 @@ export default function EditPropertyPage() {
 
   return (
     <DashboardLayout>
-      <div className="min-h-screen p-6 bg-[#f8fafc]">
-        <div className="max-w-5xl mx-auto bg-white rounded-xl shadow p-6">
-          <h1 className="text-2xl font-bold mb-6">ویرایش ملک</h1>
+      <div className="min-h-screen p-6 bg-[var(--bg-body)]">
+        <div className="max-w-5xl mx-auto bg-[var(--bg-card)] rounded-xl shadow-[var(--shadow)] p-6">
+          <h1 className="text-2xl font-bold mb-6 text-[var(--text-body)]">ویرایش ملک</h1>
           {/* Stepper فرم */}
           <PropertyStepper onSubmit={handleSubmit} />
 
@@ -223,7 +223,7 @@ export default function EditPropertyPage() {
             </button>
             <button
               onClick={() => router.push("/dashboard/main/properties")}
-              className="px-6 py-3 bg-gray-100 text-gray-700 font-bold rounded-2xl hover:bg-gray-200 transition-all"
+                className="px-6 py-3 bg-[var(--bg-hover)] text-[var(--text-body)] font-bold rounded-2xl hover:bg-[var(--border)] transition-all"
             >
               لغو
             </button>

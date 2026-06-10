@@ -274,7 +274,7 @@ export default function TrainingRequestShowPage() {
   if (loading) {
     return (
       <DashboardLayout>
-        <div className="p-10 text-yellow-400 bg-black rounded-3xl">
+        <div className="p-10 text-yellow-400 bg-[var(--bg-overlay)] rounded-3xl">
           در حال بارگذاری...
         </div>
       </DashboardLayout>
@@ -283,14 +283,14 @@ export default function TrainingRequestShowPage() {
 
   return (
     <DashboardLayout>
-      <div className="overflow-x-hidden rounded-3xl border border-gray-800 bg-[#0f1115] p-4 sm:p-6 md:p-8">
-        <h1 className="text-2xl font-black text-white mb-6">
+      <div className="overflow-x-hidden rounded-3xl border border-[var(--border)] bg-[var(--bg-body)] p-4 sm:p-6 md:p-8">
+        <h1 className="text-2xl font-black text-[var(--text-body)] mb-6">
           مشاهده و ویرایش درخواست تمرینی
         </h1>
 
         <div className="flex flex-col md:flex-row gap-4 mb-6">
           {/* مربی */}
-          <div className="flex-1 p-4 bg-[#1a1d23] rounded-lg border border-gray-800">
+          <div className="flex-1 p-4 bg-[var(--bg-card)] rounded-lg border border-[var(--border)]">
             <div className="flex items-center gap-4">
               <div className="w-26 h-26 rounded-xl bg-gray-800 border-2 border-yellow-400 overflow-hidden flex items-center justify-center">
                 {trainer?.profileImage ? (
@@ -306,10 +306,10 @@ export default function TrainingRequestShowPage() {
                 )}
               </div>
               <div className="flex-1 min-w-0 text-right">
-                <div className="text-white font-black text-2xl">
+                <div className="text-[var(--text-body)] font-black text-2xl">
                   {trainer?.name || "—"}
                 </div>
-                <div className="text-gray-400 text-sm mt-2">
+                <div className="text-[var(--text-dim)] text-sm mt-2">
                   نقش: {trainer?.role || "—"}
                 </div>
               </div>
@@ -317,13 +317,13 @@ export default function TrainingRequestShowPage() {
           </div>
 
           {/* پرداخت / خلاصه */}
-          <div className="w-full md:w-64 p-4 bg-[#1a1d23] rounded-lg border border-gray-800 flex flex-col items-center justify-between">
+          <div className="w-full md:w-64 p-4 bg-[var(--bg-card)] rounded-lg border border-[var(--border)] flex flex-col items-center justify-between">
             <div className="text-right w-full">
-              <div className="text-gray-400 text-xs">مبلغ (ثابت)</div>
+              <div className="text-[var(--text-dim)] text-xs">مبلغ (ثابت)</div>
               <div className="text-yellow-400 font-black text-lg">
                 {PRICE.toLocaleString()} تومان
               </div>
-              <div className="text-gray-400 text-xs mt-2">
+              <div className="text-[var(--text-dim)] text-xs mt-2">
                 روش پرداخت: آنلاین (نمادین)
               </div>
             </div>
@@ -336,7 +336,7 @@ export default function TrainingRequestShowPage() {
               ) : (
                 <button
                   onClick={handlePay}
-                  className="w-full py-2 rounded-xl bg-yellow-400 text-black font-black hover:bg-yellow-500"
+                  className="w-full py-2 rounded-xl bg-yellow-400 text-[var(--text-body)] font-black hover:bg-yellow-500"
                 >
                   پرداخت
                 </button>
@@ -348,7 +348,7 @@ export default function TrainingRequestShowPage() {
         {/* اطلاعات ورزشکار کامل */}
         <section className="mb-8">
           <h3 className="text-yellow-400 font-bold mb-3">اطلاعات ورزشکار</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-300">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-[var(--text-dim)]">
             <Field label="نام" value={user?.name ?? "—"} disabled />
             <Field
               label="کد عضویت"
@@ -383,7 +383,7 @@ export default function TrainingRequestShowPage() {
           <h3 className="text-yellow-400 font-bold mb-3">عکس‌های آپلودشده</h3>
           <div className="flex gap-3 overflow-x-auto">
             {(request?.photos ?? []).length === 0 && (
-              <div className="text-gray-500">عکسی آپلود نشده</div>
+              <div className="text-[var(--text-muted)]">عکسی آپلود نشده</div>
             )}
 
             {(request?.photos ?? []).map((p, idx) => (
@@ -393,7 +393,7 @@ export default function TrainingRequestShowPage() {
                   // فقط modal نمایش داده شود (و نه تکرار تصویر در صفحه)
                   setPreviewPhoto(resolvePhotoUrl(p));
                 }}
-                className="w-28 h-28 cursor-pointer rounded-md overflow-hidden border border-gray-700 hover:border-yellow-400 transition"
+                className="w-28 h-28 cursor-pointer rounded-md overflow-hidden border border-[var(--border)] hover:border-yellow-400 transition"
                 type="button"
                 title="نمایش تصویر"
               >
@@ -456,21 +456,21 @@ export default function TrainingRequestShowPage() {
 
         {/* یادداشت کاربر (غیرفعال برای ویرایش توسط مربی/کاربر) */}
         <section className="mb-6">
-          <label className="text-sm text-gray-400">یادداشت کاربر</label>
+          <label className="text-sm text-[var(--text-dim)]">یادداشت کاربر</label>
           <textarea
             value={form.userNotes}
             onChange={(e) => onChange("userNotes", e.target.value)}
-            className="w-full bg-gray-800 p-3 rounded-lg text-white mt-2 min-h-[120px]"
+            className="w-full bg-gray-800 p-3 rounded-lg text-[var(--text-body)] mt-2 min-h-[120px]"
           />
         </section>
 
         {/* یادداشت مربی (قابل ویرایش) */}
         <section className="mb-6">
-          <label className="text-sm text-gray-400">یادداشت مربی</label>
+          <label className="text-sm text-[var(--text-dim)]">یادداشت مربی</label>
           <textarea
             value={form.trainerNotes}
             onChange={(e) => onChange("trainerNotes", e.target.value)}
-            className="w-full bg-gray-800 p-3 rounded-lg text-white mt-2 min-h-[120px]"
+            className="w-full bg-gray-800 p-3 rounded-lg text-[var(--text-body)] mt-2 min-h-[120px]"
             placeholder="اینجا یادداشت مربی را بنویسید..."
             disabled
           />
@@ -493,14 +493,14 @@ export default function TrainingRequestShowPage() {
             <button
               onClick={onSave}
               disabled={saving}
-              className="w-full rounded-2xl bg-yellow-400 px-6 py-3 font-black text-black sm:w-auto"
+              className="w-full rounded-2xl bg-yellow-400 px-6 py-3 font-black text-[var(--text-body)] sm:w-auto"
             >
               {saving ? "در حال ذخیره..." : "ثبت / بروزرسانی درخواست"}
             </button>
 
             <button
               onClick={() => router.back()}
-              className="w-full rounded-2xl bg-gray-800 px-5 py-3 text-gray-300 sm:w-auto"
+              className="w-full rounded-2xl bg-gray-800 px-5 py-3 text-[var(--text-dim)] sm:w-auto"
             >
               بازگشت
             </button>
@@ -511,7 +511,7 @@ export default function TrainingRequestShowPage() {
       {/* modal preview عکس */}
       {previewPhoto && (
         <div
-          className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center"
+          className="fixed inset-0 z-50 bg-[var(--bg-overlay)]/80 flex items-center justify-center"
           onClick={() => setPreviewPhoto(null)}
         >
           <div
@@ -521,7 +521,7 @@ export default function TrainingRequestShowPage() {
             {/* Close Button */}
             <button
               onClick={() => setPreviewPhoto(null)}
-              className="absolute -top-10 right-0 text-white text-3xl font-black hover:text-yellow-400"
+              className="absolute -top-10 right-0 text-[var(--text-body)] text-3xl font-black hover:text-yellow-400"
             >
               ×
             </button>
@@ -565,11 +565,11 @@ function TrainingPlanPreview({ request, trainer }) {
   const issuedAt = request?.updatedAt || request?.createdAt;
 
   return (
-    <section className="mb-6 rounded-[2rem] border border-gray-800 bg-[#10131a] p-4 sm:p-5">
-      <div className="mb-5 flex flex-col gap-3 border-b border-gray-800 pb-4 sm:flex-row sm:items-center sm:justify-between">
+    <section className="mb-6 rounded-[2rem] border border-[var(--border)] bg-[var(--bg-card)] p-4 sm:p-5">
+      <div className="mb-5 flex flex-col gap-3 border-b border-[var(--border)] pb-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <p className="text-xs font-black text-gray-500">کارت اطلاعات برنامه</p>
-          <h3 className="mt-1 text-xl font-black text-white">{plan?.title || "برنامه تمرینی صادر نشده است"}</h3>
+          <p className="text-xs font-black text-[var(--text-muted)]">کارت اطلاعات برنامه</p>
+          <h3 className="mt-1 text-xl font-black text-[var(--text-body)]">{plan?.title || "برنامه تمرینی صادر نشده است"}</h3>
         </div>
         <span className="w-fit rounded-full bg-yellow-400/10 px-4 py-2 text-xs font-black text-yellow-400">
           {request?.status === "approved" ? "برنامه صادر شد" : "در انتظار صدور"}
@@ -584,46 +584,46 @@ function TrainingPlanPreview({ request, trainer }) {
       {Object.keys(exercisesByDay).length ? (
         <div className="space-y-3">
           {Object.entries(exercisesByDay).map(([day, exercises], index) => (
-            <details key={day} className="group rounded-2xl border border-gray-800 bg-[#1a1d23] p-4" open={index === 0}>
+            <details key={day} className="group rounded-2xl border border-[var(--border)] bg-[var(--bg-card)] p-4" open={index === 0}>
               <summary className="cursor-pointer list-none text-base font-black text-yellow-400">{day}</summary>
               <div className="mt-4 space-y-3 border-r-2 border-yellow-400/30 pr-4">
                 {exercises.map((exercise, i) => (
-                  <div key={`${exercise.name}-${i}`} className="rounded-2xl bg-gray-900/80 p-4">
-                    <h4 className="font-black text-white">{exercise.name || "حرکت تمرینی"}</h4>
-                    <div className="mt-3 grid grid-cols-1 gap-2 text-sm font-bold text-gray-300 sm:grid-cols-3">
+                  <div key={`${exercise.name}-${i}`} className="rounded-2xl bg-[var(--bg-hover)]/80 p-4">
+                    <h4 className="font-black text-[var(--text-body)]">{exercise.name || "حرکت تمرینی"}</h4>
+                    <div className="mt-3 grid grid-cols-1 gap-2 text-sm font-bold text-[var(--text-dim)] sm:grid-cols-3">
                       <span>ست: {exercise.sets || "—"}</span>
                       <span>تکرار: {exercise.reps || "—"}</span>
                       <span>استراحت: {exercise.restTime || "—"}</span>
                     </div>
-                    {exercise.notes && <p className="mt-3 rounded-xl bg-white/5 p-3 text-xs font-bold leading-6 text-gray-400">{exercise.notes}</p>}
+                    {exercise.notes && <p className="mt-3 rounded-xl bg-white/5 p-3 text-xs font-bold leading-6 text-[var(--text-dim)]">{exercise.notes}</p>}
                   </div>
                 ))}
               </div>
             </details>
           ))}
         </div>
-      ) : <p className="rounded-2xl bg-gray-900/80 p-5 text-center text-sm font-bold text-gray-500">هنوز برنامه تمرینی برای نمایش صادر نشده است.</p>}
+      ) : <p className="rounded-2xl bg-[var(--bg-hover)]/80 p-5 text-center text-sm font-bold text-[var(--text-muted)]">هنوز برنامه تمرینی برای نمایش صادر نشده است.</p>}
     </section>
   );
 }
 
 function PlanMeta({ label, value }) {
-  return <div className="rounded-2xl bg-gray-900/80 p-3"><p className="text-[11px] font-black text-gray-500">{label}</p><p className="mt-1 text-sm font-black text-white">{value}</p></div>;
+  return <div className="rounded-2xl bg-[var(--bg-hover)]/80 p-3"><p className="text-[11px] font-black text-[var(--text-muted)]">{label}</p><p className="mt-1 text-sm font-black text-[var(--text-body)]">{value}</p></div>;
 }
 
 function Field({ label, value, onChange, disabled = false }) {
   return (
     <div>
-      <label className="block text-xs text-gray-500 mb-1">{label}</label>
+      <label className="block text-xs text-[var(--text-muted)] mb-1">{label}</label>
       {disabled ? (
-        <div className="bg-gray-800 p-3 rounded-lg text-gray-300">
+        <div className="bg-gray-800 p-3 rounded-lg text-[var(--text-dim)]">
           {value ?? "—"}
         </div>
       ) : (
         <input
           value={value ?? ""}
           onChange={(e) => onChange?.(e.target.value)}
-          className="w-full bg-gray-800 p-3 rounded-lg text-white"
+          className="w-full bg-gray-800 p-3 rounded-lg text-[var(--text-body)]"
         />
       )}
     </div>
@@ -633,11 +633,11 @@ function Field({ label, value, onChange, disabled = false }) {
 function SelectField({ label, value, onChange, options = [] }) {
   return (
     <div>
-      <label className="block text-xs text-gray-500 mb-1">{label}</label>
+      <label className="block text-xs text-[var(--text-muted)] mb-1">{label}</label>
       <select
         value={value ?? ""}
         onChange={(e) => onChange?.(e.target.value)}
-        className="w-full bg-gray-800 p-3 rounded-lg text-white"
+        className="w-full bg-gray-800 p-3 rounded-lg text-[var(--text-body)]"
       >
         <option value="" disabled>
           انتخاب کنید

@@ -92,13 +92,13 @@ export default function UserMainDashboard() {
 
   return (
     <DashboardLayout>
-      <div className="min-h-screen rounded-[2rem] bg-[#0f1115] p-4 text-right md:p-8" dir="rtl">
+      <div className="min-h-screen rounded-[2rem] bg-[var(--bg-body)] p-4 text-right md:p-8" dir="rtl">
         <div className="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-end">
           <div>
-            <h1 className="text-2xl font-black text-white md:text-4xl">داشبورد <span className="text-yellow-400">ورزشکار</span></h1>
-            <p className="mt-2 text-xs font-bold text-gray-500">تمام اطلاعات از API و دیتابیس واقعی سیستم خوانده می‌شود.</p>
+            <h1 className="text-2xl font-black text-[var(--text-body)] md:text-4xl">داشبورد <span className="text-yellow-400">ورزشکار</span></h1>
+            <p className="mt-2 text-xs font-bold text-[var(--text-muted)]">تمام اطلاعات از API و دیتابیس واقعی سیستم خوانده می‌شود.</p>
           </div>
-          <Link href="/users-dashboard/notifications" className="relative w-fit rounded-2xl border border-gray-800 bg-[#1a1d23] p-3 text-gray-500 transition-all hover:border-yellow-400/50 hover:text-yellow-400">
+          <Link href="/users-dashboard/notifications" className="relative w-fit rounded-2xl border border-[var(--border)] bg-[var(--bg-card)] p-3 text-[var(--text-muted)] transition-all hover:border-yellow-400/50 hover:text-yellow-400">
             <Bell size={20} />
             {unreadCount > 0 && (
               <span className="absolute -left-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-[10px] font-black text-white">
@@ -116,11 +116,11 @@ export default function UserMainDashboard() {
         </div>
 
         <div className="mb-8 grid grid-cols-1 gap-6 xl:grid-cols-3">
-          <section className="rounded-[2rem] border border-gray-800 bg-[#1a1d23] p-5 xl:col-span-2">
+          <section className="rounded-[2rem] border border-[var(--border)] bg-[var(--bg-card)] p-5 xl:col-span-2">
             <div className="mb-5 flex items-center justify-between gap-2">
               <div className="flex items-center gap-2">
                 <Dumbbell className="text-yellow-400" />
-                <h2 className="text-xl font-black text-white">برنامه تمرینی و غذایی</h2>
+                <h2 className="text-xl font-black text-[var(--text-body)]">برنامه تمرینی و غذایی</h2>
               </div>
               {activeTraining && (
                 <Link href="/users-dashboard/workout" className="flex items-center gap-1.5 rounded-2xl bg-yellow-400/10 px-4 py-2 text-xs font-black text-yellow-400 transition-all hover:bg-yellow-400/20">
@@ -130,11 +130,11 @@ export default function UserMainDashboard() {
               )}
             </div>
             {activeTraining && (
-              <div className="mb-4 rounded-2xl bg-gray-900/50 p-4">
+              <div className="mb-4 rounded-2xl bg-[var(--bg-hover)]/50 p-4">
                 <div className="mb-2 flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <UserRound size={16} className="text-yellow-400" />
-                    <span className="text-sm font-black text-white">
+                    <span className="text-sm font-black text-[var(--text-body)]">
                       {activeTraining.trainerId?.name ? `مربی: ${activeTraining.trainerId.name}` : "مربی: ثبت نشده"}
                     </span>
                   </div>
@@ -153,10 +153,10 @@ export default function UserMainDashboard() {
             </div>
           </section>
 
-          <section className="rounded-[2rem] border border-gray-800 bg-[#1a1d23] p-5">
+          <section className="rounded-[2rem] border border-[var(--border)] bg-[var(--bg-card)] p-5">
             <div className="mb-3 flex items-center gap-2">
               <HeartPulse className="text-yellow-400" />
-              <h2 className="text-xl font-black text-white">شاخص توده بدنی (BMI)</h2>
+              <h2 className="text-xl font-black text-[var(--text-body)]">شاخص توده بدنی (BMI)</h2>
             </div>
             <div className="h-48">
               <ResponsiveContainer width="100%" height="100%">
@@ -167,39 +167,39 @@ export default function UserMainDashboard() {
               </ResponsiveContainer>
             </div>
             <div className="text-center">
-              <span className="text-4xl font-black text-white">{bmi || "—"}</span>
+              <span className="text-4xl font-black text-[var(--text-body)]">{bmi || "—"}</span>
               <p className="mt-1 text-sm font-black text-yellow-400">{bmiCategory(bmi)}</p>
-              <p className="mt-2 text-xs font-bold text-gray-500">قد: {currentUser?.height || "—"} | وزن: {currentUser?.weight || "—"}</p>
+              <p className="mt-2 text-xs font-bold text-[var(--text-muted)]">قد: {currentUser?.height || "—"} | وزن: {currentUser?.weight || "—"}</p>
             </div>
           </section>
         </div>
 
         <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
-          <section className="rounded-[2rem] border border-gray-800 bg-[#1a1d23]/70 p-5 xl:col-span-2">
+          <section className="rounded-[2rem] border border-[var(--border)] bg-[var(--bg-card)]/70 p-5 xl:col-span-2">
             <div className="mb-5 flex items-center gap-2">
               <Activity className="text-yellow-400" />
-              <h2 className="text-xl font-black text-white">گزارش فعالیت‌های اخیر</h2>
+              <h2 className="text-xl font-black text-[var(--text-body)]">گزارش فعالیت‌های اخیر</h2>
             </div>
             <div className="space-y-3">
               {activities.length ? activities.map((log, index) => (
-                <div key={`${log.type}-${log.date}-${index}`} className="flex flex-col justify-between gap-3 rounded-2xl border border-gray-800 bg-[#10131a] p-4 transition hover:border-yellow-400/50 sm:flex-row sm:items-center">
+                <div key={`${log.type}-${log.date}-${index}`} className="flex flex-col justify-between gap-3 rounded-2xl border border-[var(--border)] bg-[var(--bg-card)] p-4 transition hover:border-yellow-400/50 sm:flex-row sm:items-center">
                   <div className="flex items-center gap-4">
-                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gray-900 text-yellow-400">{activityIcon(log.type)}</div>
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[var(--bg-hover)] text-yellow-400">{activityIcon(log.type)}</div>
                     <div>
-                      <h4 className="text-sm font-black text-white">{log.title}</h4>
-                      <p className="mt-1 text-xs font-bold text-gray-500">{log.description} | {formatDate(log.date)}</p>
+                      <h4 className="text-sm font-black text-[var(--text-body)]">{log.title}</h4>
+                      <p className="mt-1 text-xs font-bold text-[var(--text-muted)]">{log.description} | {formatDate(log.date)}</p>
                     </div>
                   </div>
                   <div className="text-left text-xs font-black text-yellow-400">{typeof log.amount === "number" ? `${log.amount.toLocaleString("fa-IR")} تومان` : log.amount}</div>
                 </div>
-              )) : <p className="rounded-2xl bg-[#10131a] p-6 text-center text-sm font-bold text-gray-500">هنوز فعالیت واقعی برای این حساب ثبت نشده است.</p>}
+              )) : <p className="rounded-2xl bg-[var(--bg-card)] p-6 text-center text-sm font-bold text-[var(--text-muted)]">هنوز فعالیت واقعی برای این حساب ثبت نشده است.</p>}
             </div>
           </section>
 
-          <section className="rounded-[2rem] border border-gray-800 bg-[#1a1d23] p-5">
+          <section className="rounded-[2rem] border border-[var(--border)] bg-[var(--bg-card)] p-5">
             <div className="mb-5 flex items-center gap-2">
               <Target className="text-yellow-400" />
-              <h2 className="text-xl font-black text-white">تحلیل جلسات اشتراک</h2>
+              <h2 className="text-xl font-black text-[var(--text-body)]">تحلیل جلسات اشتراک</h2>
             </div>
             <div className="h-48">
               <ResponsiveContainer width="100%" height="100%">
@@ -212,10 +212,10 @@ export default function UserMainDashboard() {
                 </PieChart>
               </ResponsiveContainer>
             </div>
-            <div className="space-y-2 text-xs font-bold text-gray-400">
-              <p>نام طرح: <span className="text-white">{activeMembership?.planName || "—"}</span></p>
-              <p>شروع: <span className="text-white">{activeMembership?.membershipStartDate ? new Date(activeMembership.membershipStartDate).toLocaleDateString("fa-IR") : "—"}</span></p>
-              <p>پایان: <span className="text-white">{activeMembership?.membershipEndDate ? new Date(activeMembership.membershipEndDate).toLocaleDateString("fa-IR") : "—"}</span></p>
+            <div className="space-y-2 text-xs font-bold text-[var(--text-dim)]">
+              <p>نام طرح: <span className="text-[var(--text-body)]">{activeMembership?.planName || "—"}</span></p>
+              <p>شروع: <span className="text-[var(--text-body)]">{activeMembership?.membershipStartDate ? new Date(activeMembership.membershipStartDate).toLocaleDateString("fa-IR") : "—"}</span></p>
+              <p>پایان: <span className="text-[var(--text-body)]">{activeMembership?.membershipEndDate ? new Date(activeMembership.membershipEndDate).toLocaleDateString("fa-IR") : "—"}</span></p>
             </div>
           </section>
         </div>
@@ -235,27 +235,27 @@ const mealLabels = {
 
 function StatCard({ icon, title, value, hint, danger = false }) {
   return (
-    <div className={`rounded-[2rem] border p-5 ${danger ? "border-red-900/50 bg-red-950/20" : "border-gray-800 bg-[#1a1d23]"}`}>
+    <div className={`rounded-[2rem] border p-5 ${danger ? "border-red-900/50 bg-red-950/20" : "border-[var(--border)] bg-[var(--bg-card)]"}`}>
       <div className="mb-4 flex items-start justify-between">
         <div className={danger ? "text-red-400" : "text-yellow-400"}>{icon}</div>
-        <span className="text-[10px] font-black text-gray-500">{title}</span>
+        <span className="text-[10px] font-black text-[var(--text-muted)]">{title}</span>
       </div>
-      <h3 className="text-2xl font-black text-white">{value}</h3>
-      <p className="mt-2 text-xs font-bold text-gray-500">{hint}</p>
+      <h3 className="text-2xl font-black text-[var(--text-body)]">{value}</h3>
+      <p className="mt-2 text-xs font-bold text-[var(--text-muted)]">{hint}</p>
     </div>
   );
 }
 
 function ProgramCard({ title, subtitle, items, empty }) {
   return (
-    <div className="rounded-2xl border border-gray-800 bg-[#10131a] p-4">
-      <h3 className="font-black text-white">{title}</h3>
-      <p className="mb-4 mt-1 text-xs font-bold text-gray-500">{subtitle}</p>
+    <div className="rounded-2xl border border-[var(--border)] bg-[var(--bg-card)] p-4">
+      <h3 className="font-black text-[var(--text-body)]">{title}</h3>
+      <p className="mb-4 mt-1 text-xs font-bold text-[var(--text-muted)]">{subtitle}</p>
       {items?.length ? (
         <div className="space-y-2">
-          {items.map((item, index) => <div key={index} className="rounded-xl bg-white/5 p-3 text-xs font-bold leading-6 text-gray-300">{item}</div>)}
+          {items.map((item, index) => <div key={index} className="rounded-xl bg-[var(--bg-hover)]/60 p-3 text-xs font-bold leading-6 text-[var(--text-dim)]">{item}</div>)}
         </div>
-      ) : <p className="rounded-xl bg-white/5 p-4 text-center text-xs font-bold text-gray-500">{empty}</p>}
+      ) : <p className="rounded-xl bg-[var(--bg-hover)]/60 p-4 text-center text-xs font-bold text-[var(--text-muted)]">{empty}</p>}
     </div>
   );
 }

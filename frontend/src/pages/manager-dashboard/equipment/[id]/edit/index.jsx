@@ -298,7 +298,7 @@ export default function EditEquipmentPage() {
   if (loadingEquipments)
     return (
       <DashboardLayout>
-        <div className="p-6 text-center text-white">
+        <div className="p-6 text-center text-[var(--text-body)]">
           در حال بارگذاری اطلاعات...
         </div>
       </DashboardLayout>
@@ -312,7 +312,7 @@ export default function EditEquipmentPage() {
           <div className="mt-3">
             <button
               onClick={() => refetch()}
-              className="bg-yellow-400 text-black px-3 py-2 rounded-xl"
+              className="bg-yellow-400 text-[var(--text-body)] px-3 py-2 rounded-xl"
             >
               تلاش مجدد
             </button>
@@ -324,16 +324,16 @@ export default function EditEquipmentPage() {
   return (
     <DashboardLayout>
       <div
-        className="p-4 sm:p-8 min-h-screen bg-[#0f1115] rounded-[2.5rem] border border-gray-800 shadow-2xl"
+        className="p-4 sm:p-8 min-h-screen bg-[var(--bg-body)] rounded-[2.5rem] border border-[var(--border)] shadow-2xl"
         dir="rtl"
       >
         {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-10 pb-6 border-b border-gray-800">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-10 pb-6 border-b border-[var(--border)]">
           <div>
-            <h1 className="text-3xl font-black text-white italic tracking-tighter uppercase">
+            <h1 className="text-3xl font-black text-[var(--text-body)] italic tracking-tighter uppercase">
               ویرایش <span className="text-yellow-400">تجهیز</span>
             </h1>
-            <p className="text-gray-500 text-xs font-bold mt-2 flex items-center gap-2">
+            <p className="text-[var(--text-muted)] text-xs font-bold mt-2 flex items-center gap-2">
               <Wrench size={14} className="text-yellow-400" />
               مدیریت و به‌روزرسانی دارایی‌ها
             </p>
@@ -342,7 +342,7 @@ export default function EditEquipmentPage() {
           <div className="flex gap-3">
             <button
               onClick={() => router.push("/manager-dashboard/equipment")}
-              className="bg-[#1a1d23] text-yellow-400 border border-yellow-400 px-4 py-2 rounded-xl font-black hover:bg-yellow-400 hover:text-black transition"
+              className="bg-[var(--bg-card)] text-yellow-400 border border-yellow-400 px-4 py-2 rounded-xl font-black hover:bg-yellow-400 hover:text-[var(--text-body)] transition"
             >
               بازگشت به فهرست
             </button>
@@ -369,7 +369,7 @@ export default function EditEquipmentPage() {
                   });
                 }
               }}
-              className="bg-white text-black px-4 py-2 rounded-xl font-black hover:opacity-90 transition"
+              className="bg-[var(--bg-card)] text-[var(--text-body)] px-4 py-2 rounded-xl font-black hover:opacity-90 transition"
             >
               بازنشانی
             </button>
@@ -377,23 +377,23 @@ export default function EditEquipmentPage() {
         </div>
 
         <form onSubmit={handleSubmit} className="max-w-4xl mx-auto space-y-8">
-          <div className="bg-[#1a1d23] p-6 rounded-3xl border border-gray-800 shadow-inner">
+          <div className="bg-[var(--bg-card)] p-6 rounded-3xl border border-[var(--border)] shadow-inner">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* equipmentCode */}
               <div className="space-y-2">
-                <label className="text-gray-400 text-sm font-bold">
+                <label className="text-[var(--text-dim)] text-sm font-bold">
                   شناسه دستگاه
                 </label>
                 <input
                   value={form.equipmentCode}
                   readOnly
-                  className="w-full bg-[#0f1115] border border-gray-700 text-white rounded-2xl p-4 focus:ring-2 focus:ring-yellow-400/20 focus:border-yellow-400 outline-none cursor-not-allowed opacity-80"
+                  className="w-full bg-[var(--bg-body)] border border-[var(--border)] text-[var(--text-body)] rounded-2xl p-4 focus:ring-2 focus:ring-yellow-400/20 focus:border-yellow-400 outline-none cursor-not-allowed opacity-80"
                 />
               </div>
 
               {/* name */}
               <div className="space-y-2">
-                <label className="text-gray-400 text-sm font-bold">
+                <label className="text-[var(--text-dim)] text-sm font-bold">
                   نام دستگاه
                 </label>
                 <input
@@ -402,13 +402,13 @@ export default function EditEquipmentPage() {
                   onChange={handleChange}
                   placeholder="مثال: پرس پا وزنه‌آزاد"
                   required
-                  className="w-full bg-[#0f1115] border border-gray-700 text-white rounded-2xl p-4 focus:ring-2 focus:ring-yellow-400/20 focus:border-yellow-400 outline-none"
+                  className="w-full bg-[var(--bg-body)] border border-[var(--border)] text-[var(--text-body)] rounded-2xl p-4 focus:ring-2 focus:ring-yellow-400/20 focus:border-yellow-400 outline-none"
                 />
               </div>
 
               {/* brand */}
               <div className="space-y-2">
-                <label className="text-gray-400 text-sm font-bold">
+                <label className="text-[var(--text-dim)] text-sm font-bold">
                   برند سازنده
                 </label>
                 <select
@@ -416,7 +416,7 @@ export default function EditEquipmentPage() {
                   value={form.brand}
                   onChange={handleChange}
                   required
-                  className="w-full bg-[#0f1115] border border-gray-700 text-white rounded-2xl p-4 focus:ring-2 focus:ring-yellow-400/20 focus:border-yellow-400 outline-none appearance-none"
+                  className="w-full bg-[var(--bg-body)] border border-[var(--border)] text-[var(--text-body)] rounded-2xl p-4 focus:ring-2 focus:ring-yellow-400/20 focus:border-yellow-400 outline-none appearance-none"
                 >
                   <option value="" disabled>
                     انتخاب برند...
@@ -436,7 +436,7 @@ export default function EditEquipmentPage() {
 
               {/* model */}
               <div className="space-y-2">
-                <label className="text-gray-400 text-sm font-bold">
+                <label className="text-[var(--text-dim)] text-sm font-bold">
                   مدل دستگاه
                 </label>
                 <input
@@ -444,13 +444,13 @@ export default function EditEquipmentPage() {
                   value={form.model}
                   onChange={handleChange}
                   placeholder="مدل (اختیاری)"
-                  className="w-full bg-[#0f1115] border border-gray-700 text-white rounded-2xl p-4 focus:ring-2 focus:ring-yellow-400/20 focus:border-yellow-400 outline-none"
+                  className="w-full bg-[var(--bg-body)] border border-[var(--border)] text-[var(--text-body)] rounded-2xl p-4 focus:ring-2 focus:ring-yellow-400/20 focus:border-yellow-400 outline-none"
                 />
               </div>
 
               {/* healthIndex */}
               <div className="space-y-2 md:col-span-2">
-                <label className="text-gray-400 text-sm font-bold">
+                <label className="text-[var(--text-dim)] text-sm font-bold">
                   شاخص سلامت ({form.healthIndex}%)
                 </label>
                 <div className="flex items-center gap-4">
@@ -475,14 +475,14 @@ export default function EditEquipmentPage() {
                     onChange={handleNumberChange}
                     min="0"
                     max="100"
-                    className="w-20 bg-[#0f1115] border border-gray-700 text-white rounded-2xl p-2 text-center"
+                    className="w-20 bg-[var(--bg-body)] border border-[var(--border)] text-[var(--text-body)] rounded-2xl p-2 text-center"
                   />
                 </div>
               </div>
 
               {/* lastServiceDate */}
               <div className="space-y-2">
-                <label className="text-gray-400 text-sm font-bold">
+                <label className="text-[var(--text-dim)] text-sm font-bold">
                   آخرین سرویس فنی (YYYY/MM/DD)
                 </label>
                 <input
@@ -499,20 +499,20 @@ export default function EditEquipmentPage() {
                   }}
                   placeholder="مثال: 1402/09/10"
                   maxLength={10}
-                  className="w-full bg-[#0f1115] border border-gray-700 text-white rounded-2xl p-4 focus:ring-2 focus:ring-yellow-400/20 focus:border-yellow-400 outline-none"
+                  className="w-full bg-[var(--bg-body)] border border-[var(--border)] text-[var(--text-body)] rounded-2xl p-4 focus:ring-2 focus:ring-yellow-400/20 focus:border-yellow-400 outline-none"
                 />
               </div>
 
               {/* operationalStatus */}
               <div className="space-y-2">
-                <label className="text-gray-400 text-sm font-bold">
+                <label className="text-[var(--text-dim)] text-sm font-bold">
                   وضعیت عملیاتی
                 </label>
                 <select
                   name="operationalStatus"
                   value={form.operationalStatus}
                   onChange={handleChange}
-                  className="w-full bg-[#0f1115] border border-gray-700 text-white rounded-2xl p-4 focus:ring-2 focus:ring-yellow-400/20 focus:border-yellow-400 outline-none appearance-none"
+                  className="w-full bg-[var(--bg-body)] border border-[var(--border)] text-[var(--text-body)] rounded-2xl p-4 focus:ring-2 focus:ring-yellow-400/20 focus:border-yellow-400 outline-none appearance-none"
                 >
                   {statusOptions.map((s) => (
                     <option key={s.value} value={s.value}>
@@ -524,7 +524,7 @@ export default function EditEquipmentPage() {
 
               {/* location */}
               <div className="space-y-2">
-                <label className="text-gray-400 text-sm font-bold">
+                <label className="text-[var(--text-dim)] text-sm font-bold">
                   محل قرارگیری
                 </label>
                 <select
@@ -532,7 +532,7 @@ export default function EditEquipmentPage() {
                   value={form.location}
                   onChange={handleChange}
                   required
-                  className="w-full bg-[#0f1115] border border-gray-700 text-white rounded-2xl p-4 focus:ring-2 focus:ring-yellow-400/20 focus:border-yellow-400 outline-none appearance-none"
+                  className="w-full bg-[var(--bg-body)] border border-[var(--border)] text-[var(--text-body)] rounded-2xl p-4 focus:ring-2 focus:ring-yellow-400/20 focus:border-yellow-400 outline-none appearance-none"
                 >
                   <option value="" disabled>
                     انتخاب محل قرارگیری...
@@ -545,7 +545,7 @@ export default function EditEquipmentPage() {
 
               {/* purchaseDate */}
               <div className="space-y-2">
-                <label className="text-gray-400 text-sm font-bold">
+                <label className="text-[var(--text-dim)] text-sm font-bold">
                   تاریخ خرید (YYYY/MM/DD)
                 </label>
                 <input
@@ -562,13 +562,13 @@ export default function EditEquipmentPage() {
                   }}
                   placeholder="مثال: 1401/02/15"
                   maxLength={10}
-                  className="w-full bg-[#0f1115] border border-gray-700 text-white rounded-2xl p-4 focus:ring-2 focus:ring-yellow-400/20 focus:border-yellow-400 outline-none"
+                  className="w-full bg-[var(--bg-body)] border border-[var(--border)] text-[var(--text-body)] rounded-2xl p-4 focus:ring-2 focus:ring-yellow-400/20 focus:border-yellow-400 outline-none"
                 />
               </div>
 
               {/* warrantyEndDate */}
               <div className="space-y-2">
-                <label className="text-gray-400 text-sm font-bold">
+                <label className="text-[var(--text-dim)] text-sm font-bold">
                   پایان گارانتی (YYYY/MM/DD)
                 </label>
                 <input
@@ -585,13 +585,13 @@ export default function EditEquipmentPage() {
                   }}
                   placeholder="اختیاری"
                   maxLength={10}
-                  className="w-full bg-[#0f1115] border border-gray-700 text-white rounded-2xl p-4 focus:ring-2 focus:ring-yellow-400/20 focus:border-yellow-400 outline-none"
+                  className="w-full bg-[var(--bg-body)] border border-[var(--border)] text-[var(--text-body)] rounded-2xl p-4 focus:ring-2 focus:ring-yellow-400/20 focus:border-yellow-400 outline-none"
                 />
               </div>
 
               {/* notes */}
               <div className="md:col-span-2 space-y-2">
-                <label className="text-gray-400 text-sm font-bold">
+                <label className="text-[var(--text-dim)] text-sm font-bold">
                   توضیحات تکمیلی
                 </label>
                 <textarea
@@ -600,7 +600,7 @@ export default function EditEquipmentPage() {
                   onChange={handleChange}
                   placeholder="یادداشت‌ها یا هشدارها درباره دستگاه..."
                   rows="4"
-                  className="w-full bg-[#0f1115] border border-gray-700 text-white rounded-2xl p-4 focus:ring-2 focus:ring-yellow-400/20 focus:border-yellow-400 outline-none"
+                  className="w-full bg-[var(--bg-body)] border border-[var(--border)] text-[var(--text-body)] rounded-2xl p-4 focus:ring-2 focus:ring-yellow-400/20 focus:border-yellow-400 outline-none"
                 />
               </div>
             </div>
@@ -611,7 +611,7 @@ export default function EditEquipmentPage() {
             <button
               type="submit"
               disabled={isUpdating}
-              className="group relative w-full max-w-md bg-yellow-400 hover:bg-yellow-500 text-black px-10 py-4 rounded-2xl font-black text-lg italic transition-all shadow-[0_20px_40px_rgba(250,204,21,0.15)] active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden"
+              className="group relative w-full max-w-md bg-yellow-400 hover:bg-yellow-500 text-[var(--text-body)] px-10 py-4 rounded-2xl font-black text-lg italic transition-all shadow-[0_20px_40px_rgba(250,204,21,0.15)] active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden"
             >
               {isUpdating ? "در حال ذخیره..." : "ذخیره تغییرات"}
             </button>
@@ -619,7 +619,7 @@ export default function EditEquipmentPage() {
             <button
               type="button"
               onClick={handleDelete}
-              className="group relative w-full max-w-xs bg-red-500 hover:bg-red-600 text-white px-6 py-4 rounded-2xl font-black text-sm italic transition-all shadow-[0_8px_20px_rgba(239,68,68,0.15)] active:scale-95"
+              className="group relative w-full max-w-xs bg-red-500 hover:bg-red-600 text-[var(--text-body)] px-6 py-4 rounded-2xl font-black text-sm italic transition-all shadow-[0_8px_20px_rgba(239,68,68,0.15)] active:scale-95"
             >
               حذف تجهیز
             </button>
@@ -627,7 +627,7 @@ export default function EditEquipmentPage() {
         </form>
 
         {/* small footer hint */}
-        <div className="mt-8 text-gray-500 text-xs flex items-center gap-2">
+        <div className="mt-8 text-[var(--text-muted)] text-xs flex items-center gap-2">
           <Info size={14} className="text-yellow-400" />
           فیلدهای تاریخ را در قالب YYYY/MM/DD وارد کنید. برای تبدیل تاریخ شمسی
           از فرانت یا ابزار مناسب استفاده کنید.

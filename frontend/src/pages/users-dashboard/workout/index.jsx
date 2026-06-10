@@ -227,7 +227,7 @@ export default function WorkoutCalendarPage() {
   if (loading) {
     return (
       <DashboardLayout>
-        <div className="min-h-screen rounded-[2rem] bg-[#0f1115] p-4 md:p-8">
+        <div className="min-h-screen rounded-[2rem] bg-[var(--bg-body)] p-4 md:p-8">
           <div className="mb-6 flex items-center gap-3">
             <div className="h-14 w-14 animate-pulse rounded-2xl bg-gray-800" />
             <div className="space-y-2">
@@ -248,16 +248,16 @@ export default function WorkoutCalendarPage() {
 
   return (
     <DashboardLayout>
-      <div className="min-h-screen rounded-[2rem] bg-[#0f1115] p-4 md:p-8" dir="rtl">
+      <div className="min-h-screen rounded-[2rem] bg-[var(--bg-body)] p-4 md:p-8" dir="rtl">
         {/* Header */}
         <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div className="flex items-center gap-3">
-            <div className="rounded-2xl bg-yellow-400 p-3 text-black">
+            <div className="rounded-2xl bg-yellow-400 p-3 text-[var(--text-body)]">
               <CalendarDays size={24} />
             </div>
             <div>
-              <h1 className="text-2xl font-black text-white md:text-3xl">تقویم تمرینی</h1>
-              <p className="text-xs font-bold text-gray-500 mt-0.5">
+              <h1 className="text-2xl font-black text-[var(--text-body)] md:text-3xl">تقویم تمرینی</h1>
+              <p className="text-xs font-bold text-[var(--text-muted)] mt-0.5">
                 {activeProgram
                   ? `برنامه فعال: ${activeProgram.title}`
                   : "برنامه تمرینی فعالی وجود ندارد"}
@@ -274,7 +274,7 @@ export default function WorkoutCalendarPage() {
                   setActiveProgram(programs.find((p) => p.status === "active") || null);
                 }
               }}
-              className="rounded-2xl border border-gray-800 bg-[#1a1d23] px-4 py-2.5 text-sm font-black text-gray-300 transition-all hover:border-yellow-400/50 hover:text-yellow-400"
+              className="rounded-2xl border border-[var(--border)] bg-[var(--bg-card)] px-4 py-2.5 text-sm font-black text-[var(--text-dim)] transition-all hover:border-yellow-400/50 hover:text-yellow-400"
             >
               نمای همه برنامه‌ها
             </button>
@@ -283,11 +283,11 @@ export default function WorkoutCalendarPage() {
 
         {/* Progress bar */}
         {activeProgram && (
-          <div className="mb-6 rounded-[2rem] border border-gray-800 bg-[#1a1d23] p-5">
+          <div className="mb-6 rounded-[2rem] border border-[var(--border)] bg-[var(--bg-card)] p-5">
             <div className="mb-3 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Dumbbell size={18} className="text-yellow-400" />
-                <span className="font-black text-white">{activeProgram.title}</span>
+                <span className="font-black text-[var(--text-body)]">{activeProgram.title}</span>
               </div>
               <span className="rounded-xl bg-yellow-400/10 px-3 py-1 text-sm font-black text-yellow-400">
                 {progressStats.percent}%
@@ -313,15 +313,15 @@ export default function WorkoutCalendarPage() {
         )}
 
         {/* Calendar header */}
-        <div className="mb-4 flex items-center justify-between rounded-2xl bg-[#1a1d23] px-5 py-3">
-          <button onClick={prevMonth} className="rounded-xl p-2 text-gray-400 transition-all hover:bg-gray-800 hover:text-white">
+        <div className="mb-4 flex items-center justify-between rounded-2xl bg-[var(--bg-card)] px-5 py-3">
+          <button onClick={prevMonth} className="rounded-xl p-2 text-[var(--text-dim)] transition-all hover:bg-gray-800 hover:text-[var(--text-body)]">
             <ChevronRight size={20} />
           </button>
           <div className="flex items-center gap-2">
-            <span className="text-lg font-black text-white">{currentMonthName}</span>
+            <span className="text-lg font-black text-[var(--text-body)]">{currentMonthName}</span>
             <span className="rounded-lg bg-gray-800 px-3 py-1 text-sm font-black text-yellow-400">{curYear}</span>
           </div>
-          <button onClick={nextMonth} className="rounded-xl p-2 text-gray-400 transition-all hover:bg-gray-800 hover:text-white">
+          <button onClick={nextMonth} className="rounded-xl p-2 text-[var(--text-dim)] transition-all hover:bg-gray-800 hover:text-[var(--text-body)]">
             <ChevronLeft size={20} />
           </button>
         </div>
@@ -329,7 +329,7 @@ export default function WorkoutCalendarPage() {
         {/* Day headers */}
         <div className="mb-2 grid grid-cols-7 gap-1">
           {PERSIAN_DAYS.map((d) => (
-            <div key={d} className="rounded-xl bg-gray-900/50 py-2 text-center text-[10px] font-black text-gray-500 md:text-xs">
+            <div key={d} className="rounded-xl bg-[var(--bg-hover)]/50 py-2 text-center text-[10px] font-black text-[var(--text-muted)] md:text-xs">
               {d}
             </div>
           ))}
@@ -353,14 +353,14 @@ export default function WorkoutCalendarPage() {
                   !jDate ? "border-transparent" : ""
                 } ${todayCell ? "border-yellow-400 bg-yellow-400/10 shadow-lg shadow-yellow-400/10" : ""} ${
                   selected ? "ring-2 ring-yellow-400" : ""
-                } ${hasWorkout && !todayCell ? dayStatusColor(jDate) : "border-gray-800 bg-[#1a1d23]/50"}`}
+                } ${hasWorkout && !todayCell ? dayStatusColor(jDate) : "border-[var(--border)] bg-[var(--bg-card)]/50"}`}
               >
                 {jDate && (
                   <>
                     <div className="flex items-center justify-between">
                       <span
                         className={`text-xs font-black md:text-sm ${
-                          todayCell ? "text-yellow-400" : "text-gray-400"
+                          todayCell ? "text-yellow-400" : "text-[var(--text-dim)]"
                         }`}
                       >
                         {jDate.toLocaleString("fa-IR")}
@@ -373,7 +373,7 @@ export default function WorkoutCalendarPage() {
                             toggleDayCompletion(jDate);
                           }}
                           className={`transition-all ${
-                            log?.completed ? "text-green-400" : "text-gray-600 hover:text-yellow-400"
+                            log?.completed ? "text-green-400" : "text-[var(--text-muted)] hover:text-yellow-400"
                           }`}
                         >
                           {log?.completed ? <CheckCircle2 size={14} /> : <Circle size={14} />}
@@ -388,7 +388,7 @@ export default function WorkoutCalendarPage() {
                           </span>
                         ))}
                         {exercises.length > 3 && (
-                          <span className="text-[8px] font-black text-gray-500">+{exercises.length - 3}</span>
+                          <span className="text-[8px] font-black text-[var(--text-muted)]">+{exercises.length - 3}</span>
                         )}
                       </div>
                     )}
@@ -415,10 +415,10 @@ export default function WorkoutCalendarPage() {
 
         {/* Empty state */}
         {!activeProgram && (
-          <div className="flex flex-col items-center justify-center py-20 text-gray-500">
+          <div className="flex flex-col items-center justify-center py-20 text-[var(--text-muted)]">
             <CalendarDays size={48} className="mb-4 opacity-30" />
             <p className="text-lg font-black">برنامه تمرینی فعالی ندارید</p>
-            <p className="mt-1 text-sm text-gray-600">
+            <p className="mt-1 text-sm text-[var(--text-muted)]">
               از مربی خود درخواست برنامه تمرینی دهید تا در اینجا نمایش داده شود
             </p>
           </div>
@@ -435,10 +435,10 @@ function isToday(jDate) {
 
 function StatBadge({ icon, label, value }) {
   return (
-    <div className="rounded-2xl border border-gray-800 bg-[#1a1d23] p-3 md:p-4">
+    <div className="rounded-2xl border border-[var(--border)] bg-[var(--bg-card)] p-3 md:p-4">
       <div className="mb-2 flex items-center gap-1.5 text-yellow-400">{icon}</div>
-      <p className="text-lg font-black text-white md:text-2xl">{value}</p>
-      <p className="mt-0.5 text-[10px] font-bold text-gray-500 md:text-xs">{label}</p>
+      <p className="text-lg font-black text-[var(--text-body)] md:text-2xl">{value}</p>
+      <p className="mt-0.5 text-[10px] font-bold text-[var(--text-muted)] md:text-xs">{label}</p>
     </div>
   );
 }
@@ -447,13 +447,13 @@ function DayDetailPanel({ jDate, dayName, year, month, exercises, log, onToggle,
   const gregorian = moment(`${year}/${month + 1}/${jDate}`, "jYYYY/jM/jD").format("YYYY/MM/DD");
 
   return (
-    <div className="rounded-[2rem] border border-gray-800 bg-[#1a1d23] p-5">
+    <div className="rounded-[2rem] border border-[var(--border)] bg-[var(--bg-card)] p-5">
       <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h2 className="text-xl font-black text-white">
+          <h2 className="text-xl font-black text-[var(--text-body)]">
             روز {jDate.toLocaleString("fa-IR")} {dayName && `(${dayName})`}
           </h2>
-          <p className="text-xs font-bold text-gray-500 mt-0.5">{gregorian}</p>
+          <p className="text-xs font-bold text-[var(--text-muted)] mt-0.5">{gregorian}</p>
         </div>
         {exercises.length > 0 && (
           <button
@@ -462,7 +462,7 @@ function DayDetailPanel({ jDate, dayName, year, month, exercises, log, onToggle,
             className={`flex items-center gap-2 rounded-2xl px-5 py-2.5 text-sm font-black transition-all ${
               log?.completed
                 ? "bg-green-500/20 text-green-400 hover:bg-green-500/30"
-                : "bg-yellow-400 text-black hover:bg-yellow-500"
+                : "bg-yellow-400 text-[var(--text-body)] hover:bg-yellow-500"
             } disabled:opacity-50`}
           >
             {updating ? (
@@ -478,7 +478,7 @@ function DayDetailPanel({ jDate, dayName, year, month, exercises, log, onToggle,
       </div>
 
       {exercises.length === 0 ? (
-        <p className="rounded-2xl bg-gray-900/50 p-6 text-center text-sm font-bold text-gray-500">
+        <p className="rounded-2xl bg-[var(--bg-hover)]/50 p-6 text-center text-sm font-bold text-[var(--text-muted)]">
           در این روز تمرینی ثبت نشده است
         </p>
       ) : (
@@ -486,7 +486,7 @@ function DayDetailPanel({ jDate, dayName, year, month, exercises, log, onToggle,
           {exercises.map((ex, idx) => (
             <div
               key={idx}
-              className="rounded-2xl border border-gray-800 bg-gray-900/50 p-4 transition-all hover:border-yellow-400/30"
+              className="rounded-2xl border border-[var(--border)] bg-[var(--bg-hover)]/50 p-4 transition-all hover:border-yellow-400/30"
             >
               <div className="flex items-start justify-between gap-4">
                 <div className="flex items-center gap-3">
@@ -494,9 +494,9 @@ function DayDetailPanel({ jDate, dayName, year, month, exercises, log, onToggle,
                     <Dumbbell size={18} />
                   </div>
                   <div>
-                    <h4 className="font-black text-white">{ex.name}</h4>
+                    <h4 className="font-black text-[var(--text-body)]">{ex.name}</h4>
                     {ex.muscleGroup && (
-                      <p className="text-[10px] font-bold text-gray-500">{ex.muscleGroup}</p>
+                      <p className="text-[10px] font-bold text-[var(--text-muted)]">{ex.muscleGroup}</p>
                     )}
                   </div>
                 </div>
@@ -504,15 +504,15 @@ function DayDetailPanel({ jDate, dayName, year, month, exercises, log, onToggle,
               <div className="mt-3 grid grid-cols-3 gap-2 text-center">
                 <div className="rounded-xl bg-gray-800/50 p-2">
                   <p className="text-lg font-black text-yellow-400">{ex.sets || "—"}</p>
-                  <p className="text-[10px] font-bold text-gray-500">ست</p>
+                  <p className="text-[10px] font-bold text-[var(--text-muted)]">ست</p>
                 </div>
                 <div className="rounded-xl bg-gray-800/50 p-2">
                   <p className="text-lg font-black text-yellow-400">{ex.reps || "—"}</p>
-                  <p className="text-[10px] font-bold text-gray-500">تکرار</p>
+                  <p className="text-[10px] font-bold text-[var(--text-muted)]">تکرار</p>
                 </div>
                 <div className="rounded-xl bg-gray-800/50 p-2">
                   <p className="text-lg font-black text-yellow-400">{ex.restTime || "—"}</p>
-                  <p className="text-[10px] font-bold text-gray-500">استراحت (ثانیه)</p>
+                  <p className="text-[10px] font-bold text-[var(--text-muted)]">استراحت (ثانیه)</p>
                 </div>
               </div>
               {ex.notes && (
@@ -527,7 +527,7 @@ function DayDetailPanel({ jDate, dayName, year, month, exercises, log, onToggle,
 
       {log?.notes && (
         <div className="mt-3 rounded-xl bg-gray-800/30 p-3">
-          <p className="text-xs font-bold text-gray-400">یادداشت: {log.notes}</p>
+          <p className="text-xs font-bold text-[var(--text-dim)]">یادداشت: {log.notes}</p>
         </div>
       )}
     </div>

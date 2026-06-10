@@ -69,23 +69,23 @@ export default function PresencePage() {
 
   return (
     <DashboardLayout>
-      <div className="p-4 sm:p-8 min-h-screen bg-[#0f1115]" dir="rtl">
+      <div className="p-4 sm:p-8 min-h-screen bg-[var(--bg-body)]" dir="rtl">
         {/* Header - مرکز کنترل حضور */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-10 pb-6 border-b border-gray-800">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-10 pb-6 border-b border-[var(--border)]">
           <div>
-            <h1 className="text-4xl font-black text-white italic tracking-tighter uppercase">
+            <h1 className="text-4xl font-black text-[var(--text-body)] italic tracking-tighter uppercase">
               لیست{" "}
               <span className="text-yellow-400 underline decoration-2 underline-offset-8">
                 حاضرین در خط
               </span>
             </h1>
-            <p className="text-gray-500 text-xs font-bold mt-3 flex items-center gap-2">
+            <p className="text-[var(--text-muted)] text-xs font-bold mt-3 flex items-center gap-2">
               <Activity size={14} className="text-green-500 animate-pulse" />
               LIVE TRAINING MONITORING SYSTEM
             </p>
           </div>
 
-          <button onClick={() => window.alert("ثبت ورود اعضا در باشگاه از طریق سیستم احراز هویت حضوری انجام می‌شود و اطلاعات ثبت‌شده در این بخش صرفاً جهت نمایش و گزارش‌گیری نمایش داده می‌شوند.")} className="w-full md:w-auto bg-yellow-400 hover:bg-yellow-500 text-black font-black px-8 py-4 rounded-2xl flex items-center justify-center gap-3 transition-all active:scale-95 shadow-[0_10px_20px_rgba(250,204,21,0.2)]">
+          <button onClick={() => window.alert("ثبت ورود اعضا در باشگاه از طریق سیستم احراز هویت حضوری انجام می‌شود و اطلاعات ثبت‌شده در این بخش صرفاً جهت نمایش و گزارش‌گیری نمایش داده می‌شوند.")} className="w-full md:w-auto bg-yellow-400 hover:bg-yellow-500 text-[var(--text-body)] font-black px-8 py-4 rounded-2xl flex items-center justify-center gap-3 transition-all active:scale-95 shadow-[0_10px_20px_rgba(250,204,21,0.2)]">
             <UserPlus size={20} /> ثبت ورود جدید (SCAN)
           </button>
         </div>
@@ -120,16 +120,16 @@ export default function PresencePage() {
           ].map((stat, i) => (
             <div
               key={i}
-              className="bg-[#1a1d23] p-6 rounded-3xl border border-gray-800 flex items-center gap-5"
+              className="bg-[var(--bg-card)] p-6 rounded-3xl border border-[var(--border)] flex items-center gap-5"
             >
-              <div className={`p-4 rounded-2xl bg-gray-900 ${stat.color}`}>
+              <div className={`p-4 rounded-2xl bg-[var(--bg-hover)] ${stat.color}`}>
                 {stat.icon}
               </div>
               <div>
-                <p className="text-gray-500 text-[10px] font-black uppercase tracking-widest">
+                <p className="text-[var(--text-muted)] text-[10px] font-black uppercase tracking-widest">
                   {stat.label}
                 </p>
-                <h3 className="text-2xl font-black text-white italic">
+                <h3 className="text-2xl font-black text-[var(--text-body)] italic">
                   {stat.val}
                 </h3>
               </div>
@@ -140,15 +140,15 @@ export default function PresencePage() {
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
           {/* Main Table - لیست دقیق حاضرین */}
           <div className="xl:col-span-2 space-y-6">
-            <div className="bg-[#1a1d23] rounded-[2.5rem] border border-gray-800 overflow-hidden shadow-2xl">
-              <div className="p-6 border-b border-gray-800 flex flex-col sm:flex-row justify-between gap-4">
-                <div className="flex bg-gray-900 p-1 rounded-xl">
+            <div className="bg-[var(--bg-card)] rounded-[2.5rem] border border-[var(--border)] overflow-hidden shadow-2xl">
+              <div className="p-6 border-b border-[var(--border)] flex flex-col sm:flex-row justify-between gap-4">
+                <div className="flex bg-[var(--bg-hover)] p-1 rounded-xl">
                   <button
                     onClick={() => setActiveTab("present")}
                     className={`px-6 py-2 rounded-lg text-xs font-black transition-all ${
                       activeTab === "present"
-                        ? "bg-yellow-400 text-black"
-                        : "text-gray-500"
+                        ? "bg-yellow-400 text-[var(--text-body)]"
+                        : "text-[var(--text-muted)]"
                     }`}
                   >
                     حاضرین
@@ -157,8 +157,8 @@ export default function PresencePage() {
                     onClick={() => setActiveTab("history")}
                     className={`px-6 py-2 rounded-lg text-xs font-black transition-all ${
                       activeTab === "history"
-                        ? "bg-yellow-400 text-black"
-                        : "text-gray-500"
+                        ? "bg-yellow-400 text-[var(--text-body)]"
+                        : "text-[var(--text-muted)]"
                     }`}
                   >
                     تاریخچه امروز
@@ -168,10 +168,10 @@ export default function PresencePage() {
                   <input
                     type="text"
                     placeholder="جستجوی قهرمان..."
-                    className="bg-gray-800 text-white text-xs p-3 pr-10 rounded-xl outline-none focus:ring-1 ring-yellow-400 w-full"
+                    className="bg-gray-800 text-[var(--text-body)] text-xs p-3 pr-10 rounded-xl outline-none focus:ring-1 ring-yellow-400 w-full"
                   />
                   <Search
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)]"
                     size={16}
                   />
                 </div>
@@ -179,7 +179,7 @@ export default function PresencePage() {
 
               <div className="overflow-x-auto">
                 <table className="w-full text-right">
-                  <thead className="bg-gray-800/50 text-gray-500 text-[10px] uppercase font-black tracking-widest">
+                  <thead className="bg-gray-800/50 text-[var(--text-muted)] text-[10px] uppercase font-black tracking-widest">
                     <tr>
                       <th className="p-5">ورزشکار</th>
                       <th className="p-5">زمان ورود</th>
@@ -200,31 +200,31 @@ export default function PresencePage() {
                               {member.name[0]}
                             </div>
                             <div>
-                              <p className="text-white text-sm">
+                              <p className="text-[var(--text-body)] text-sm">
                                 {member.name}
                               </p>
-                              <p className="text-[10px] text-gray-500">
+                              <p className="text-[10px] text-[var(--text-muted)]">
                                 {member.id} | {member.plan}
                               </p>
                             </div>
                           </div>
                         </td>
-                        <td className="p-5 text-gray-300 font-mono text-xs">
+                        <td className="p-5 text-[var(--text-dim)] font-mono text-xs">
                           {member.entrance}
                         </td>
                         <td className="p-5">
-                          <span className="bg-gray-900 text-blue-400 px-3 py-1 rounded-lg text-[10px] border border-blue-400/20">
+                          <span className="bg-[var(--bg-hover)] text-blue-400 px-3 py-1 rounded-lg text-[10px] border border-blue-400/20">
                             {member.zone}
                           </span>
                         </td>
                         <td className="p-5">
-                          <div className="flex items-center gap-2 text-gray-400">
+                          <div className="flex items-center gap-2 text-[var(--text-dim)]">
                             <Zap size={14} className="text-yellow-400" />{" "}
                             {member.locker}
                           </div>
                         </td>
                         <td className="p-5 text-center">
-                          <button className="p-3 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white rounded-xl transition-all group-hover:scale-110">
+                          <button className="p-3 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-[var(--text-body)] rounded-xl transition-all group-hover:scale-110">
                             <LogOut size={16} />
                           </button>
                         </td>
@@ -239,8 +239,8 @@ export default function PresencePage() {
           {/* Sidebar - ترافیک سالن و اطلاعیه‌ها */}
           <div className="space-y-8">
             {/* نمودار ترافیک لحظه‌ای */}
-            <div className="bg-[#1a1d23] p-8 rounded-[2.5rem] border border-gray-800">
-              <h3 className="text-white font-black italic mb-8 flex items-center gap-2 uppercase tracking-tighter">
+            <div className="bg-[var(--bg-card)] p-8 rounded-[2.5rem] border border-[var(--border)]">
+              <h3 className="text-[var(--text-body)] font-black italic mb-8 flex items-center gap-2 uppercase tracking-tighter">
                 <BarChart size={20} className="text-yellow-400" /> تراکم جمعیت
                 (Live)
               </h3>
@@ -267,25 +267,25 @@ export default function PresencePage() {
                   </ReBarChart>
                 </ResponsiveContainer>
               </div>
-              <p className="text-center text-gray-500 text-[10px] mt-4 font-bold uppercase tracking-widest">
+              <p className="text-center text-[var(--text-muted)] text-[10px] mt-4 font-bold uppercase tracking-widest">
                 تحلیل هوش مصنوعی: سالن در وضعیت قرمز (شلوغ)
               </p>
             </div>
 
             {/* بخش کمدها */}
-            <div className="bg-[#1a1d23] p-8 rounded-[2.5rem] border border-gray-800 relative overflow-hidden">
+            <div className="bg-[var(--bg-card)] p-8 rounded-[2.5rem] border border-[var(--border)] relative overflow-hidden">
               <div className="relative z-10 text-center">
                 <ShieldAlert
                   size={48}
                   className="text-yellow-400 mx-auto mb-4"
                 />
-                <h3 className="text-white font-black italic text-xl mb-2">
+                <h3 className="text-[var(--text-body)] font-black italic text-xl mb-2">
                   مدیریت کمدها
                 </h3>
-                <p className="text-gray-500 text-xs mb-6">
+                <p className="text-[var(--text-muted)] text-xs mb-6">
                   تعداد ۶۸ کمد خالی جهت واگذاری موجود است.
                 </p>
-                <button className="w-full bg-gray-900 border border-gray-700 text-white py-4 rounded-2xl font-black text-sm hover:border-yellow-400 transition-all">
+                <button className="w-full bg-[var(--bg-hover)] border border-[var(--border)] text-[var(--text-body)] py-4 rounded-2xl font-black text-sm hover:border-yellow-400 transition-all">
                   مشاهده نقشه کمدها
                 </button>
               </div>

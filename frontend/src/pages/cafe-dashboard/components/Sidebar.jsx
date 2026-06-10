@@ -61,7 +61,7 @@ function MenuItem({ item, pathname, onClose, level = 0 }) {
           className={`flex items-center justify-between rounded-xl p-3 mb-1 transition-all duration-200 cursor-pointer ${
             isActive
               ? "bg-yellow-400/10 text-yellow-400"
-              : "text-gray-400 hover:bg-gray-800/50 hover:text-white"
+              : "text-[var(--text-dim)] hover:bg-gray-800/50 hover:text-white"
           }`}
           style={{ paddingRight }}
         >
@@ -101,7 +101,7 @@ function MenuItem({ item, pathname, onClose, level = 0 }) {
         className={`flex items-center gap-3 rounded-xl p-3 mb-1 transition-all duration-200 ${
           isActive
             ? "bg-yellow-400 text-black font-bold shadow-[0_0_15px_rgba(250,204,21,0.3)]"
-            : "text-gray-400 hover:bg-gray-800/50 hover:text-white"
+            : "text-[var(--text-dim)] hover:bg-gray-800/50 hover:text-white"
         }`}
         style={{ paddingRight }}
         onClick={onClose}
@@ -153,7 +153,7 @@ export default function Sidebar({ isMobileOpen, onClose }) {
   return (
     <div
       id="sidebar"
-      className={`fixed top-0 right-0 h-full w-56 z-[60] bg-[#0f1115] border-l border-gray-800 text-white flex flex-col transition-all duration-300 transform ${
+      className={`fixed top-0 right-0 h-full w-56 z-[60] bg-[var(--bg-sidebar)] border-l border-[var(--border)] text-[var(--text-body)] flex flex-col transition-all duration-300 transform ${
         isMobileOpen ? "translate-x-0" : "translate-x-full"
       } lg:translate-x-0 lg:flex`}
       dir="rtl"
@@ -173,7 +173,7 @@ export default function Sidebar({ isMobileOpen, onClose }) {
         </div>
         <button
           onClick={onClose}
-          className="lg:hidden text-gray-400 hover:text-white"
+          className="lg:hidden text-[var(--text-dim)] hover:text-white"
         >
           <X size={24} />
         </button>
@@ -181,7 +181,7 @@ export default function Sidebar({ isMobileOpen, onClose }) {
 
       {/* منوها */}
       <nav className="flex-1 overflow-y-auto px-4 custom-scrollbar">
-        <p className="sidebar-text text-[10px] uppercase tracking-widest text-gray-500 mb-4 mr-2">
+        <p className="sidebar-text text-[10px] uppercase tracking-widest text-[var(--text-muted)] mb-4 mr-2">
           منوی اصلی
         </p>
         <ul className="space-y-1">
@@ -197,14 +197,14 @@ export default function Sidebar({ isMobileOpen, onClose }) {
       </nav>
 
       {/* فوتر سایدبار (پروفایل کوتاه) */}
-      <div className="p-4 border-t border-gray-800">
-        <div className="flex items-center gap-3 p-2 bg-gray-900/50 rounded-2xl">
+      <div className="p-4 border-t border-[var(--border)]">
+        <div className="flex items-center gap-3 p-2 bg-[var(--bg-hover)] rounded-2xl">
           <div className="w-10 h-10 rounded-xl bg-yellow-400 flex items-center justify-center text-black font-bold">
             AD
           </div>
           <div className="sidebar-text">
-            <p className="text-sm font-bold">{roleTitle}</p>
-            <p className="text-[10px] text-gray-500">خوش آمدید</p>
+            <p className="text-sm font-bold text-[var(--text-body)]">{roleTitle}</p>
+            <p className="text-[10px] text-[var(--text-muted)]">خوش آمدید</p>
           </div>
         </div>
       </div>

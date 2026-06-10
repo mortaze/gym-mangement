@@ -39,19 +39,19 @@ const equipmentStatusData = [
 
 function EquipmentMobileCard({ item }) {
   return (
-    <article className="rounded-3xl border border-gray-800 bg-[#10131a] p-4 text-right shadow-xl">
+    <article className="rounded-3xl border border-[var(--border)] bg-[var(--bg-card)] p-4 text-right shadow-xl">
       <div className="mb-4 flex items-start gap-3">
-        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-gray-700 bg-gray-900 text-yellow-400"><Zap size={20} /></div>
+        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-[var(--border)] bg-[var(--bg-hover)] text-yellow-400"><Zap size={20} /></div>
         <div className="min-w-0 flex-1">
-          <h4 className="break-words text-base font-black text-white">{item.name}</h4>
-          <p className="mt-1 break-all text-[11px] font-mono text-gray-500">{item.id}</p>
+          <h4 className="break-words text-base font-black text-[var(--text-body)]">{item.name}</h4>
+          <p className="mt-1 break-all text-[11px] font-mono text-[var(--text-muted)]">{item.id}</p>
         </div>
       </div>
-      <div className="space-y-3 text-sm font-bold text-gray-300">
+      <div className="space-y-3 text-sm font-bold text-[var(--text-dim)]">
         <MobileRow label="برند سازنده" value={item.brand} />
         <MobileRow label="آخرین سرویس" value={item.lastService} />
-        <div className="rounded-2xl bg-gray-900/70 p-3">
-          <div className="mb-2 flex items-center justify-between"><span className="text-gray-500">شاخص سلامت</span><span className="text-white">{item.health}%</span></div>
+        <div className="rounded-2xl bg-[var(--bg-hover)]/70 p-3">
+          <div className="mb-2 flex items-center justify-between"><span className="text-[var(--text-muted)]">شاخص سلامت</span><span className="text-[var(--text-body)]">{item.health}%</span></div>
           <div className="h-2 overflow-hidden rounded-full bg-gray-800"><div className={`h-full ${item.health > 80 ? "bg-green-500" : item.health > 40 ? "bg-yellow-400" : "bg-red-500"}`} style={{ width: `${item.health}%` }} /></div>
         </div>
         <MobileRow label="وضعیت عملیاتی" value={item.status} />
@@ -64,7 +64,7 @@ function EquipmentMobileCard({ item }) {
 }
 
 function MobileRow({ label, value }) {
-  return <div className="flex items-center justify-between gap-3 rounded-2xl bg-gray-900/70 p-3"><span className="text-gray-500">{label}</span><span className="break-words text-left text-white">{value || "—"}</span></div>;
+  return <div className="flex items-center justify-between gap-3 rounded-2xl bg-[var(--bg-hover)]/70 p-3"><span className="text-[var(--text-muted)]">{label}</span><span className="break-words text-left text-[var(--text-body)]">{value || "—"}</span></div>;
 }
 
 export default function EquipmentPage() {
@@ -113,17 +113,17 @@ export default function EquipmentPage() {
   return (
     <DashboardLayout>
       <div
-        className="min-h-screen overflow-x-hidden rounded-4xl bg-[#0f1115] p-3 sm:p-4 md:p-8"
+        className="min-h-screen overflow-x-hidden rounded-4xl bg-[var(--bg-body)] p-3 sm:p-4 md:p-8"
         dir="rtl"
       >
         {/* Header - مدیریت دارایی‌ها */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-10 pb-6 border-b border-gray-800">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-10 pb-6 border-b border-[var(--border)]">
           <div>
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-white italic tracking-tighter uppercase">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-[var(--text-body)] italic tracking-tighter uppercase">
               مدیریت{" "}
               <span className="text-yellow-400">تجهیزات و ماشین‌آلات</span>
             </h1>
-            <p className="text-gray-500 text-xs font-bold mt-3 flex items-center gap-2">
+            <p className="text-[var(--text-muted)] text-xs font-bold mt-3 flex items-center gap-2">
               <Wrench size={14} className="text-yellow-400" />
               ASSET MANAGEMENT & MAINTENANCE SYSTEM
             </p>
@@ -131,7 +131,7 @@ export default function EquipmentPage() {
 
           <Link
             href="/manager-dashboard/equipment/create"
-            className="w-full md:w-auto bg-white hover:bg-yellow-400 text-black font-black px-8 py-4 rounded-2xl flex items-center justify-center gap-3 transition-all active:scale-95"
+            className="w-full md:w-auto bg-[var(--bg-card)] hover:bg-yellow-400 text-[var(--text-body)] font-black px-8 py-4 rounded-2xl flex items-center justify-center gap-3 transition-all active:scale-95"
           >
             <Plus size={20} />
             افزودن دستگاه جدید
@@ -141,7 +141,7 @@ export default function EquipmentPage() {
         {/* Top Analytics - تحلیل سلامت کل */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-10">
           {/* کارت نمودار وضعیت */}
-          <div className="bg-[#1a1d23] p-5 sm:p-8 rounded-[2rem] sm:rounded-[2.5rem] border border-gray-800 flex flex-col md:flex-row items-center gap-6 md:gap-8 shadow-2xl">
+          <div className="bg-[var(--bg-card)] p-5 sm:p-8 rounded-[2rem] sm:rounded-[2.5rem] border border-[var(--border)] flex flex-col md:flex-row items-center gap-6 md:gap-8 shadow-2xl">
             <div className="h-[180px] w-[180px]">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
@@ -165,7 +165,7 @@ export default function EquipmentPage() {
               </ResponsiveContainer>
             </div>
             <div className="space-y-3">
-              <h3 className="text-white font-black italic text-lg mb-4 uppercase tracking-tighter">
+              <h3 className="text-[var(--text-body)] font-black italic text-lg mb-4 uppercase tracking-tighter">
                 وضعیت سلامت کل
               </h3>
               {equipmentStatusData.map((item, i) => (
@@ -174,10 +174,10 @@ export default function EquipmentPage() {
                     className="w-3 h-3 rounded-full"
                     style={{ backgroundColor: item.color }}
                   ></div>
-                  <span className="text-gray-400 text-xs font-bold">
+                  <span className="text-[var(--text-dim)] text-xs font-bold">
                     {item.name}:
                   </span>
-                  <span className="text-white text-xs font-black">
+                  <span className="text-[var(--text-body)] text-xs font-black">
                     {item.value}%
                   </span>
                 </div>
@@ -187,15 +187,15 @@ export default function EquipmentPage() {
 
           {/* کارت آمار سریع */}
           <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-6">
-            <div className="bg-[#1a1d23] p-8 rounded-[2.5rem] border border-gray-800 relative overflow-hidden group">
+            <div className="bg-[var(--bg-card)] p-8 rounded-[2.5rem] border border-[var(--border)] relative overflow-hidden group">
               <div className="relative z-10">
                 <TrendingDown className="text-red-500 mb-4" size={32} />
-                <p className="text-gray-500 text-[10px] font-black uppercase tracking-[0.2em]">
+                <p className="text-[var(--text-muted)] text-[10px] font-black uppercase tracking-[0.2em]">
                   هزینه استهلاک ماهانه
                 </p>
-                <h3 className="text-3xl font-black text-white italic mt-1">
+                <h3 className="text-3xl font-black text-[var(--text-body)] italic mt-1">
                   ۱۲,۵۰۰,۰۰۰{" "}
-                  <span className="text-sm font-normal text-gray-400 tracking-normal">
+                  <span className="text-sm font-normal text-[var(--text-dim)] tracking-normal">
                     تومان
                   </span>
                 </h3>
@@ -203,15 +203,15 @@ export default function EquipmentPage() {
               <div className="absolute top-0 left-0 w-full h-1 bg-red-500/50"></div>
             </div>
 
-            <div className="bg-[#1a1d23] p-8 rounded-[2.5rem] border border-gray-800 relative overflow-hidden group">
+            <div className="bg-[var(--bg-card)] p-8 rounded-[2.5rem] border border-[var(--border)] relative overflow-hidden group">
               <div className="relative z-10">
                 <ShieldCheck className="text-green-500 mb-4" size={32} />
-                <p className="text-gray-500 text-[10px] font-black uppercase tracking-[0.2em]">
+                <p className="text-[var(--text-muted)] text-[10px] font-black uppercase tracking-[0.2em]">
                   تجهیزات تحت گارانتی
                 </p>
-                <h3 className="text-3xl font-black text-white italic mt-1">
+                <h3 className="text-3xl font-black text-[var(--text-body)] italic mt-1">
                   ۴۲{" "}
-                  <span className="text-sm font-normal text-gray-400 tracking-normal text-rtl">
+                  <span className="text-sm font-normal text-[var(--text-dim)] tracking-normal text-rtl">
                     دستگاه
                   </span>
                 </h3>
@@ -222,7 +222,7 @@ export default function EquipmentPage() {
         </div>
         {/* اگر در حال لود است */}
         {isLoading && (
-          <div className="text-white p-6 text-center">
+          <div className="text-[var(--text-body)] p-6 text-center">
             در حال بارگذاری داده‌ها...
           </div>
         )}
@@ -233,7 +233,7 @@ export default function EquipmentPage() {
             خطا در دریافت داده‌ها — دوباره تلاش کنید یا صفحه را رفرش کنید.
             <button
               onClick={() => refetch()}
-              className="mr-2 text-sm bg-yellow-400 text-black px-3 py-1 rounded-xl"
+              className="mr-2 text-sm bg-yellow-400 text-[var(--text-body)] px-3 py-1 rounded-xl"
             >
               تلاش مجدد
             </button>
@@ -241,17 +241,17 @@ export default function EquipmentPage() {
         )}
 
         {/* Inventory Table - لیست موجودی انبار آهن */}
-        <div className="bg-[#1a1d23] rounded-[2.5rem] border border-gray-800 overflow-hidden shadow-2xl">
-          <div className="flex flex-col gap-4 border-b border-gray-800 bg-gray-800/20 p-4 sm:p-6 sm:flex-row sm:items-center sm:justify-between">
-            <h3 className="text-white font-black italic uppercase tracking-widest text-sm flex items-center gap-3">
+        <div className="bg-[var(--bg-card)] rounded-[2.5rem] border border-[var(--border)] overflow-hidden shadow-2xl">
+          <div className="flex flex-col gap-4 border-b border-[var(--border)] bg-gray-800/20 p-4 sm:p-6 sm:flex-row sm:items-center sm:justify-between">
+            <h3 className="text-[var(--text-body)] font-black italic uppercase tracking-widest text-sm flex items-center gap-3">
               <Dumbbell className="text-yellow-400" size={20} /> لیست دارایی‌های
               ثابت مجموعه
             </h3>
             <div className="flex gap-2">
-              <button className="p-2 bg-gray-900 text-gray-400 rounded-lg hover:text-white transition-colors">
+              <button className="p-2 bg-[var(--bg-hover)] text-[var(--text-dim)] rounded-lg hover:text-[var(--text-body)] transition-colors">
                 <History size={18} />
               </button>
-              <button className="p-2 bg-gray-900 text-gray-400 rounded-lg hover:text-white transition-colors">
+              <button className="p-2 bg-[var(--bg-hover)] text-[var(--text-dim)] rounded-lg hover:text-[var(--text-body)] transition-colors">
                 <BarChart3 size={18} />
               </button>
             </div>
@@ -263,7 +263,7 @@ export default function EquipmentPage() {
 
           <div className="hidden overflow-x-auto md:block">
             <table className="w-full min-w-[880px] text-right">
-              <thead className="bg-gray-800/50 text-gray-500 text-[10px] uppercase font-black tracking-widest">
+              <thead className="bg-gray-800/50 text-[var(--text-muted)] text-[10px] uppercase font-black tracking-widest">
                 <tr>
                   <th className="p-6">شناسه / دستگاه</th>
                   <th className="p-6">برند سازنده</th>
@@ -281,23 +281,23 @@ export default function EquipmentPage() {
                   >
                     <td className="p-6">
                       <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 bg-gray-900 rounded-2xl flex items-center justify-center text-yellow-400 border border-gray-700 group-hover:border-yellow-400/50 transition-all">
+                        <div className="w-12 h-12 bg-[var(--bg-hover)] rounded-2xl flex items-center justify-center text-yellow-400 border border-[var(--border)] group-hover:border-yellow-400/50 transition-all">
                           <Zap size={20} />
                         </div>
                         <div>
-                          <p className="text-white text-sm">{item.name}</p>
-                          <p className="text-[10px] text-gray-500 font-mono italic">
+                          <p className="text-[var(--text-body)] text-sm">{item.name}</p>
+                          <p className="text-[10px] text-[var(--text-muted)] font-mono italic">
                             {item.id}
                           </p>
                         </div>
                       </div>
                     </td>
-                    <td className="p-6 text-gray-400 text-xs uppercase tracking-widest">
+                    <td className="p-6 text-[var(--text-dim)] text-xs uppercase tracking-widest">
                       {item.brand}
                     </td>
                     <td className="p-6">
                       <div className="flex items-center gap-3">
-                        <div className="flex-1 h-1.5 w-24 bg-gray-900 rounded-full overflow-hidden">
+                        <div className="flex-1 h-1.5 w-24 bg-[var(--bg-hover)] rounded-full overflow-hidden">
                           <div
                             className={`h-full rounded-full ${
                               item.health > 80
@@ -309,12 +309,12 @@ export default function EquipmentPage() {
                             style={{ width: `${item.health}%` }}
                           ></div>
                         </div>
-                        <span className="text-white text-xs">
+                        <span className="text-[var(--text-body)] text-xs">
                           {item.health}%
                         </span>
                       </div>
                     </td>
-                    <td className="p-6 text-gray-400 text-xs font-mono">
+                    <td className="p-6 text-[var(--text-dim)] text-xs font-mono">
                       {item.lastService}
                     </td>
                     <td className="p-6 text-center">
@@ -334,13 +334,13 @@ export default function EquipmentPage() {
                       <div className="flex justify-center gap-2">
                         <Link
                           href={`/manager-dashboard/equipment/${item.id}/edit`}
-                          className="p-2 bg-gray-800 text-gray-400 hover:text-yellow-400 hover:bg-gray-700 rounded-lg transition-all"
+                          className="p-2 bg-gray-800 text-[var(--text-dim)] hover:text-yellow-400 hover:bg-gray-700 rounded-lg transition-all"
                         >
                           <Edit3 size={16} />
                         </Link>
                         <button
                           onClick={() => window.alert("حذف تجهیزات از این صفحه فعال نشده است.")}
-                          className="p-2 bg-gray-800 text-gray-400 hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-all"
+                          className="p-2 bg-gray-800 text-[var(--text-dim)] hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-all"
                         >
                           <Trash2 size={16} />
                         </button>
@@ -354,7 +354,7 @@ export default function EquipmentPage() {
         </div>
 
         {/* Footer Info */}
-        <div className="mt-8 flex items-center gap-2 text-gray-600">
+        <div className="mt-8 flex items-center gap-2 text-[var(--text-muted)]">
           <AlertTriangle size={14} className="text-yellow-400" />
           <p className="text-[10px] font-bold uppercase tracking-widest italic">
             هشدار سیستم: ۲ دستگاه به زمان اورهال (Overhaul) نزدیک می‌شوند. نسبت

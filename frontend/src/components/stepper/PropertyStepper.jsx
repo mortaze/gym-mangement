@@ -14,15 +14,15 @@ export default function PropertyStepper({ onSubmit }) {
   const { currentStep, next, prev } = usePropertyStepper();
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
+    <div className="bg-[var(--bg-card)] rounded-2xl border border-[var(--border)] p-6 shadow-sm">
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3 mb-6">
         {steps.map((step, index) => (
           <div
             key={step}
             className={`rounded-xl border px-3 py-2 text-center text-sm font-bold ${
               index === currentStep
-                ? "border-yellow-400 bg-yellow-50 text-gray-900"
-                : "border-gray-200 bg-gray-50 text-gray-500"
+                ? "border-yellow-400 bg-yellow-50 text-[var(--text-body)]"
+                : "border-[var(--border)] bg-[var(--bg-hover)] text-[var(--text-muted)]"
             }`}
           >
             {step}
@@ -30,7 +30,7 @@ export default function PropertyStepper({ onSubmit }) {
         ))}
       </div>
 
-      <div className="rounded-xl border border-dashed border-gray-300 bg-gray-50 p-6 text-center text-gray-600">
+      <div className="rounded-xl border border-dashed border-[var(--border)] bg-[var(--bg-hover)] p-6 text-center text-[var(--text-muted)]">
         فرم مرحله «{steps[currentStep]}» آماده اتصال به داده‌های ملک است.
       </div>
 
@@ -39,7 +39,7 @@ export default function PropertyStepper({ onSubmit }) {
           type="button"
           onClick={prev}
           disabled={currentStep === 0}
-          className="rounded-xl bg-gray-200 px-5 py-2 font-bold text-gray-700 disabled:opacity-50"
+          className="rounded-xl bg-gray-200 px-5 py-2 font-bold text-[var(--text-body)] disabled:opacity-50"
         >
           قبلی
         </button>
@@ -47,7 +47,7 @@ export default function PropertyStepper({ onSubmit }) {
           <button
             type="button"
             onClick={next}
-            className="rounded-xl bg-yellow-400 px-5 py-2 font-black text-black"
+            className="rounded-xl bg-yellow-400 px-5 py-2 font-black text-[var(--text-body)]"
           >
             بعدی
           </button>

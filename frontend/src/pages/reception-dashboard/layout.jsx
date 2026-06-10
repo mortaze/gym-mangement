@@ -27,17 +27,17 @@ export default function DashboardLayout({ children }) {
   }, [isMobileSidebarOpen]);
 
   return (
-    <div className="flex bg-[#080a0f] min-h-screen" dir="rtl">
+    <div className="flex bg-[var(--bg-body)] min-h-screen" dir="rtl">
       <Sidebar
         isMobileOpen={isMobileSidebarOpen}
         onClose={() => setIsMobileSidebarOpen(false)}
       />
 
-      {isMobileSidebarOpen && <button aria-label="بستن منوی موبایل" className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm lg:hidden" onClick={() => setIsMobileSidebarOpen(false)} />}
+      {isMobileSidebarOpen && <button aria-label="بستن منوی موبایل" className="fixed inset-0 z-50 bg-[var(--bg-overlay)]/60 backdrop-blur-sm lg:hidden" onClick={() => setIsMobileSidebarOpen(false)} />}
 
       <main
         id="mainContent"
-        className="min-w-0 flex-1 overflow-x-hidden p-3 sm:p-4 md:p-6 bg-[#080a0f] text-gray-100 min-h-screen lg:mr-56 dashboard-dark-shell"
+        className="min-w-0 flex-1 overflow-x-hidden p-3 sm:p-4 md:p-6 bg-[var(--bg-body)] text-[var(--text-body)] min-h-screen lg:mr-56 dashboard-content"
       >
         <Header onOpenSidebar={() => setIsMobileSidebarOpen(true)} />
         {children}

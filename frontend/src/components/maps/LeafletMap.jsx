@@ -131,12 +131,12 @@ export default function Map({
 
   // استایل مشترک برای اینپوت‌ها
   const inputClasses =
-    "w-full p-3 rounded-xl border-2 border-slate-200 bg-white text-lg font-mono font-bold text-slate-700 focus:border-cyan-400 focus:ring-4 focus:ring-cyan-100 transition-all outline-none text-left dir-ltr shadow-sm hover:border-cyan-200";
+    "w-full p-3 rounded-xl border-2 border-slate-200 bg-[var(--bg-card)] text-lg font-mono font-bold text-slate-700 focus:border-cyan-400 focus:ring-4 focus:ring-cyan-100 transition-all outline-none text-left dir-ltr shadow-sm hover:border-cyan-200";
 
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-sm transition-all duration-300">
       {/* باکس اصلی مودال */}
-      <div className="bg-white w-full max-w-4xl rounded-[2rem] shadow-2xl flex flex-col overflow-hidden animate-in fade-in zoom-in duration-300 border-4 border-white/50 ring-1 ring-slate-200/50">
+      <div className="bg-[var(--bg-card)] w-full max-w-4xl rounded-[2rem] shadow-2xl flex flex-col overflow-hidden animate-in fade-in zoom-in duration-300 border-4 border-white/50 ring-1 ring-slate-200/50">
         {/* --- هدر رنگی --- */}
         <div className="flex justify-between items-center px-6 py-4 bg-gradient-to-r from-slate-50 to-white border-b border-slate-100 relative overflow-hidden">
           {/* یک افکت نوری پس زمینه */}
@@ -146,7 +146,7 @@ export default function Map({
             <div className="bg-gradient-to-br from-cyan-400 to-blue-600 p-3 rounded-2xl shadow-lg shadow-cyan-200/50">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-7 w-7 text-white"
+                className="h-7 w-7 text-[var(--text-body)]"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -221,7 +221,7 @@ export default function Map({
           </MapContainer>
 
           {/* راهنمای شناور */}
-          <div className="absolute top-4 right-4 z-[400] bg-white/95 backdrop-blur px-4 py-2 rounded-xl shadow-md text-sm font-medium text-slate-700 border border-cyan-100 pointer-events-none flex items-center gap-2">
+          <div className="absolute top-4 right-4 z-[400] bg-[var(--bg-card)]/95 backdrop-blur px-4 py-2 rounded-xl shadow-md text-sm font-medium text-slate-700 border border-cyan-100 pointer-events-none flex items-center gap-2">
             <span className="text-xl">👇</span> برای تغییر، کلیک کنید یا پین را
             بکشید
           </div>
@@ -312,7 +312,7 @@ export default function Map({
             {/* دکمه گرادینت دار */}
             <button
               onClick={handleConfirm}
-              className="px-10 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 text-white hover:from-blue-700 hover:to-cyan-600 shadow-xl shadow-cyan-200/40 transition font-bold text-sm flex items-center gap-3 transform active:scale-95"
+              className="px-10 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 text-[var(--text-body)] hover:from-blue-700 hover:to-cyan-600 shadow-xl shadow-cyan-200/40 transition font-bold text-sm flex items-center gap-3 transform active:scale-95"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"

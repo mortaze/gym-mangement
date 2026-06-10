@@ -1,101 +1,14 @@
-
-@import "tailwindcss";
-@font-face {
-  font-family: "Vazir";
-  src: url("/fonts/Vazir.woff2") format("woff2");
-  font-weight: normal;
-  font-style: normal;
-}
-
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #fffff;
-    --foreground: #ededed;
-  }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Vazir;
-}
-
-.newsletter-description {
-  color: #243241;
-}
-/* فقط به اسلایدر محصول بوردر بده */
-.product-swiper .swiper-slide-active img {
-  border: 2px solid rgb(255, 132, 0); /* طوسی */
-  border-radius: 0.75rem; /* مثل rounded-xl */
-}
-@media (max-width: 640px) {
-  .custom-pagination {
-    display: none !important;
-  }
-}
-.scrollbar-hide {
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* Internet Explorer 10+ */
-}
-.scrollbar-hide::-webkit-scrollbar {
-  display: none; /* Chrome, Safari and Opera */
-}
-
-/* Unified production dark dashboard theme */
-.dashboard-dark-shell,
-.dashboard-dark-shell section,
-.dashboard-dark-shell article {
-  color-scheme: dark;
-}
-.dashboard-dark-shell .bg-gray-200,
-.dashboard-dark-shell .bg-gray-100,
-.dashboard-dark-shell .bg-white {
-  background-color: #11141b !important;
-  color: #f8fafc !important;
-  border-color: #1f2937 !important;
-}
-.dashboard-dark-shell .text-black { color: #f8fafc !important; }
-.dashboard-dark-shell .text-gray-800,
-.dashboard-dark-shell .text-gray-700 { color: #d1d5db !important; }
-.dashboard-dark-shell input,
-.dashboard-dark-shell select,
-.dashboard-dark-shell textarea {
-  background-color: #151922 !important;
-  color: #f8fafc !important;
-  border-color: #374151 !important;
-}
-.dashboard-dark-shell table,
-.dashboard-dark-shell thead,
-.dashboard-dark-shell tbody,
-.dashboard-dark-shell tr,
-.dashboard-dark-shell td,
-.dashboard-dark-shell th {
-  background-color: #11141b !important;
-  color: #e5e7eb !important;
-  border-color: #283241 !important;
-}
-.dashboard-dark-shell .modal,
-.dashboard-dark-shell [role="dialog"] {
-  background-color: #11141b !important;
-  color: #f8fafc !important;
-}
-
-.dashboard-dark-shell {
+.dashboard-content {
   min-width: 0;
   overflow-x: hidden;
 }
-.dashboard-dark-shell img,
-.dashboard-dark-shell table {
+.dashboard-content img,
+.dashboard-content table {
   max-width: 100%;
 }
 @media (max-width: 640px) {
-  .dashboard-dark-shell .recharts-wrapper,
-  .dashboard-dark-shell .recharts-surface {
+  .dashboard-content .recharts-wrapper,
+  .dashboard-content .recharts-surface {
     max-width: 100% !important;
   }
 }

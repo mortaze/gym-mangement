@@ -110,7 +110,7 @@ export default function EditOwnerPage() {
   if (isLoading)
     return (
       <DashboardLayout>
-        <div className="text-black">در حال بارگذاری...</div>;
+        <div className="text-[var(--text-body)]">در حال بارگذاری...</div>;
       </DashboardLayout>
     );
 
@@ -130,17 +130,17 @@ export default function EditOwnerPage() {
           >
             <FaArrowLeft /> بازگشت به مالکان
           </Link>
-          <h2 className="text-2xl font-bold text-gray-800">ویرایش مالک</h2>
+          <h2 className="text-2xl font-bold text-[var(--text-body)]">ویرایش مالک</h2>
         </div>
 
         {/* فرم */}
         <form
           onSubmit={handleSubmit}
-          className="space-y-6 bg-white text-black p-8 rounded-xl shadow-lg border border-gray-100"
+          className="space-y-6 bg-[var(--bg-card)] text-[var(--text-body)] p-8 rounded-xl shadow-lg border border-[var(--border)]"
         >
           {/* نام */}
           <div>
-            <label className="mb-1 font-semibold text-gray-700 block">
+            <label className="mb-1 font-semibold text-[var(--text-body)] block">
               نام کامل مالک
             </label>
             <input
@@ -148,27 +148,27 @@ export default function EditOwnerPage() {
               name="name"
               value={formData.name}
               onChange={handleChange}
-              className="border border-gray-300 rounded-lg p-3 w-full bg-gray-50"
+              className="border border-[var(--border)] rounded-lg p-3 w-full bg-[var(--bg-hover)]"
             />
           </div>
 
-          <hr className="border-gray-200" />
+          <hr className="border-[var(--border)]" />
 
           {/* کد ملی + شناسه سازمانی */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div>
-              <label className="font-semibold text-gray-700">کد ملی</label>
+              <label className="font-semibold text-[var(--text-body)]">کد ملی</label>
               <input
                 type="text"
                 name="nationalId"
                 value={formData.nationalId}
                 onChange={handleChange}
-                className="border border-gray-300  rounded-lg p-3 w-full bg-gray-50"
+                className="border border-[var(--border)]  rounded-lg p-3 w-full bg-[var(--bg-hover)]"
               />
             </div>
 
             <div>
-              <label className="font-semibold text-gray-700">
+              <label className="font-semibold text-[var(--text-body)]">
                 شناسه سازمانی
               </label>
               <input
@@ -176,49 +176,49 @@ export default function EditOwnerPage() {
                 name="orgId"
                 value={formData.orgId}
                 onChange={handleChange}
-                className="border border-gray-300 rounded-lg p-3 w-full bg-gray-50"
+                className="border border-[var(--border)] rounded-lg p-3 w-full bg-[var(--bg-hover)]"
               />
             </div>
           </div>
 
-          <hr className="border-gray-200" />
+          <hr className="border-[var(--border)]" />
 
           {/* ایمیل + موبایل */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div>
-              <label className="font-semibold text-gray-700">ایمیل</label>
+              <label className="font-semibold text-[var(--text-body)]">ایمیل</label>
               <input
                 type="email"
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                className="border border-gray-300 rounded-lg p-3 w-full bg-gray-50"
+                className="border border-[var(--border)] rounded-lg p-3 w-full bg-[var(--bg-hover)]"
               />
             </div>
 
             <div>
-              <label className="font-semibold text-gray-700">شماره تماس</label>
+              <label className="font-semibold text-[var(--text-body)]">شماره تماس</label>
               <input
                 type="text"
                 name="phone"
                 value={formData.phone}
                 onChange={handleChange}
-                className="border border-gray-300 rounded-lg p-3 w-full bg-gray-50"
+                className="border border-[var(--border)] rounded-lg p-3 w-full bg-[var(--bg-hover)]"
               />
             </div>
           </div>
 
-          <hr className="border-gray-200" />
+          <hr className="border-[var(--border)]" />
 
           {/* نوع + وضعیت */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div>
-              <label className="font-semibold text-gray-700">نوع مالک</label>
+              <label className="font-semibold text-[var(--text-body)]">نوع مالک</label>
               <select
                 name="type"
                 value={formData.type}
                 onChange={handleChange}
-                className="border border-gray-300 rounded-lg p-3 w-full bg-gray-50"
+                className="border border-[var(--border)] rounded-lg p-3 w-full bg-[var(--bg-hover)]"
               >
                 <option value="individual">شخصی</option>
                 <option value="organization">سازمانی</option>
@@ -226,12 +226,12 @@ export default function EditOwnerPage() {
             </div>
 
             <div>
-              <label className="font-semibold text-gray-700">وضعیت</label>
+              <label className="font-semibold text-[var(--text-body)]">وضعیت</label>
               <select
                 name="status"
                 value={formData.status}
                 onChange={handleChange}
-                className="border border-gray-300 rounded-lg p-3 w-full bg-gray-50"
+                className="border border-[var(--border)] rounded-lg p-3 w-full bg-[var(--bg-hover)]"
               >
                 <option value="active">فعال</option>
                 <option value="inactive">غیرفعال</option>
@@ -240,32 +240,32 @@ export default function EditOwnerPage() {
             </div>
           </div>
 
-          <hr className="border-gray-200" />
+          <hr className="border-[var(--border)]" />
 
           {/* آدرس */}
           <div>
-            <label className="font-semibold text-gray-700">آدرس</label>
+            <label className="font-semibold text-[var(--text-body)]">آدرس</label>
             <input
               type="text"
               name="address"
               value={formData.address}
               onChange={handleChange}
-              className="border border-gray-300 rounded-lg p-3 w-full bg-gray-50"
+              className="border border-[var(--border)] rounded-lg p-3 w-full bg-[var(--bg-hover)]"
             />
           </div>
 
-          <hr className="border-gray-200" />
+          <hr className="border-[var(--border)]" />
 
           {/* عکس */}
           <div>
-            <label className="font-semibold text-gray-700 block mb-2">
+            <label className="font-semibold text-[var(--text-body)] block mb-2">
               عکس مالک
             </label>
 
             {/* عکس قبلی */}
             {previewOld && (
               <div className="mb-4">
-                <p className="text-gray-600 text-sm mb-1">عکس فعلی:</p>
+                <p className="text-[var(--text-muted)] text-sm mb-1">عکس فعلی:</p>
                 <img
                   src={previewOld}
                   className="w-32 h-32 rounded-lg object-cover border"
@@ -276,7 +276,7 @@ export default function EditOwnerPage() {
             {/* عکس جدید */}
             {previewNew && (
               <div className="mb-4">
-                <p className="text-gray-600 text-sm mb-1">
+                <p className="text-[var(--text-muted)] text-sm mb-1">
                   پیش‌نمایش عکس جدید:
                 </p>
                 <img
@@ -286,9 +286,9 @@ export default function EditOwnerPage() {
               </div>
             )}
 
-            <label className="flex items-center gap-3 border border-gray-300 rounded-lg p-3 cursor-pointer bg-gray-50 hover:ring-2 hover:ring-green-500 transition">
+            <label className="flex items-center gap-3 border border-[var(--border)] rounded-lg p-3 cursor-pointer bg-[var(--bg-hover)] hover:ring-2 hover:ring-green-500 transition">
               <MdDriveFolderUpload size={24} className="text-green-600" />
-              <span className="text-gray-600">انتخاب فایل جدید (اختیاری)</span>
+              <span className="text-[var(--text-muted)]">انتخاب فایل جدید (اختیاری)</span>
               <input
                 type="file"
                 accept="image/*"
@@ -298,17 +298,17 @@ export default function EditOwnerPage() {
             </label>
           </div>
 
-          <hr className="border-gray-200" />
+          <hr className="border-[var(--border)]" />
 
           {/* یادداشت */}
           <div>
-            <label className="font-semibold text-gray-700">یادداشت‌ها</label>
+            <label className="font-semibold text-[var(--text-body)]">یادداشت‌ها</label>
             <textarea
               name="notes"
               value={formData.notes}
               onChange={handleChange}
               rows={4}
-              className="border border-gray-300 rounded-lg p-3 w-full bg-gray-50 resize-y"
+              className="border border-[var(--border)] rounded-lg p-3 w-full bg-[var(--bg-hover)] resize-y"
             />
           </div>
 

@@ -41,7 +41,7 @@ export default function AnalyticsPage() {
   if (loading) {
     return (
       <DashboardLayout>
-        <div className="flex min-h-screen items-center justify-center rounded-[2rem] bg-[#0f1115]">
+        <div className="flex min-h-screen items-center justify-center rounded-[2rem] bg-[var(--bg-body)]">
           <Loader2 size={40} className="animate-spin text-yellow-400" />
         </div>
       </DashboardLayout>
@@ -61,12 +61,12 @@ export default function AnalyticsPage() {
 
   return (
     <DashboardLayout>
-      <div className="min-h-screen rounded-[2rem] bg-[#0f1115] p-4 md:p-8" dir="rtl">
+      <div className="min-h-screen rounded-[2rem] bg-[var(--bg-body)] p-4 md:p-8" dir="rtl">
         <div className="mb-8 flex items-center gap-3">
-          <div className="rounded-2xl bg-yellow-400 p-3 text-black"><BarChart3 size={24} /></div>
+          <div className="rounded-2xl bg-yellow-400 p-3 text-[var(--text-body)]"><BarChart3 size={24} /></div>
           <div>
-            <h1 className="text-2xl font-black text-white md:text-3xl">آمار و تحلیل</h1>
-            <p className="text-xs font-bold text-gray-500 mt-0.5">داده‌های واقعی از دیتابیس</p>
+            <h1 className="text-2xl font-black text-[var(--text-body)] md:text-3xl">آمار و تحلیل</h1>
+            <p className="text-xs font-bold text-[var(--text-muted)] mt-0.5">داده‌های واقعی از دیتابیس</p>
           </div>
         </div>
 
@@ -127,12 +127,12 @@ export default function AnalyticsPage() {
           </ChartCard>
         </div>
 
-        <div className="rounded-[2rem] border border-gray-800 bg-[#1a1d23] p-5">
-          <h3 className="mb-4 flex items-center gap-2 text-lg font-black text-white"><Activity size={18} className="text-yellow-400" /> آخرین رویدادهای سیستم</h3>
+        <div className="rounded-[2rem] border border-[var(--border)] bg-[var(--bg-card)] p-5">
+          <h3 className="mb-4 flex items-center gap-2 text-lg font-black text-[var(--text-body)]"><Activity size={18} className="text-yellow-400" /> آخرین رویدادهای سیستم</h3>
           <div className="space-y-2">
             {(s.auditActions || []).slice(0, 8).map((a, i) => (
-              <div key={i} className="flex items-center justify-between rounded-xl bg-gray-900/50 p-3 text-xs">
-                <span className="font-bold text-gray-300">{a._id === "login" ? "ورود" : a._id === "create_user" ? "ایجاد کاربر" : a._id === "book_class" ? "رزرو کلاس" : a._id === "create_invoice" ? "صدور فاکتور" : a._id === "create_class" ? "ایجاد کلاس" : a._id === "create_membership" ? "عضویت جدید" : a._id === "mark_attendance" ? "حضور کلاس" : a._id === "cancel_booking" ? "لغو رزرو" : a._id}</span>
+              <div key={i} className="flex items-center justify-between rounded-xl bg-[var(--bg-hover)]/50 p-3 text-xs">
+                <span className="font-bold text-[var(--text-dim)]">{a._id === "login" ? "ورود" : a._id === "create_user" ? "ایجاد کاربر" : a._id === "book_class" ? "رزرو کلاس" : a._id === "create_invoice" ? "صدور فاکتور" : a._id === "create_class" ? "ایجاد کلاس" : a._id === "create_membership" ? "عضویت جدید" : a._id === "mark_attendance" ? "حضور کلاس" : a._id === "cancel_booking" ? "لغو رزرو" : a._id}</span>
                 <span className="font-black text-yellow-400">{a.count} بار</span>
               </div>
             ))}
@@ -145,18 +145,18 @@ export default function AnalyticsPage() {
 
 function KpiCard({ icon, label, value, color }) {
   return (
-    <div className="rounded-[2rem] border border-gray-800 bg-[#1a1d23] p-4 md:p-5">
+    <div className="rounded-[2rem] border border-[var(--border)] bg-[var(--bg-card)] p-4 md:p-5">
       <div className={`mb-3 ${color}`}>{React.cloneElement(icon, { size: 22 })}</div>
-      <p className="text-2xl font-black text-white md:text-3xl">{typeof value === "number" ? value.toLocaleString("fa-IR") : value}</p>
-      <p className="mt-1 text-[10px] font-bold text-gray-500">{label}</p>
+      <p className="text-2xl font-black text-[var(--text-body)] md:text-3xl">{typeof value === "number" ? value.toLocaleString("fa-IR") : value}</p>
+      <p className="mt-1 text-[10px] font-bold text-[var(--text-muted)]">{label}</p>
     </div>
   );
 }
 
 function ChartCard({ title, icon, children }) {
   return (
-    <div className="rounded-[2rem] border border-gray-800 bg-[#1a1d23] p-5">
-      <h3 className="mb-5 flex items-center gap-2 text-sm font-black text-white">
+    <div className="rounded-[2rem] border border-[var(--border)] bg-[var(--bg-card)] p-5">
+      <h3 className="mb-5 flex items-center gap-2 text-sm font-black text-[var(--text-body)]">
         <span className="text-yellow-400">{icon}</span> {title}
       </h3>
       {children}

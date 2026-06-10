@@ -56,7 +56,7 @@ export default function AuditLogsPage() {
   if (loading) {
     return (
       <DashboardLayout>
-        <div className="flex min-h-screen items-center justify-center rounded-[2rem] bg-[#0f1115]">
+        <div className="flex min-h-screen items-center justify-center rounded-[2rem] bg-[var(--bg-body)]">
           <Loader2 size={40} className="animate-spin text-yellow-400" />
         </div>
       </DashboardLayout>
@@ -65,21 +65,21 @@ export default function AuditLogsPage() {
 
   return (
     <DashboardLayout>
-      <div className="min-h-screen rounded-[2rem] bg-[#0f1115] p-4 md:p-8" dir="rtl">
+      <div className="min-h-screen rounded-[2rem] bg-[var(--bg-body)] p-4 md:p-8" dir="rtl">
         <div className="mb-6 flex items-center gap-3">
-          <div className="rounded-2xl bg-yellow-400 p-3 text-black"><ClipboardList size={24} /></div>
+          <div className="rounded-2xl bg-yellow-400 p-3 text-[var(--text-body)]"><ClipboardList size={24} /></div>
           <div>
-            <h1 className="text-2xl font-black text-white md:text-3xl">لاگ فعالیت‌ها</h1>
-            <p className="text-xs font-bold text-gray-500 mt-0.5">{total} رویداد ثبت شده</p>
+            <h1 className="text-2xl font-black text-[var(--text-body)] md:text-3xl">لاگ فعالیت‌ها</h1>
+            <p className="text-xs font-bold text-[var(--text-muted)] mt-0.5">{total} رویداد ثبت شده</p>
           </div>
         </div>
 
         <div className="mb-4 flex flex-col gap-3 sm:flex-row">
           <div className="relative flex-1">
-            <Search size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500" />
-            <input type="text" value={search} onChange={(e) => setSearch(e.target.value)} placeholder="جستجو..." className="w-full rounded-2xl border border-gray-800 bg-[#1a1d23] py-3 pr-10 pl-4 text-sm text-white outline-none focus:border-yellow-400" />
+            <Search size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--text-muted)]" />
+            <input type="text" value={search} onChange={(e) => setSearch(e.target.value)} placeholder="جستجو..." className="w-full rounded-2xl border border-[var(--border)] bg-[var(--bg-card)] py-3 pr-10 pl-4 text-sm text-[var(--text-body)] outline-none focus:border-yellow-400" />
           </div>
-          <select value={actionFilter} onChange={(e) => { setActionFilter(e.target.value); setPage(1); }} className="rounded-2xl border border-gray-800 bg-[#1a1d23] px-4 py-2.5 text-sm text-white outline-none focus:border-yellow-400">
+          <select value={actionFilter} onChange={(e) => { setActionFilter(e.target.value); setPage(1); }} className="rounded-2xl border border-[var(--border)] bg-[var(--bg-card)] px-4 py-2.5 text-sm text-[var(--text-body)] outline-none focus:border-yellow-400">
             <option value="">همه رویدادها</option>
             {Object.entries(ACTION_LABELS).map(([key, label]) => (
               <option key={key} value={key}>{label}</option>
@@ -89,24 +89,24 @@ export default function AuditLogsPage() {
 
         <div className="space-y-2">
           {filtered.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-20 text-gray-500">
+            <div className="flex flex-col items-center justify-center py-20 text-[var(--text-muted)]">
               <ClipboardList size={48} className="mb-4 opacity-30" />
               <p className="text-lg font-black">رویدادی یافت نشد</p>
             </div>
           ) : filtered.map((log) => (
-            <div key={log._id} className="rounded-2xl border border-gray-800 bg-[#1a1d23] p-3 text-xs transition-all hover:border-yellow-400/20">
+            <div key={log._id} className="rounded-2xl border border-[var(--border)] bg-[var(--bg-card)] p-3 text-xs transition-all hover:border-yellow-400/20">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <div className="flex items-center gap-3">
                   <span className="rounded-lg bg-yellow-400/10 px-2 py-1 font-black text-yellow-400">
                     {ACTION_LABELS[log.action] || log.action}
                   </span>
-                  <span className="font-bold text-white">{log.userId?.name || "سیستم"}</span>
-                  {log.resource && <span className="text-gray-500">{log.resource}</span>}
+                  <span className="font-bold text-[var(--text-body)]">{log.userId?.name || "سیستم"}</span>
+                  {log.resource && <span className="text-[var(--text-muted)]">{log.resource}</span>}
                 </div>
-                <span className="text-gray-600">{formatTime(log.createdAt)}</span>
+                <span className="text-[var(--text-muted)]">{formatTime(log.createdAt)}</span>
               </div>
               {log.details && typeof log.details === "object" && (
-                <div className="mt-2 rounded-xl bg-gray-900/50 p-2 text-[10px] text-gray-500 font-mono">
+                <div className="mt-2 rounded-xl bg-[var(--bg-hover)]/50 p-2 text-[10px] text-[var(--text-muted)] font-mono">
                   {JSON.stringify(log.details).slice(0, 200)}
                 </div>
               )}
@@ -116,11 +116,11 @@ export default function AuditLogsPage() {
 
         {totalPages > 1 && (
           <div className="mt-6 flex items-center justify-center gap-2">
-            <button disabled={page <= 1} onClick={() => setPage((p) => p - 1)} className="rounded-xl bg-gray-800 px-4 py-2 text-xs font-black text-white transition-all hover:bg-gray-700 disabled:opacity-40">
+            <button disabled={page <= 1} onClick={() => setPage((p) => p - 1)} className="rounded-xl bg-gray-800 px-4 py-2 text-xs font-black text-[var(--text-body)] transition-all hover:bg-gray-700 disabled:opacity-40">
               قبلی
             </button>
-            <span className="text-xs text-gray-400">صفحه {page} از {totalPages}</span>
-            <button disabled={page >= totalPages} onClick={() => setPage((p) => p + 1)} className="rounded-xl bg-gray-800 px-4 py-2 text-xs font-black text-white transition-all hover:bg-gray-700 disabled:opacity-40">
+            <span className="text-xs text-[var(--text-dim)]">صفحه {page} از {totalPages}</span>
+            <button disabled={page >= totalPages} onClick={() => setPage((p) => p + 1)} className="rounded-xl bg-gray-800 px-4 py-2 text-xs font-black text-[var(--text-body)] transition-all hover:bg-gray-700 disabled:opacity-40">
               بعدی
             </button>
           </div>

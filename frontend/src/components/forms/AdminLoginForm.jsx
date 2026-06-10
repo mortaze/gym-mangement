@@ -72,76 +72,76 @@ export default function UnifiedLoginForm() {
   };
 
   return (
-    <section className="font-[Vazir] w-full max-w-2xl rounded-[2rem] border border-white/10 bg-[#151923]/95 p-5 shadow-2xl shadow-black/40 backdrop-blur sm:p-8 lg:p-10">
+    <section className="font-[Vazir] w-full max-w-2xl rounded-[2rem] border border-white/10 bg-[var(--bg-card)]/95 p-5 shadow-2xl shadow-black/40 backdrop-blur sm:p-8 lg:p-10">
       <div className="mb-8 text-center">
-        <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-3xl bg-yellow-400 text-black shadow-lg shadow-yellow-400/20">
+        <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-3xl bg-yellow-400 text-[var(--text-body)] shadow-lg shadow-yellow-400/20">
           <LockKeyhole size={30} />
         </div>
-        <h1 className="text-2xl font-black text-white sm:text-3xl lg:text-4xl">ورود به سامانه مدیریت باشگاه</h1>
-        <p className="mx-auto mt-4 max-w-xl text-sm font-bold leading-7 text-gray-400 sm:text-base">
+        <h1 className="text-2xl font-black text-[var(--text-body)] sm:text-3xl lg:text-4xl">ورود به سامانه مدیریت باشگاه</h1>
+        <p className="mx-auto mt-4 max-w-xl text-sm font-bold leading-7 text-[var(--text-dim)] sm:text-base">
           برای ورود از بخش راهنمای ورود نقش خود را انتخاب کرده و رمز عبور Admin@123456 برای تمامی نقش‌ها استفاده کنید.
         </p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         <div>
-          <label className="mb-2 block text-xs font-black text-gray-400">شناسه ورود</label>
+          <label className="mb-2 block text-xs font-black text-[var(--text-dim)]">شناسه ورود</label>
           <input
             {...register("loginIdentifier")}
             placeholder="شناسه ورود"
             autoComplete="username"
-            className="w-full rounded-2xl border border-gray-800 bg-[#0f1115] px-4 py-4 font-bold text-white outline-none transition focus:border-yellow-400 focus:ring-4 focus:ring-yellow-400/10"
+            className="w-full rounded-2xl border border-[var(--border)] bg-[var(--bg-body)] px-4 py-4 font-bold text-[var(--text-body)] outline-none transition focus:border-yellow-400 focus:ring-4 focus:ring-yellow-400/10"
           />
           <ErrorMsg msg={errors.loginIdentifier?.message} />
         </div>
 
         <div className="relative">
-          <label className="mb-2 block text-xs font-black text-gray-400">رمز عبور</label>
+          <label className="mb-2 block text-xs font-black text-[var(--text-dim)]">رمز عبور</label>
           <input
             {...register("password")}
             type={showPass ? "text" : "password"}
             placeholder="رمز عبور"
             autoComplete="current-password"
-            className="w-full rounded-2xl border border-gray-800 bg-[#0f1115] px-4 py-4 pl-12 font-bold text-white outline-none transition focus:border-yellow-400 focus:ring-4 focus:ring-yellow-400/10"
+            className="w-full rounded-2xl border border-[var(--border)] bg-[var(--bg-body)] px-4 py-4 pl-12 font-bold text-[var(--text-body)] outline-none transition focus:border-yellow-400 focus:ring-4 focus:ring-yellow-400/10"
           />
-          <button type="button" onClick={() => setShowPass(!showPass)} className="absolute left-4 top-[43px] text-gray-500 transition hover:text-yellow-400" aria-label="نمایش یا مخفی‌سازی رمز عبور">
+          <button type="button" onClick={() => setShowPass(!showPass)} className="absolute left-4 top-[43px] text-[var(--text-muted)] transition hover:text-yellow-400" aria-label="نمایش یا مخفی‌سازی رمز عبور">
             {showPass ? <EyeOff size={18} /> : <Eye size={18} />}
           </button>
           <ErrorMsg msg={errors.password?.message} />
         </div>
 
-        <button type="submit" disabled={isLoading} className="w-full rounded-2xl bg-yellow-400 py-4 text-sm font-black text-black shadow-lg shadow-yellow-400/20 transition hover:bg-white disabled:cursor-not-allowed disabled:opacity-60 sm:text-base">
+        <button type="submit" disabled={isLoading} className="w-full rounded-2xl bg-yellow-400 py-4 text-sm font-black text-[var(--text-body)] shadow-lg shadow-yellow-400/20 transition hover:bg-white disabled:cursor-not-allowed disabled:opacity-60 sm:text-base">
           {isLoading ? "در حال احراز هویت..." : "ورود به سامانه"}
         </button>
       </form>
 
-      <aside className="mt-7 rounded-3xl border border-yellow-400/20 bg-[#0f1115] p-4 sm:p-5">
+      <aside className="mt-7 rounded-3xl border border-yellow-400/20 bg-[var(--bg-body)] p-4 sm:p-5">
         <div className="mb-4 flex items-center gap-3">
           <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-yellow-400/10 text-yellow-400">
             <ShieldCheck size={22} />
           </div>
           <div>
-            <h2 className="text-base font-black text-white sm:text-lg">راهنمای ورود آزمایشی</h2>
-            <p className="text-[11px] font-bold text-gray-500">شناسه‌ها به‌صورت داینامیک از MongoDB خوانده می‌شوند.</p>
+            <h2 className="text-base font-black text-[var(--text-body)] sm:text-lg">راهنمای ورود آزمایشی</h2>
+            <p className="text-[11px] font-bold text-[var(--text-muted)]">شناسه‌ها به‌صورت داینامیک از MongoDB خوانده می‌شوند.</p>
           </div>
         </div>
 
-        {guideLoading && <p className="rounded-2xl bg-white/5 p-4 text-sm font-bold text-gray-400">در حال دریافت شناسه‌ها از دیتابیس...</p>}
+        {guideLoading && <p className="rounded-2xl bg-white/5 p-4 text-sm font-bold text-[var(--text-dim)]">در حال دریافت شناسه‌ها از دیتابیس...</p>}
         {guideError && <p className="rounded-2xl bg-red-500/10 p-4 text-sm font-bold text-red-300">امکان دریافت راهنمای ورود از سرور وجود ندارد.</p>}
         {!guideLoading && !guideError && guides.length === 0 && (
-          <p className="rounded-2xl bg-white/5 p-4 text-sm font-bold leading-7 text-gray-400">برای نقش‌های هدف، کاربر فعالی در MongoDB یافت نشد.</p>
+          <p className="rounded-2xl bg-white/5 p-4 text-sm font-bold leading-7 text-[var(--text-dim)]">برای نقش‌های هدف، کاربر فعالی در MongoDB یافت نشد.</p>
         )}
 
         {guides.length > 0 && (
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             {guides.map((guide) => (
-              <div key={`${guide.role}-${guide.identifier}`} className="rounded-2xl border border-gray-800 bg-white/[0.03] p-4 transition hover:border-yellow-400/50">
+              <div key={`${guide.role}-${guide.identifier}`} className="rounded-2xl border border-[var(--border)] bg-white/[0.03] p-4 transition hover:border-yellow-400/50">
                 <div className="mb-3 flex items-center justify-between gap-2">
-                  <h3 className="font-black text-white">{guide.label || ROLE_LABELS[guide.role] || guide.role}</h3>
+                  <h3 className="font-black text-[var(--text-body)]">{guide.label || ROLE_LABELS[guide.role] || guide.role}</h3>
                   <span className="rounded-full bg-yellow-400/10 px-2 py-1 text-[10px] font-black text-yellow-400">{guide.role}</span>
                 </div>
                 <CopyRow label="شناسه ورود" value={guide.identifier} copied={copied} onCopy={copyToClipboard} />
-                <button type="button" onClick={() => fillIdentifier(guide.identifier)} className="mt-3 w-full rounded-xl border border-gray-700 py-2 text-xs font-black text-gray-300 transition hover:border-yellow-400 hover:text-yellow-400">
+                <button type="button" onClick={() => fillIdentifier(guide.identifier)} className="mt-3 w-full rounded-xl border border-[var(--border)] py-2 text-xs font-black text-[var(--text-dim)] transition hover:border-yellow-400 hover:text-yellow-400">
                   استفاده از شناسه
                 </button>
               </div>
@@ -158,10 +158,10 @@ function CopyRow({ label, value, copied, onCopy }) {
   return (
     <div className="mb-2 flex items-center justify-between gap-2 rounded-xl bg-white/5 px-3 py-2">
       <div className="min-w-0">
-        <p className="text-[10px] font-bold text-gray-500">{label}</p>
-        <p className="truncate text-xs font-black text-gray-100" dir="ltr">{value}</p>
+        <p className="text-[10px] font-bold text-[var(--text-muted)]">{label}</p>
+        <p className="truncate text-xs font-black text-[var(--text-body)]" dir="ltr">{value}</p>
       </div>
-      <button type="button" onClick={() => onCopy(value)} className="shrink-0 rounded-lg p-2 text-gray-500 transition hover:bg-yellow-400 hover:text-black" aria-label={`کپی ${label}`}>
+      <button type="button" onClick={() => onCopy(value)} className="shrink-0 rounded-lg p-2 text-[var(--text-muted)] transition hover:bg-yellow-400 hover:text-[var(--text-body)]" aria-label={`کپی ${label}`}>
         {isCopied ? <Check size={16} /> : <Clipboard size={16} />}
       </button>
     </div>

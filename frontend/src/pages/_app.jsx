@@ -6,6 +6,7 @@ import { Provider } from "react-redux";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import ReactModal from "react-modal";
 import { clearAuth, fetchCurrentUser, getDashboardPath, getStoredAuth, normalizeRole, persistAuth } from "@/utils/auth";
+import { ThemeProvider } from "@/contexts/ThemeContext";
 
 import "../styles/globals.css";
 import "../styles/dashboard.css";
@@ -90,9 +91,11 @@ export default function App({ Component, pageProps }) {
   return (
     <GoogleOAuthProvider clientId={NEXT_PUBLIC_GOOGLE_CLIENT_ID}>
       <Provider store={store}>
-        <AuthGate>
-          <Component {...pageProps} />
-        </AuthGate>
+        <ThemeProvider>
+          <AuthGate>
+            <Component {...pageProps} />
+          </AuthGate>
+        </ThemeProvider>
       </Provider>
     </GoogleOAuthProvider>
   );

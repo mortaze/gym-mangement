@@ -136,7 +136,7 @@ export default function UserClassesPage() {
   if (loading) {
     return (
       <DashboardLayout>
-        <div className="min-h-screen rounded-[2rem] bg-[#0f1115] p-4 md:p-8">
+        <div className="min-h-screen rounded-[2rem] bg-[var(--bg-body)] p-4 md:p-8">
           <div className="mb-6 flex items-center gap-3">
             <div className="h-14 w-14 animate-pulse rounded-2xl bg-gray-800" />
             <div className="space-y-2">
@@ -152,12 +152,12 @@ export default function UserClassesPage() {
 
   return (
     <DashboardLayout>
-      <div className="min-h-screen rounded-[2rem] bg-[#0f1115] p-4 md:p-8" dir="rtl">
+      <div className="min-h-screen rounded-[2rem] bg-[var(--bg-body)] p-4 md:p-8" dir="rtl">
         <div className="mb-6 flex items-center gap-3">
-          <div className="rounded-2xl bg-yellow-400 p-3 text-black"><CalendarDays size={24} /></div>
+          <div className="rounded-2xl bg-yellow-400 p-3 text-[var(--text-body)]"><CalendarDays size={24} /></div>
           <div>
-            <h1 className="text-2xl font-black text-white md:text-3xl">کلاس‌های گروهی</h1>
-            <p className="text-xs font-bold text-gray-500 mt-0.5">رزرو و مدیریت کلاس‌ها</p>
+            <h1 className="text-2xl font-black text-[var(--text-body)] md:text-3xl">کلاس‌های گروهی</h1>
+            <p className="text-xs font-bold text-[var(--text-muted)] mt-0.5">رزرو و مدیریت کلاس‌ها</p>
           </div>
         </div>
 
@@ -171,12 +171,12 @@ export default function UserClassesPage() {
               onClick={() => setActiveTab(tab.key)}
               className={`rounded-2xl px-5 py-2.5 text-sm font-black transition-all ${
                 activeTab === tab.key
-                  ? "bg-yellow-400 text-black"
-                  : "border border-gray-800 bg-[#1a1d23] text-gray-400 hover:border-yellow-400/40 hover:text-white"
+                  ? "bg-yellow-400 text-[var(--text-body)]"
+                  : "border border-[var(--border)] bg-[var(--bg-card)] text-[var(--text-dim)] hover:border-yellow-400/40 hover:text-[var(--text-body)]"
               }`}
             >
               {tab.label}
-              {tab.count > 0 && <span className="mr-2 rounded-lg bg-gray-900 px-2 py-0.5 text-[10px]">{tab.count}</span>}
+              {tab.count > 0 && <span className="mr-2 rounded-lg bg-[var(--bg-hover)] px-2 py-0.5 text-[10px]">{tab.count}</span>}
             </button>
           ))}
         </div>
@@ -184,38 +184,38 @@ export default function UserClassesPage() {
         {activeTab === "browse" && (
           <>
             <div className="mb-4">
-              <label className="block mb-1.5 text-xs font-bold text-gray-400">انتخاب تاریخ</label>
+              <label className="block mb-1.5 text-xs font-bold text-[var(--text-dim)]">انتخاب تاریخ</label>
               <input
                 type="date"
                 value={filterDate}
                 onChange={(e) => setFilterDate(e.target.value)}
-                className="w-full max-w-xs rounded-2xl border border-gray-800 bg-[#1a1d23] px-4 py-2.5 text-sm text-white outline-none focus:border-yellow-400"
+                className="w-full max-w-xs rounded-2xl border border-[var(--border)] bg-[var(--bg-card)] px-4 py-2.5 text-sm text-[var(--text-body)] outline-none focus:border-yellow-400"
               />
             </div>
 
             <div className="space-y-3">
               {filteredSessions.length === 0 ? (
-                <div className="flex flex-col items-center justify-center py-20 text-gray-500">
+                <div className="flex flex-col items-center justify-center py-20 text-[var(--text-muted)]">
                   <CalendarDays size={48} className="mb-4 opacity-30" />
                   <p className="text-lg font-black">کلاسی در این تاریخ وجود ندارد</p>
-                  <p className="text-sm text-gray-600 mt-1">تاریخ دیگری را انتخاب کنید</p>
+                  <p className="text-sm text-[var(--text-muted)] mt-1">تاریخ دیگری را انتخاب کنید</p>
                 </div>
               ) : filteredSessions.map((s) => {
                 const booked = s.attendees?.filter((a) => a.status === "booked").length || 0;
                 const avail = Math.max(0, s.capacity - booked);
                 const alreadyBooked = isBooked(s._id);
                 return (
-                  <div key={s._id} className="rounded-[2rem] border border-gray-800 bg-[#1a1d23] p-4 transition-all hover:border-yellow-400/30">
+                  <div key={s._id} className="rounded-[2rem] border border-[var(--border)] bg-[var(--bg-card)] p-4 transition-all hover:border-yellow-400/30">
                     <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                       <div className="flex items-start gap-3">
                         <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-yellow-400/10 text-yellow-400">
                           <CalendarDays size={24} />
                         </div>
                         <div>
-                          <h3 className="font-black text-white">{s.title}</h3>
-                          <p className="text-xs text-gray-400 mt-0.5">مربی: {s.trainerId?.name || "—"}</p>
-                          <p className="text-xs text-gray-500 mt-0.5">{formatDate(s.date)} • ساعت {s.time} • {s.duration} دقیقه</p>
-                          <p className="text-xs text-gray-500 mt-0.5">{s.location}</p>
+                          <h3 className="font-black text-[var(--text-body)]">{s.title}</h3>
+                          <p className="text-xs text-[var(--text-dim)] mt-0.5">مربی: {s.trainerId?.name || "—"}</p>
+                          <p className="text-xs text-[var(--text-muted)] mt-0.5">{formatDate(s.date)} • ساعت {s.time} • {s.duration} دقیقه</p>
+                          <p className="text-xs text-[var(--text-muted)] mt-0.5">{s.location}</p>
                         </div>
                       </div>
                       <div className="flex flex-wrap items-center gap-3">
@@ -227,13 +227,13 @@ export default function UserClassesPage() {
                             <Ban size={14} /> لغو رزرو
                           </button>
                         ) : (
-                          <button onClick={() => bookClass(s._id)} disabled={avail === 0} className="flex items-center gap-1 rounded-2xl bg-yellow-400 px-4 py-2 text-xs font-black text-black transition-all hover:bg-yellow-500 disabled:opacity-50">
+                          <button onClick={() => bookClass(s._id)} disabled={avail === 0} className="flex items-center gap-1 rounded-2xl bg-yellow-400 px-4 py-2 text-xs font-black text-[var(--text-body)] transition-all hover:bg-yellow-500 disabled:opacity-50">
                             <BookOpen size={14} /> {avail === 0 ? "تکمیل" : "رزرو"}
                           </button>
                         )}
                       </div>
                     </div>
-                    {s.description && <p className="mt-3 text-xs text-gray-500 rounded-xl bg-gray-900/50 p-3">{s.description}</p>}
+                    {s.description && <p className="mt-3 text-xs text-[var(--text-muted)] rounded-xl bg-[var(--bg-hover)]/50 p-3">{s.description}</p>}
                   </div>
                 );
               })}
@@ -244,22 +244,22 @@ export default function UserClassesPage() {
         {activeTab === "my" && (
           <div className="space-y-3">
             {bookings.filter((b) => b.status !== "cancelled").length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-20 text-gray-500">
+              <div className="flex flex-col items-center justify-center py-20 text-[var(--text-muted)]">
                 <BookOpen size={48} className="mb-4 opacity-30" />
                 <p className="text-lg font-black">رزروی ندارید</p>
-                <p className="text-sm text-gray-600 mt-1">از بخش کلاس‌های موجود رزرو کنید</p>
+                <p className="text-sm text-[var(--text-muted)] mt-1">از بخش کلاس‌های موجود رزرو کنید</p>
               </div>
             ) : bookings.filter((b) => b.status !== "cancelled").map((b) => (
-              <div key={b._id} className="rounded-[2rem] border border-gray-800 bg-[#1a1d23] p-4 transition-all hover:border-yellow-400/30">
+              <div key={b._id} className="rounded-[2rem] border border-[var(--border)] bg-[var(--bg-card)] p-4 transition-all hover:border-yellow-400/30">
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                   <div className="flex items-start gap-3">
                     <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-yellow-400/10 text-yellow-400">
                       <CalendarDays size={22} />
                     </div>
                     <div>
-                      <h3 className="font-black text-white">{b.title}</h3>
-                      <p className="text-xs text-gray-400 mt-0.5">مربی: {b.trainer?.name || "—"}</p>
-                      <p className="text-xs text-gray-500">{formatDate(b.date)} • ساعت {b.time} • {b.duration} دقیقه</p>
+                      <h3 className="font-black text-[var(--text-body)]">{b.title}</h3>
+                      <p className="text-xs text-[var(--text-dim)] mt-0.5">مربی: {b.trainer?.name || "—"}</p>
+                      <p className="text-xs text-[var(--text-muted)]">{formatDate(b.date)} • ساعت {b.time} • {b.duration} دقیقه</p>
                       <span className={`mt-1 inline-block rounded-xl px-3 py-0.5 text-[10px] font-black ${b.status === "booked" ? "bg-yellow-400/10 text-yellow-400" : "bg-green-500/10 text-green-400"}`}>
                         {b.status === "booked" ? "رزرو شده" : b.status === "attended" ? "حاضر شده" : "لغو شده"}
                       </span>
@@ -267,7 +267,7 @@ export default function UserClassesPage() {
                   </div>
                   <div className="flex items-center gap-2">
                     {b.status === "booked" && b.qrToken && (
-                      <button onClick={() => setSelectedQr(b)} className="flex items-center gap-1 rounded-2xl border border-gray-700 bg-gray-800 px-3 py-2 text-xs font-black text-gray-300 transition-all hover:border-yellow-400/50 hover:text-yellow-400">
+                      <button onClick={() => setSelectedQr(b)} className="flex items-center gap-1 rounded-2xl border border-[var(--border)] bg-gray-800 px-3 py-2 text-xs font-black text-[var(--text-dim)] transition-all hover:border-yellow-400/50 hover:text-yellow-400">
                         <QrCode size={14} /> QR
                       </button>
                     )}
@@ -287,25 +287,25 @@ export default function UserClassesPage() {
       </div>
 
       {selectedQr && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm" onClick={() => setSelectedQr(null)}>
-          <div className="w-full max-w-sm rounded-[2rem] border border-gray-800 bg-[#1a1d23] p-8 text-center" onClick={(e) => e.stopPropagation()}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--bg-overlay)]/60 p-4 backdrop-blur-sm" onClick={() => setSelectedQr(null)}>
+          <div className="w-full max-w-sm rounded-[2rem] border border-[var(--border)] bg-[var(--bg-card)] p-8 text-center" onClick={(e) => e.stopPropagation()}>
             <div className="mb-4">
-              <div className="inline-flex items-center justify-center rounded-2xl bg-white p-4">
-                <div className="h-40 w-40 bg-white flex items-center justify-center">
+              <div className="inline-flex items-center justify-center rounded-2xl bg-[var(--bg-card)] p-4">
+                <div className="h-40 w-40 bg-[var(--bg-card)] flex items-center justify-center">
                   <div className="text-center">
-                    <div className="text-black text-xs mb-2 font-bold">QR ورود به کلاس</div>
-                    <QrCode size={80} className="text-black mx-auto" />
-                    <div className="mt-2 bg-gray-100 p-1 rounded text-[8px] text-gray-600 font-mono break-all">
+                    <div className="text-[var(--text-body)] text-xs mb-2 font-bold">QR ورود به کلاس</div>
+                    <QrCode size={80} className="text-[var(--text-body)] mx-auto" />
+                    <div className="mt-2 bg-[var(--bg-hover)] p-1 rounded text-[8px] text-[var(--text-muted)] font-mono break-all">
                       {selectedQr.qrToken}
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            <h3 className="font-black text-white">{selectedQr.title}</h3>
-            <p className="text-xs text-gray-400 mt-1">{formatDate(selectedQr.date)} • {selectedQr.time}</p>
-            <p className="text-xs text-gray-500 mt-0.5">این QR را هنگام ورود به مربی نشان دهید</p>
-            <button onClick={() => setSelectedQr(null)} className="mt-4 rounded-2xl bg-yellow-400 px-6 py-2.5 text-sm font-black text-black transition-all hover:bg-yellow-500">
+            <h3 className="font-black text-[var(--text-body)]">{selectedQr.title}</h3>
+            <p className="text-xs text-[var(--text-dim)] mt-1">{formatDate(selectedQr.date)} • {selectedQr.time}</p>
+            <p className="text-xs text-[var(--text-muted)] mt-0.5">این QR را هنگام ورود به مربی نشان دهید</p>
+            <button onClick={() => setSelectedQr(null)} className="mt-4 rounded-2xl bg-yellow-400 px-6 py-2.5 text-sm font-black text-[var(--text-body)] transition-all hover:bg-yellow-500">
               بستن
             </button>
           </div>
@@ -339,10 +339,10 @@ function QuickSchedule({ groupByDate, sessions, setFilterDate }) {
                 if (gDate) setFilterDate(gDate);
                 setOpen(false);
               }}
-              className="w-full rounded-2xl border border-gray-800 bg-[#1a1d23] p-3 text-right transition-all hover:border-yellow-400/30"
+              className="w-full rounded-2xl border border-[var(--border)] bg-[var(--bg-card)] p-3 text-right transition-all hover:border-yellow-400/30"
             >
-              <p className="text-sm font-black text-white">{dateLabel}</p>
-              <p className="text-xs text-gray-400 mt-0.5">
+              <p className="text-sm font-black text-[var(--text-body)]">{dateLabel}</p>
+              <p className="text-xs text-[var(--text-dim)] mt-0.5">
                 {clsList.length} کلاس • {clsList.reduce((s, c) => s + (c.attendees?.filter((a) => a.status === "booked").length || 0), 0)} ثبت‌نام
               </p>
             </button>

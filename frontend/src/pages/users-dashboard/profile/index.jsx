@@ -48,30 +48,30 @@ export default function MyProfilePage() {
 
   return (
     <DashboardLayout>
-      <div className="p-4 sm:p-8 min-h-screen bg-[#0f1115] rounded-[2.5rem] border border-gray-800 shadow-2xl">
+      <div className="p-4 sm:p-8 min-h-screen bg-[var(--bg-body)] rounded-[2.5rem] border border-[var(--border)] shadow-2xl">
         {/* Header */}
         <div className="flex items-center gap-4 mb-10">
           <Link
             href="/dashboard"
-            className="p-3 bg-gray-800 text-yellow-400 hover:bg-yellow-400 hover:text-black transition-all rounded-xl"
+            className="p-3 bg-gray-800 text-yellow-400 hover:bg-yellow-400 hover:text-[var(--text-body)] transition-all rounded-xl"
           >
             <ArrowRight size={22} />
           </Link>
 
           <div>
-            <h2 className="text-3xl font-black text-white italic uppercase">
+            <h2 className="text-3xl font-black text-[var(--text-body)] italic uppercase">
               پروفایل <span className="text-yellow-400">من</span>
             </h2>
-            <p className="text-gray-500 text-xs uppercase tracking-widest mt-1">
+            <p className="text-[var(--text-muted)] text-xs uppercase tracking-widest mt-1">
               My Profile
             </p>
           </div>
         </div>
 
         {/* Profile Card */}
-        <div className="max-w-3xl mx-auto bg-[#1a1d23] border border-gray-800 rounded-3xl p-6 shadow-2xl">
+        <div className="max-w-3xl mx-auto bg-[var(--bg-card)] border border-[var(--border)] rounded-3xl p-6 shadow-2xl">
           {/* Top */}
-          <div className="flex flex-col sm:flex-row gap-6 items-center border-b border-gray-800 pb-6 mb-6">
+          <div className="flex flex-col sm:flex-row gap-6 items-center border-b border-[var(--border)] pb-6 mb-6">
             <div className="relative">
               <div className="w-28 h-28 rounded-2xl bg-gray-800 flex items-center justify-center border-2 border-yellow-400 overflow-hidden shadow-lg">
                 {user.profileImage ? (
@@ -98,19 +98,19 @@ export default function MyProfilePage() {
             </div>
 
             <div className="text-center sm:text-right">
-              <h3 className="text-2xl font-black text-white">
+              <h3 className="text-2xl font-black text-[var(--text-body)]">
                 {user.name || "—"}
               </h3>
 
-              <p className="text-gray-500 text-xs uppercase tracking-widest mt-1">
+              <p className="text-[var(--text-muted)] text-xs uppercase tracking-widest mt-1">
                 {typeof user.role === "string" ? user.role : "User"}
               </p>
 
               <span
                 className={`inline-block mt-3 px-4 py-1 rounded-lg text-[11px] font-bold uppercase ${
                   isActive
-                    ? "bg-yellow-400 text-black"
-                    : "bg-gray-700 text-gray-300"
+                    ? "bg-yellow-400 text-[var(--text-body)]"
+                    : "bg-gray-700 text-[var(--text-dim)]"
                 }`}
               >
                 {isActive ? "Active Member" : "Inactive"}
@@ -119,7 +119,7 @@ export default function MyProfilePage() {
           </div>
 
           {/* Info Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-gray-300">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-[var(--text-dim)]">
             <Info icon={User} label="کد عضویت" value={user.employeeCode} />
             <Info icon={Phone} label="شماره تماس" value={user.contactNumber} />
             <Info icon={MapPin} label="آدرس" value={user.address} />
@@ -142,7 +142,7 @@ export default function MyProfilePage() {
           <div className="flex flex-col sm:flex-row gap-4 mt-8">
             <Link
               href="/users-dashboard/profile/edit"
-              className="flex-1 flex items-center justify-center gap-2 bg-yellow-400 hover:bg-yellow-600 text-black py-4 rounded-2xl font-black transition-all"
+              className="flex-1 flex items-center justify-center gap-2 bg-yellow-400 hover:bg-yellow-600 text-[var(--text-body)] py-4 rounded-2xl font-black transition-all"
             >
               <Lock size={18} />
               تغییر رمز عبور/ ویرایش اطلاعات

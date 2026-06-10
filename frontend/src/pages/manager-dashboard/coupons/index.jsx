@@ -55,13 +55,13 @@ export default function CouponsPage() {
 
   return (
     <DashboardLayout>
-      <div className="p-4 md:p-8 min-h-screen bg-[#0f1115] rounded-[2rem]" dir="rtl">
+      <div className="p-4 md:p-8 min-h-screen bg-[var(--bg-body)] rounded-[2rem]" dir="rtl">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
           <div>
-            <h1 className="text-3xl font-black text-white">مدیریت کدهای تخفیف</h1>
-            <p className="text-gray-500 text-sm mt-1">ایجاد و مدیریت کدهای تخفیف و هدیه برای اعضا</p>
+            <h1 className="text-3xl font-black text-[var(--text-body)]">مدیریت کدهای تخفیف</h1>
+            <p className="text-[var(--text-muted)] text-sm mt-1">ایجاد و مدیریت کدهای تخفیف و هدیه برای اعضا</p>
           </div>
-          <button onClick={() => { setEditing(null); setShowModal(true); }} className="bg-yellow-400 text-black px-6 py-3 rounded-2xl font-black flex items-center gap-2 hover:bg-yellow-500 transition-all">
+          <button onClick={() => { setEditing(null); setShowModal(true); }} className="bg-yellow-400 text-[var(--text-body)] px-6 py-3 rounded-2xl font-black flex items-center gap-2 hover:bg-yellow-500 transition-all">
             <Plus size={18} /> کد جدید
           </button>
         </div>
@@ -76,10 +76,10 @@ export default function CouponsPage() {
         )}
 
         {loading ? <p className="text-yellow-400">در حال بارگذاری...</p> : (
-          <div className="overflow-x-auto rounded-[2rem] border border-gray-800 bg-[#1a1d23]">
+          <div className="overflow-x-auto rounded-[2rem] border border-[var(--border)] bg-[var(--bg-card)]">
             <table className="w-full min-w-[800px] text-right text-sm">
               <thead>
-                <tr className="border-b border-gray-800 text-gray-400">
+                <tr className="border-b border-[var(--border)] text-[var(--text-dim)]">
                   <th className="p-4">کد</th>
                   <th className="p-4">نوع</th>
                   <th className="p-4">مقدار</th>
@@ -91,13 +91,13 @@ export default function CouponsPage() {
               </thead>
               <tbody>
                 {coupons.map((c) => (
-                  <tr key={c._id} className="border-b border-gray-800 text-gray-200 last:border-b-0">
+                  <tr key={c._id} className="border-b border-[var(--border)] text-[var(--text-body)] last:border-b-0">
                     <td className="p-4">
                       <span className="font-black text-yellow-400">{c.code}</span>
                       {c.isGift && <Gift size={14} className="inline mr-2 text-purple-400" />}
                     </td>
                     <td className="p-4">{c.type === "percentage" ? "درصدی" : "مبلغ ثابت"}</td>
-                    <td className="p-4 font-black text-white">
+                    <td className="p-4 font-black text-[var(--text-body)]">
                       {c.type === "percentage" ? `${c.value}%` : `${c.value.toLocaleString()} تومان`}
                     </td>
                     <td className="p-4">{c.usedCount}/{c.maxUses || "∞"}</td>
@@ -109,7 +109,7 @@ export default function CouponsPage() {
                     </td>
                     <td className="p-4">
                       <div className="flex gap-2">
-                        <button onClick={() => { setEditing(c); setShowModal(true); }} className="bg-gray-800 hover:bg-gray-700 text-white p-2 rounded-xl transition-all"><Edit3 size={16} /></button>
+                        <button onClick={() => { setEditing(c); setShowModal(true); }} className="bg-gray-800 hover:bg-gray-700 text-[var(--text-body)] p-2 rounded-xl transition-all"><Edit3 size={16} /></button>
                         <button onClick={() => remove(c._id)} className="bg-gray-800 hover:bg-red-500/20 text-red-400 p-2 rounded-xl transition-all"><Trash2 size={16} /></button>
                       </div>
                     </td>
@@ -128,9 +128,9 @@ export default function CouponsPage() {
 
 function StatBox({ label, value }) {
   return (
-    <div className="bg-[#1a1d23] border border-gray-800 rounded-2xl p-4 text-center">
-      <p className="text-gray-500 text-xs font-bold">{label}</p>
-      <p className="text-white text-2xl font-black mt-1">{value}</p>
+    <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-2xl p-4 text-center">
+      <p className="text-[var(--text-muted)] text-xs font-bold">{label}</p>
+      <p className="text-[var(--text-body)] text-2xl font-black mt-1">{value}</p>
     </div>
   );
 }
@@ -154,18 +154,18 @@ function CouponModal({ editing, onSave, onClose }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4" onClick={onClose}>
-      <div className="bg-[#1a1d23] border border-gray-800 rounded-[2rem] p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--bg-overlay)]/60 backdrop-blur-sm p-4" onClick={onClose}>
+      <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-[2rem] p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-black text-white">{editing ? "ویرایش کد تخفیف" : "کد تخفیف جدید"}</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-white"><X size={20} /></button>
+          <h2 className="text-xl font-black text-[var(--text-body)]">{editing ? "ویرایش کد تخفیف" : "کد تخفیف جدید"}</h2>
+          <button onClick={onClose} className="text-[var(--text-dim)] hover:text-[var(--text-body)]"><X size={20} /></button>
         </div>
         <form onSubmit={submit} className="space-y-4">
           {!editing && <Input label="کد تخفیف" value={form.code} onChange={(v) => setForm({ ...form, code: v })} required placeholder="مثال: SUMMER1403" />}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-gray-400 text-sm font-bold mb-1">نوع</label>
-              <select value={form.type} onChange={(e) => setForm({ ...form, type: e.target.value })} className="w-full bg-gray-900 border border-gray-800 rounded-2xl p-3 text-white text-sm focus:border-yellow-400 outline-none">
+              <label className="block text-[var(--text-dim)] text-sm font-bold mb-1">نوع</label>
+              <select value={form.type} onChange={(e) => setForm({ ...form, type: e.target.value })} className="w-full bg-[var(--bg-hover)] border border-[var(--border)] rounded-2xl p-3 text-[var(--text-body)] text-sm focus:border-yellow-400 outline-none">
                 <option value="percentage">درصدی</option>
                 <option value="fixed">مبلغ ثابت</option>
               </select>
@@ -179,16 +179,16 @@ function CouponModal({ editing, onSave, onClose }) {
           <Input label="تاریخ انقضا (اختیاری)" type="date" value={form.expiresAt ? form.expiresAt.slice(0, 10) : ""} onChange={(v) => setForm({ ...form, expiresAt: v })} />
           <Input label="توضیحات (اختیاری)" value={form.description} onChange={(v) => setForm({ ...form, description: v })} />
           <div className="flex items-center gap-4">
-            <label className="flex items-center gap-2 text-gray-400 text-sm font-bold cursor-pointer">
+            <label className="flex items-center gap-2 text-[var(--text-dim)] text-sm font-bold cursor-pointer">
               <input type="checkbox" checked={form.isActive} onChange={(e) => setForm({ ...form, isActive: e.target.checked })} className="accent-yellow-400" />
               فعال
             </label>
-            <label className="flex items-center gap-2 text-gray-400 text-sm font-bold cursor-pointer">
+            <label className="flex items-center gap-2 text-[var(--text-dim)] text-sm font-bold cursor-pointer">
               <input type="checkbox" checked={form.isGift} onChange={(e) => setForm({ ...form, isGift: e.target.checked })} className="accent-yellow-400" />
               کد هدیه
             </label>
           </div>
-          <button type="submit" className="w-full bg-yellow-400 text-black py-3 rounded-2xl font-black flex items-center justify-center gap-2 hover:bg-yellow-500 transition-all">
+          <button type="submit" className="w-full bg-yellow-400 text-[var(--text-body)] py-3 rounded-2xl font-black flex items-center justify-center gap-2 hover:bg-yellow-500 transition-all">
             <Save size={18} /> {editing ? "به‌روزرسانی" : "ایجاد کد"}
           </button>
         </form>
@@ -200,8 +200,8 @@ function CouponModal({ editing, onSave, onClose }) {
 function Input({ label, value, onChange, type = "text", required, placeholder }) {
   return (
     <div>
-      <label className="block text-gray-400 text-sm font-bold mb-1">{label}</label>
-      <input type={type} value={value} onChange={(e) => onChange(e.target.value)} required={required} placeholder={placeholder} className="w-full bg-gray-900 border border-gray-800 rounded-2xl p-3 text-white text-sm focus:border-yellow-400 outline-none" />
+      <label className="block text-[var(--text-dim)] text-sm font-bold mb-1">{label}</label>
+      <input type={type} value={value} onChange={(e) => onChange(e.target.value)} required={required} placeholder={placeholder} className="w-full bg-[var(--bg-hover)] border border-[var(--border)] rounded-2xl p-3 text-[var(--text-body)] text-sm focus:border-yellow-400 outline-none" />
     </div>
   );
 }

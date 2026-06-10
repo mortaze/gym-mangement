@@ -66,19 +66,19 @@ export default function CreateOwnerPage() {
           >
             <FaArrowLeft /> بازگشت به مالکان
           </Link>
-          <h2 className="text-2xl font-bold text-gray-800">ایجاد مالک جدید</h2>
+          <h2 className="text-2xl font-bold text-[var(--text-body)]">ایجاد مالک جدید</h2>
         </div>
 
         {/* استفاده از Tailwind CSS Grid برای نظم و ریسپانسیو بودن */}
         <form
           onSubmit={handleSubmit}
-          className="space-y-6 bg-white p-8 rounded-xl shadow-lg border border-gray-100" // تغییر رنگ پس‌زمینه و shadow برای ظاهر شیک‌تر
+          className="space-y-6 bg-[var(--bg-card)] p-8 rounded-xl shadow-lg border border-[var(--border)]" // تغییر رنگ پس‌زمینه و shadow برای ظاهر شیک‌تر
         >
           {/* بخش ۱: اطلاعات اصلی (تمام عرض) */}
           <div className="grid grid-cols-1 gap-5">
             {/* Name - تمام عرض در همه اندازه‌ها */}
             <div className="col-span-1">
-              <label className="mb-1 font-semibold text-gray-700 block">
+              <label className="mb-1 font-semibold text-[var(--text-body)] block">
                 نام کامل مالک <span className="text-red-500">*</span>
               </label>
               <input
@@ -86,20 +86,20 @@ export default function CreateOwnerPage() {
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                className="border border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-green-500 bg-gray-50 text-gray-800 transition duration-150"
+                className="border border-[var(--border)] rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-green-500 bg-[var(--bg-hover)] text-[var(--text-body)] transition duration-150"
                 required
               />
             </div>
           </div>
 
           {/* خط جداکننده برای نظم بیشتر */}
-          <hr className="border-gray-200" />
+          <hr className="border-[var(--border)]" />
 
           {/* بخش ۲: اطلاعات هویتی و سازمانی (۲ ستونی در دسکتاپ) */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {/* National ID */}
             <div>
-              <label className="mb-1 font-semibold text-gray-700 block">
+              <label className="mb-1 font-semibold text-[var(--text-body)] block">
                 کد ملی <span className="text-red-500">*</span>
               </label>
               <input
@@ -107,13 +107,13 @@ export default function CreateOwnerPage() {
                 name="nationalId"
                 value={formData.nationalId}
                 onChange={handleChange}
-                className="border border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-green-500 bg-gray-50 text-gray-800 transition duration-150"
+                className="border border-[var(--border)] rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-green-500 bg-[var(--bg-hover)] text-[var(--text-body)] transition duration-150"
               />
             </div>
 
             {/* Organization ID */}
             <div>
-              <label className="mb-1 font-semibold text-gray-700 block">
+              <label className="mb-1 font-semibold text-[var(--text-body)] block">
                 شناسه سازمانی <span className="text-red-500">*</span>
               </label>
               <input
@@ -121,18 +121,18 @@ export default function CreateOwnerPage() {
                 name="orgId"
                 value={formData.orgId}
                 onChange={handleChange}
-                className="border border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-green-500 bg-gray-50 text-gray-800 transition duration-150"
+                className="border border-[var(--border)] rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-green-500 bg-[var(--bg-hover)] text-[var(--text-body)] transition duration-150"
               />
             </div>
           </div>
 
-          <hr className="border-gray-200" />
+          <hr className="border-[var(--border)]" />
 
           {/* بخش ۳: اطلاعات تماس (۲ ستونی در دسکتاپ) */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {/* Email */}
             <div>
-              <label className="mb-1 font-semibold text-gray-700 block">
+              <label className="mb-1 font-semibold text-[var(--text-body)] block">
                 ایمیل <span className="text-red-500">*</span>
               </label>
               <input
@@ -140,13 +140,13 @@ export default function CreateOwnerPage() {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                className="border border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-green-500 bg-gray-50 text-gray-800 transition duration-150"
+                className="border border-[var(--border)] rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-green-500 bg-[var(--bg-hover)] text-[var(--text-body)] transition duration-150"
               />
             </div>
 
             {/* Phone */}
             <div>
-              <label className="mb-1 font-semibold text-gray-700 block">
+              <label className="mb-1 font-semibold text-[var(--text-body)] block">
                 شماره تماس <span className="text-red-500">*</span>
               </label>
               <input
@@ -154,25 +154,25 @@ export default function CreateOwnerPage() {
                 name="phone"
                 value={formData.phone}
                 onChange={handleChange}
-                className="border border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-green-500 bg-gray-50 text-gray-800 transition duration-150"
+                className="border border-[var(--border)] rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-green-500 bg-[var(--bg-hover)] text-[var(--text-body)] transition duration-150"
               />
             </div>
           </div>
 
-          <hr className="border-gray-200" />
+          <hr className="border-[var(--border)]" />
 
           {/* بخش ۴: اطلاعات دسته‌بندی و وضعیت (۲ ستونی در دسکتاپ) */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {/* Type */}
             <div>
-              <label className="mb-1 font-semibold text-gray-700 block">
+              <label className="mb-1 font-semibold text-[var(--text-body)] block">
                 نوع مالک <span className="text-red-500">*</span>
               </label>
               <select
                 name="type"
                 value={formData.type}
                 onChange={handleChange}
-                className="border border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-green-500 bg-gray-50 text-gray-800 transition duration-150 appearance-none" // appearance-none برای یکپارچگی ظاهر
+                className="border border-[var(--border)] rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-green-500 bg-[var(--bg-hover)] text-[var(--text-body)] transition duration-150 appearance-none" // appearance-none برای یکپارچگی ظاهر
               >
                 <option value="individual">شخصی</option>
                 <option value="organization">سازمانی</option>
@@ -181,14 +181,14 @@ export default function CreateOwnerPage() {
 
             {/* Status */}
             <div>
-              <label className="mb-1 font-semibold text-gray-700 block">
+              <label className="mb-1 font-semibold text-[var(--text-body)] block">
                 وضعیت <span className="text-red-500">*</span>
               </label>
               <select
                 name="status"
                 value={formData.status}
                 onChange={handleChange}
-                className="border border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-green-500 bg-gray-50 text-gray-800 transition duration-150 appearance-none"
+                className="border border-[var(--border)] rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-green-500 bg-[var(--bg-hover)] text-[var(--text-body)] transition duration-150 appearance-none"
               >
                 <option value="active">فعال</option>
                 <option value="inactive">غیرفعال</option>
@@ -197,13 +197,13 @@ export default function CreateOwnerPage() {
             </div>
           </div>
 
-          <hr className="border-gray-200" />
+          <hr className="border-[var(--border)]" />
 
           {/* بخش ۵: آدرس (تمام عرض) */}
           <div className="grid grid-cols-1 gap-5">
             {/* Address */}
             <div className="col-span-1">
-              <label className="mb-1 font-semibold text-gray-700 block">
+              <label className="mb-1 font-semibold text-[var(--text-body)] block">
                 آدرس <span className="text-red-500">*</span>
               </label>
               <input
@@ -211,23 +211,23 @@ export default function CreateOwnerPage() {
                 name="address"
                 value={formData.address}
                 onChange={handleChange}
-                className="border border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-green-500 bg-gray-50 text-gray-800 transition duration-150"
+                className="border border-[var(--border)] rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-green-500 bg-[var(--bg-hover)] text-[var(--text-body)] transition duration-150"
               />
             </div>
           </div>
 
-          <hr className="border-gray-200" />
+          <hr className="border-[var(--border)]" />
 
           {/* بخش ۶: عکس مالک (تمام عرض) */}
           <div className="grid grid-cols-1 gap-5">
             {/* Photo */}
             <div className="col-span-1">
-              <label className="mb-1 font-semibold text-gray-700 block">
+              <label className="mb-1 font-semibold text-[var(--text-body)] block">
                 عکس مالک <span className="text-red-500">*</span>
               </label>
-              <label className="flex items-center gap-3 border border-gray-300 rounded-lg p-3 cursor-pointer bg-gray-50 text-gray-700 hover:border-green-500 hover:ring-2 hover:ring-green-500 transition duration-150 w-full">
+              <label className="flex items-center gap-3 border border-[var(--border)] rounded-lg p-3 cursor-pointer bg-[var(--bg-hover)] text-[var(--text-body)] hover:border-green-500 hover:ring-2 hover:ring-green-500 transition duration-150 w-full">
                 <MdDriveFolderUpload size={24} className="text-green-600" />
-                <span className="text-gray-600">
+                <span className="text-[var(--text-muted)]">
                   {formData.photo
                     ? `فایل انتخاب شده: ${formData.photo.name}`
                     : "آپلود فایل (PNG, JPG)"}
@@ -242,13 +242,13 @@ export default function CreateOwnerPage() {
             </div>
           </div>
 
-          <hr className="border-gray-200" />
+          <hr className="border-[var(--border)]" />
 
           {/* بخش ۷: یادداشت‌ها (تمام عرض) */}
           <div className="grid grid-cols-1 gap-5">
             {/* Notes */}
             <div className="col-span-1">
-              <label className="mb-1 font-semibold text-gray-700 block">
+              <label className="mb-1 font-semibold text-[var(--text-body)] block">
                 یادداشت‌ها
               </label>
               <textarea
@@ -256,12 +256,12 @@ export default function CreateOwnerPage() {
                 value={formData.notes}
                 onChange={handleChange}
                 rows={4}
-                className="border border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-green-500 bg-gray-50 text-gray-800 resize-y transition duration-150"
+                className="border border-[var(--border)] rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-green-500 bg-[var(--bg-hover)] text-[var(--text-body)] resize-y transition duration-150"
               />
             </div>
           </div>
 
-          <hr className="border-gray-200" />
+          <hr className="border-[var(--border)]" />
 
           {/* دکمه ارسال */}
           <div className="pt-4 flex justify-end">

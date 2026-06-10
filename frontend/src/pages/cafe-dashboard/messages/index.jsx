@@ -15,14 +15,14 @@ export default function MessagesPage() {
   if (!user) {
     return (
       <DashboardLayout>
-        <div className="flex items-center justify-center py-24 text-gray-500 font-black">در حال بارگذاری...</div>
+        <div className="flex items-center justify-center py-24 text-[var(--text-muted)] font-black">در حال بارگذاری...</div>
       </DashboardLayout>
     );
   }
 
   return (
     <DashboardLayout>
-      <div className="p-4 md:p-8 min-h-screen bg-[#0f1115] rounded-[2.5rem]" dir="rtl">
+      <div className="p-4 md:p-8 min-h-screen bg-[var(--bg-body)] rounded-[2.5rem]" dir="rtl">
         <MessagingPanel currentUser={user} />
       </div>
     </DashboardLayout>

@@ -138,22 +138,22 @@ export default function EditMyProfilePage() {
   return (
     <DashboardLayout>
       <div
-        className="p-4 sm:p-8 min-h-screen bg-[#0f1115] rounded-[2.5rem] border border-gray-800 shadow-2xl"
+        className="p-4 sm:p-8 min-h-screen bg-[var(--bg-body)] rounded-[2.5rem] border border-[var(--border)] shadow-2xl"
         dir="rtl"
       >
         {/* Header */}
-        <div className="flex items-center gap-4 mb-10 pb-6 border-b border-gray-800">
+        <div className="flex items-center gap-4 mb-10 pb-6 border-b border-[var(--border)]">
           <Link
             href="/dashboard/profile"
-            className="p-3 bg-gray-800 text-yellow-400 hover:bg-yellow-400 hover:text-black transition-all rounded-xl"
+            className="p-3 bg-gray-800 text-yellow-400 hover:bg-yellow-400 hover:text-[var(--text-body)] transition-all rounded-xl"
           >
             <ArrowRight size={24} />
           </Link>
           <div>
-            <h2 className="text-3xl font-black text-white italic uppercase">
+            <h2 className="text-3xl font-black text-[var(--text-body)] italic uppercase">
               ویرایش <span className="text-yellow-400">پروفایل</span>
             </h2>
-            <p className="text-gray-500 text-[10px] tracking-[0.3em] uppercase">
+            <p className="text-[var(--text-muted)] text-[10px] tracking-[0.3em] uppercase">
               Edit My Profile
             </p>
           </div>
@@ -162,7 +162,7 @@ export default function EditMyProfilePage() {
         {/* Form */}
         <form
           onSubmit={handleSubmit}
-          className="max-w-4xl mx-auto bg-[#1a1d23] p-6 lg:p-10 rounded-3xl border border-gray-800 space-y-8"
+          className="max-w-4xl mx-auto bg-[var(--bg-card)] p-6 lg:p-10 rounded-3xl border border-[var(--border)] space-y-8"
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Name */}
@@ -190,12 +190,12 @@ export default function EditMyProfilePage() {
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
-                className="w-full bg-[#0f1115]  border border-gray-700 text-white rounded-2xl p-4 pl-12"
+                className="w-full bg-[var(--bg-body)]  border border-[var(--border)] text-[var(--text-body)] rounded-2xl p-4 pl-12"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute left-4 top-3/5 -translate-y-1/2 text-gray-500"
+                className="absolute left-4 top-3/5 -translate-y-1/2 text-[var(--text-muted)]"
               >
                 {showPassword ? <EyeOff /> : <Eye />}
               </button>
@@ -238,11 +238,11 @@ export default function EditMyProfilePage() {
 
           {/* تصویر پروفایل */}
           <div className="md:col-span-2 space-y-4">
-            <label className="flex items-center gap-2 text-gray-400 font-bold text-sm mr-2">
+            <label className="flex items-center gap-2 text-[var(--text-dim)] font-bold text-sm mr-2">
               <ImageIcon size={16} className="text-yellow-400" /> تصویر پروفایل
             </label>
-            <div className="flex flex-wrap items-center gap-6 p-4 bg-[#0f1115] border-2 border-dashed border-gray-700 rounded-3xl">
-              <label className="flex items-center justify-center gap-2 bg-yellow-400 hover:bg-yellow-500 text-black px-6 py-3 rounded-xl cursor-pointer transition-all font-black text-xs uppercase shadow-lg">
+            <div className="flex flex-wrap items-center gap-6 p-4 bg-[var(--bg-body)] border-2 border-dashed border-[var(--border)] rounded-3xl">
+              <label className="flex items-center justify-center gap-2 bg-yellow-400 hover:bg-yellow-500 text-[var(--text-body)] px-6 py-3 rounded-xl cursor-pointer transition-all font-black text-xs uppercase shadow-lg">
                 <UserPlus size={16} /> انتخاب فایل
                 <input
                   type="file"
@@ -253,13 +253,13 @@ export default function EditMyProfilePage() {
               </label>
 
               {previewNew ? (
-                <div className="flex items-center gap-3 bg-gray-800/50 p-2 rounded-2xl border border-gray-700">
+                <div className="flex items-center gap-3 bg-gray-800/50 p-2 rounded-2xl border border-[var(--border)]">
                   <img
                     src={previewNew}
                     alt="Preview"
                     className="w-16 h-16 object-cover rounded-xl border-2 border-yellow-400"
                   />
-                  <span className="text-xs text-gray-300 max-w-[150px] truncate">
+                  <span className="text-xs text-[var(--text-dim)] max-w-[150px] truncate">
                     {formData.profileImage.name}
                   </span>
                 </div>
@@ -267,10 +267,10 @@ export default function EditMyProfilePage() {
                 <img
                   src={previewOld}
                   alt="Old Preview"
-                  className="w-24 h-24 object-cover rounded-xl border border-gray-700"
+                  className="w-24 h-24 object-cover rounded-xl border border-[var(--border)]"
                 />
               ) : (
-                <span className="text-gray-500 text-xs italic">
+                <span className="text-[var(--text-muted)] text-xs italic">
                   عکسی انتخاب نشده است (فرمت های مجاز: JPG, PNG)
                 </span>
               )}
@@ -281,7 +281,7 @@ export default function EditMyProfilePage() {
           <button
             type="submit"
             disabled={isUpdating}
-            className="w-full bg-yellow-400 hover:bg-yellow-500 text-black py-5 rounded-2xl font-black text-lg"
+            className="w-full bg-yellow-400 hover:bg-yellow-500 text-[var(--text-body)] py-5 rounded-2xl font-black text-lg"
           >
             ذخیره تغییرات
           </button>
@@ -295,7 +295,7 @@ export default function EditMyProfilePage() {
 
 function Label({ icon: Icon, text }) {
   return (
-    <label className="flex items-center gap-2 text-gray-400 font-bold text-sm">
+    <label className="flex items-center gap-2 text-[var(--text-dim)] font-bold text-sm">
       <Icon size={16} className="text-yellow-400" />
       {text}
     </label>
@@ -321,10 +321,10 @@ function Input({
         value={value}
         onChange={onChange}
         disabled={disabled}
-        className={`w-full p-4 rounded-2xl bg-[#0f1115] border ${
+        className={`w-full p-4 rounded-2xl bg-[var(--bg-body)] border ${
           disabled
-            ? "border-gray-800 text-gray-500 cursor-not-allowed"
-            : "border-gray-700 text-white"
+            ? "border-[var(--border)] text-[var(--text-muted)] cursor-not-allowed"
+            : "border-[var(--border)] text-[var(--text-body)]"
         }`}
         {...props}
       />

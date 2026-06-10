@@ -28,8 +28,8 @@ const UserCard = ({ user, index, handleDelete }) => {
   const isActive = user.status === "active";
 
   return (
-    <div className="bg-[#1a1d23] p-5 rounded-2xl border border-gray-800 hover:border-yellow-400/50 transition-all duration-300 shadow-xl group">
-      <div className="flex justify-between items-start mb-4 border-b border-gray-800 pb-4">
+    <div className="bg-[var(--bg-card)] p-5 rounded-2xl border border-[var(--border)] hover:border-yellow-400/50 transition-all duration-300 shadow-xl group">
+      <div className="flex justify-between items-start mb-4 border-b border-[var(--border)] pb-4">
         <div className="flex items-center gap-4">
           <div className="relative">
             {user.profileImage ? (
@@ -39,7 +39,7 @@ const UserCard = ({ user, index, handleDelete }) => {
                 className="w-14 h-14 object-cover rounded-xl border-2 border-yellow-400"
               />
             ) : (
-              <div className="w-14 h-14 flex items-center justify-center bg-gray-800 text-yellow-400 rounded-xl border-2 border-gray-700 text-xl font-black">
+              <div className="w-14 h-14 flex items-center justify-center bg-gray-800 text-yellow-400 rounded-xl border-2 border-[var(--border)] text-xl font-black">
                 {user.name.charAt(0)}
               </div>
             )}
@@ -50,24 +50,24 @@ const UserCard = ({ user, index, handleDelete }) => {
             ></div>
           </div>
           <div>
-            <p className="font-black text-white group-hover:text-yellow-400 transition-colors">
+            <p className="font-black text-[var(--text-body)] group-hover:text-yellow-400 transition-colors">
               {user.name}
             </p>
-            <p className="text-[11px] text-gray-500 uppercase tracking-wider">
+            <p className="text-[11px] text-[var(--text-muted)] uppercase tracking-wider">
               ID: {user.employeeCode} | {user.role.name}
             </p>
           </div>
         </div>
         <span
           className={`px-3 py-1 rounded-lg text-[10px] font-bold uppercase tracking-tighter ${
-            isActive ? "bg-yellow-400 text-black" : "bg-gray-700 text-gray-300"
+            isActive ? "bg-yellow-400 text-[var(--text-body)]" : "bg-gray-700 text-[var(--text-dim)]"
           }`}
         >
           {isActive ? "Active" : "Inactive"}
         </span>
       </div>
 
-      <div className="space-y-3 text-[13px] text-gray-400">
+      <div className="space-y-3 text-[13px] text-[var(--text-dim)]">
         <div className="flex items-center gap-2">
           <Phone size={14} className="text-yellow-400" />
           <span>{user.contactNumber || "بدون شماره"}</span>
@@ -76,8 +76,8 @@ const UserCard = ({ user, index, handleDelete }) => {
           <MapPin size={14} className="text-yellow-400" />
           <span className="truncate">{user.address || "بدون آدرس"}</span>
         </div>
-        <div className="flex items-center gap-2 border-t border-gray-800/50 pt-2 mt-2">
-          <Calendar size={14} className="text-gray-500" />
+        <div className="flex items-center gap-2 border-t border-[var(--border)]/50 pt-2 mt-2">
+          <Calendar size={14} className="text-[var(--text-muted)]" />
           <span className="text-[11px]">
             آخرین تغییر رمز:{" "}
             {user.passwordChangedAt
@@ -90,13 +90,13 @@ const UserCard = ({ user, index, handleDelete }) => {
       <div className="flex justify-end gap-2 mt-5">
         <Link
           href={`/manager-dashboard/users/${user._id}/edit`}
-          className="flex-1 flex items-center justify-center gap-2 bg-gray-800 hover:bg-gray-700 text-white p-2 rounded-lg text-xs transition-all font-bold"
+          className="flex-1 flex items-center justify-center gap-2 bg-gray-800 hover:bg-gray-700 text-[var(--text-body)] p-2 rounded-lg text-xs transition-all font-bold"
         >
           <Edit3 size={14} /> ویرایش
         </Link>
         <button
           onClick={() => handleDelete(user._id)}
-          className="flex-1 flex items-center justify-center gap-2 bg-red-900/20 hover:bg-red-600 text-red-500 hover:text-white p-2 rounded-lg text-xs transition-all font-bold border border-red-900/50"
+          className="flex-1 flex items-center justify-center gap-2 bg-red-900/20 hover:bg-red-600 text-red-500 hover:text-[var(--text-body)] p-2 rounded-lg text-xs transition-all font-bold border border-red-900/50"
         >
           <Trash2 size={14} /> حذف
         </button>
@@ -166,21 +166,21 @@ export default function UsersPage() {
 
   return (
     <DashboardLayout>
-      <div className="p-4 sm:p-8 min-h-screen bg-[#0f1115] rounded-[2.5rem] border border-gray-800 shadow-2xl">
+      <div className="p-4 sm:p-8 min-h-screen bg-[var(--bg-body)] rounded-[2.5rem] border border-[var(--border)] shadow-2xl">
         {/* Header - Falah Gym Style */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-10">
           <div className="flex items-center gap-4">
             <Link
               href="/dashboard"
-              className="p-3 bg-gray-800 text-yellow-400 hover:bg-yellow-400 hover:text-black transition-all rounded-xl shadow-lg"
+              className="p-3 bg-gray-800 text-yellow-400 hover:bg-yellow-400 hover:text-[var(--text-body)] transition-all rounded-xl shadow-lg"
             >
               <ArrowRight size={24} />
             </Link>
             <div>
-              <h2 className="text-3xl font-black text-white italic tracking-tighter uppercase">
+              <h2 className="text-3xl font-black text-[var(--text-body)] italic tracking-tighter uppercase">
                 مدیریت <span className="text-yellow-400">ورزشکاران</span>
               </h2>
-              <p className="text-gray-500 text-xs mt-1 uppercase tracking-widest">
+              <p className="text-[var(--text-muted)] text-xs mt-1 uppercase tracking-widest">
                 User Management System
               </p>
             </div>
@@ -188,7 +188,7 @@ export default function UsersPage() {
 
           <Link
             href="/manager-dashboard/users/create"
-            className="w-full md:w-auto flex items-center justify-center gap-2 bg-yellow-400 hover:bg-yellow-500 text-black px-6 py-4 rounded-2xl text-sm font-black transition-all shadow-[0_10px_20px_rgba(250,204,21,0.2)] active:scale-95"
+            className="w-full md:w-auto flex items-center justify-center gap-2 bg-yellow-400 hover:bg-yellow-500 text-[var(--text-body)] px-6 py-4 rounded-2xl text-sm font-black transition-all shadow-[0_10px_20px_rgba(250,204,21,0.2)] active:scale-95"
           >
             <UserPlus size={18} /> افزودن جدید
           </Link>
@@ -201,19 +201,19 @@ export default function UsersPage() {
             placeholder="جستجو بر اساس نام، کد عضویت یا مشخصات..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full bg-[#1a1d23] border border-gray-800 text-white rounded-2xl p-4 pr-12 focus:outline-none focus:border-yellow-400 focus:ring-4 focus:ring-yellow-400/10 transition-all shadow-inner"
+            className="w-full bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-body)] rounded-2xl p-4 pr-12 focus:outline-none focus:border-yellow-400 focus:ring-4 focus:ring-yellow-400/10 transition-all shadow-inner"
           />
           <Search
-            className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-yellow-400 transition-colors"
+            className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--text-muted)] group-focus-within:text-yellow-400 transition-colors"
             size={20}
           />
         </div>
 
         {/* Desktop Table - Falah Gym Style */}
-        <div className="hidden lg:block overflow-hidden bg-[#1a1d23] rounded-3xl border border-gray-800 shadow-2xl">
+        <div className="hidden lg:block overflow-hidden bg-[var(--bg-card)] rounded-3xl border border-[var(--border)] shadow-2xl">
           <table className="w-full text-right">
             <thead>
-              <tr className="bg-gray-800/50 text-gray-400 text-[11px] uppercase tracking-[0.2em] border-b border-gray-700">
+              <tr className="bg-gray-800/50 text-[var(--text-dim)] text-[11px] uppercase tracking-[0.2em] border-b border-[var(--border)]">
                 <th className="py-5 px-6 font-black">رتبه</th>
                 <th className="py-5 px-6 font-black">ورزشکار</th>
                 <th className="py-5 px-6 font-black">کد عضویت</th>
@@ -229,7 +229,7 @@ export default function UsersPage() {
                 <tr>
                   <td
                     colSpan="7"
-                    className="text-center py-20 text-gray-600 font-bold italic text-xl"
+                    className="text-center py-20 text-[var(--text-muted)] font-bold italic text-xl"
                   >
                     ⚠️ هیچ ورزشکاری در این لیست یافت نشد
                   </td>
@@ -240,7 +240,7 @@ export default function UsersPage() {
                     key={user._id}
                     className="hover:bg-yellow-400/5 transition-colors group"
                   >
-                    <td className="py-4 px-6 font-mono text-gray-500 text-xs">
+                    <td className="py-4 px-6 font-mono text-[var(--text-muted)] text-xs">
                       {(index + 1).toString().padStart(2, "0")}
                     </td>
                     <td className="py-4 px-6">
@@ -248,32 +248,32 @@ export default function UsersPage() {
                         {user.profileImage ? (
                           <img
                             src={user.profileImage}
-                            className="w-10 h-10 rounded-lg object-cover border border-gray-700"
+                            className="w-10 h-10 rounded-lg object-cover border border-[var(--border)]"
                             alt=""
                           />
                         ) : (
-                          <div className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center text-yellow-400 font-bold text-xs border border-gray-700">
+                          <div className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center text-yellow-400 font-bold text-xs border border-[var(--border)]">
                             {user.name.charAt(0)}
                           </div>
                         )}
-                        <span className="font-bold text-gray-200 group-hover:text-white">
+                        <span className="font-bold text-[var(--text-body)] group-hover:text-[var(--text-body)]">
                           {user.name}
                         </span>
                       </div>
                     </td>
-                    <td className="py-4 px-6 text-gray-400 font-mono text-[12px]">
+                    <td className="py-4 px-6 text-[var(--text-dim)] font-mono text-[12px]">
                       {user.employeeCode}
                     </td>
-                    <td className="py-4 px-6 text-gray-400 text-[12px]">
+                    <td className="py-4 px-6 text-[var(--text-dim)] text-[12px]">
                       {user.contactNumber || "---"}
                     </td>
                     <td className="py-4 px-6">
-                      <span className="flex items-center gap-1.5 text-xs text-gray-300 bg-gray-800 px-2 py-1 rounded-md w-fit">
+                      <span className="flex items-center gap-1.5 text-xs text-[var(--text-dim)] bg-gray-800 px-2 py-1 rounded-md w-fit">
                         <ShieldCheck size={12} className="text-blue-400" />{" "}
                         {user.role}
                       </span>
                     </td>
-                    <td className="py-4 px-6 text-gray-400 font-mono text-[12px]">
+                    <td className="py-4 px-6 text-[var(--text-dim)] font-mono text-[12px]">
                       {user.createdAt
                         ? moment(user.createdAt).format("jYYYY/jMM/jDD")
                         : "-"}
@@ -292,13 +292,13 @@ export default function UsersPage() {
                       <div className="flex justify-center gap-2">
                         <Link
                           href={`/manager-dashboard/users/${user._id}/edit`}
-                          className="p-2 bg-gray-800 text-gray-400 hover:text-yellow-400 hover:bg-gray-700 rounded-lg transition-all"
+                          className="p-2 bg-gray-800 text-[var(--text-dim)] hover:text-yellow-400 hover:bg-gray-700 rounded-lg transition-all"
                         >
                           <Edit3 size={16} />
                         </Link>
                         <button
                           onClick={() => handleDelete(user._id)}
-                          className="p-2 bg-gray-800 text-gray-400 hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-all"
+                          className="p-2 bg-gray-800 text-[var(--text-dim)] hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-all"
                         >
                           <Trash2 size={16} />
                         </button>

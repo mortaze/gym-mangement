@@ -107,18 +107,18 @@ export default function TrainingRequestShowPage() {
   };
 
   if (loading) {
-    return <DashboardLayout><div className="rounded-3xl bg-black p-10 text-yellow-400">در حال بارگذاری...</div></DashboardLayout>;
+    return <DashboardLayout><div className="rounded-3xl bg-[var(--bg-overlay)] p-10 text-yellow-400">در حال بارگذاری...</div></DashboardLayout>;
   }
 
   return (
     <DashboardLayout>
-      <div className="min-h-screen rounded-[2rem] bg-[#0f1115] p-4 text-right md:p-8" dir="rtl">
+      <div className="min-h-screen rounded-[2rem] bg-[var(--bg-body)] p-4 text-right md:p-8" dir="rtl">
         <div className="mb-6 flex flex-col justify-between gap-4 md:flex-row md:items-center">
           <div>
-            <h1 className="text-2xl font-black text-white md:text-3xl">صدور برنامه حرفه‌ای</h1>
-            <p className="mt-2 text-xs font-bold text-gray-500">هیچ JSON خامی به کاربر نمایش داده نمی‌شود؛ برنامه‌ها در کارت‌های ساختاریافته ذخیره و نمایش داده می‌شوند.</p>
+            <h1 className="text-2xl font-black text-[var(--text-body)] md:text-3xl">صدور برنامه حرفه‌ای</h1>
+            <p className="mt-2 text-xs font-bold text-[var(--text-muted)]">هیچ JSON خامی به کاربر نمایش داده نمی‌شود؛ برنامه‌ها در کارت‌های ساختاریافته ذخیره و نمایش داده می‌شوند.</p>
           </div>
-          <button onClick={() => router.back()} className="flex w-fit items-center gap-2 rounded-2xl border border-gray-700 px-4 py-3 text-sm font-black text-gray-300 hover:border-yellow-400 hover:text-yellow-400"><ArrowRight size={18} /> بازگشت</button>
+          <button onClick={() => router.back()} className="flex w-fit items-center gap-2 rounded-2xl border border-[var(--border)] px-4 py-3 text-sm font-black text-[var(--text-dim)] hover:border-yellow-400 hover:text-yellow-400"><ArrowRight size={18} /> بازگشت</button>
         </div>
 
         <section className="mb-6 grid grid-cols-1 gap-4 lg:grid-cols-3">
@@ -127,8 +127,8 @@ export default function TrainingRequestShowPage() {
           <InfoCard title="وضعیت درخواست" value={form.status} hint="قابل تغییر توسط مربی" />
         </section>
 
-        <section className="mb-6 rounded-[2rem] border border-gray-800 bg-[#1a1d23] p-5">
-          <h2 className="mb-4 flex items-center gap-2 text-xl font-black text-white"><Activity className="text-yellow-400" /> جزئیات درخواست</h2>
+        <section className="mb-6 rounded-[2rem] border border-[var(--border)] bg-[var(--bg-card)] p-5">
+          <h2 className="mb-4 flex items-center gap-2 text-xl font-black text-[var(--text-body)]"><Activity className="text-yellow-400" /> جزئیات درخواست</h2>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
             <Readonly label="قد" value={request?.height ? `${request.height} سانتی‌متر` : "—"} />
             <Readonly label="وزن" value={request?.weight ? `${request.weight} کیلوگرم` : "—"} />
@@ -140,14 +140,14 @@ export default function TrainingRequestShowPage() {
             <Textarea label="یادداشت مربی" value={form.trainerNotes} onChange={(v) => onChange("trainerNotes", v)} />
           </div>
           <div className="mt-4 flex gap-3 overflow-x-auto">
-            {(request?.photos || []).map((p, idx) => <button key={idx} onClick={() => setPreviewPhoto(resolvePhotoUrl(p))} className="h-24 w-24 shrink-0 overflow-hidden rounded-2xl border border-gray-700"><img src={resolvePhotoUrl(p)} alt={`photo-${idx}`} className="h-full w-full object-cover" /></button>)}
+            {(request?.photos || []).map((p, idx) => <button key={idx} onClick={() => setPreviewPhoto(resolvePhotoUrl(p))} className="h-24 w-24 shrink-0 overflow-hidden rounded-2xl border border-[var(--border)]"><img src={resolvePhotoUrl(p)} alt={`photo-${idx}`} className="h-full w-full object-cover" /></button>)}
           </div>
         </section>
 
-        <section className="mb-6 rounded-[2rem] border border-gray-800 bg-[#1a1d23] p-5">
+        <section className="mb-6 rounded-[2rem] border border-[var(--border)] bg-[var(--bg-card)] p-5">
           <div className="mb-4 flex flex-col justify-between gap-3 md:flex-row md:items-center">
-            <h2 className="flex items-center gap-2 text-xl font-black text-white"><Dumbbell className="text-yellow-400" /> برنامه تمرینی روزانه</h2>
-            <button onClick={() => setExercises((prev) => [...prev, emptyExercise()])} className="flex w-fit items-center gap-2 rounded-xl bg-yellow-400 px-4 py-2 text-xs font-black text-black"><Plus size={16} /> افزودن حرکت</button>
+            <h2 className="flex items-center gap-2 text-xl font-black text-[var(--text-body)]"><Dumbbell className="text-yellow-400" /> برنامه تمرینی روزانه</h2>
+            <button onClick={() => setExercises((prev) => [...prev, emptyExercise()])} className="flex w-fit items-center gap-2 rounded-xl bg-yellow-400 px-4 py-2 text-xs font-black text-[var(--text-body)]"><Plus size={16} /> افزودن حرکت</button>
           </div>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <Input label="عنوان برنامه" value={form.title} onChange={(v) => onChange("title", v)} />
@@ -155,7 +155,7 @@ export default function TrainingRequestShowPage() {
           </div>
           <div className="mt-4 space-y-4">
             {exercises.map((exercise, index) => (
-              <div key={index} className="rounded-2xl border border-gray-800 bg-[#10131a] p-4">
+              <div key={index} className="rounded-2xl border border-[var(--border)] bg-[var(--bg-card)] p-4">
                 <div className="mb-3 flex items-center justify-between"><span className="font-black text-yellow-400">حرکت {index + 1}</span><button onClick={() => removeExercise(index)} className="text-red-400"><Trash2 size={18} /></button></div>
                 <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
                   <Input label="نام روز" value={exercise.day} onChange={(v) => updateExercise(index, "day", v)} placeholder="مثال: شنبه" />
@@ -170,16 +170,16 @@ export default function TrainingRequestShowPage() {
           </div>
         </section>
 
-        <section className="mb-6 rounded-[2rem] border border-gray-800 bg-[#1a1d23] p-5">
-          <h2 className="mb-4 flex items-center gap-2 text-xl font-black text-white"><Utensils className="text-yellow-400" /> برنامه غذایی</h2>
+        <section className="mb-6 rounded-[2rem] border border-[var(--border)] bg-[var(--bg-card)] p-5">
+          <h2 className="mb-4 flex items-center gap-2 text-xl font-black text-[var(--text-body)]"><Utensils className="text-yellow-400" /> برنامه غذایی</h2>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             {Object.entries(mealLabels).map(([key, label]) => <Textarea key={key} label={label} value={meals[key]} onChange={(v) => updateMeal(key, v)} />)}
           </div>
         </section>
 
-        <section className="mb-6 rounded-[2rem] border border-gray-800 bg-[#1a1d23] p-5">
-          <label className="mb-2 block text-xs font-black text-gray-500">وضعیت</label>
-          <select value={form.status} onChange={(e) => onChange("status", e.target.value)} className="w-full rounded-xl bg-gray-800 p-3 font-bold text-white">
+        <section className="mb-6 rounded-[2rem] border border-[var(--border)] bg-[var(--bg-card)] p-5">
+          <label className="mb-2 block text-xs font-black text-[var(--text-muted)]">وضعیت</label>
+          <select value={form.status} onChange={(e) => onChange("status", e.target.value)} className="w-full rounded-xl bg-gray-800 p-3 font-bold text-[var(--text-body)]">
             <option value="pending">در انتظار صدور</option>
             <option value="in_progress">در انتظار صدور</option>
             <option value="approved">تأیید شده</option>
@@ -187,14 +187,14 @@ export default function TrainingRequestShowPage() {
           </select>
         </section>
 
-        <button onClick={onSave} disabled={saving} className="w-full rounded-2xl bg-yellow-400 py-4 font-black text-black disabled:opacity-60 md:w-auto md:px-10">{saving ? "در حال ذخیره..." : "ثبت نهایی برنامه"}</button>
+        <button onClick={onSave} disabled={saving} className="w-full rounded-2xl bg-yellow-400 py-4 font-black text-[var(--text-body)] disabled:opacity-60 md:w-auto md:px-10">{saving ? "در حال ذخیره..." : "ثبت نهایی برنامه"}</button>
       </div>
-      {previewPhoto && <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4" onClick={() => setPreviewPhoto(null)}><img src={previewPhoto} alt="preview" className="max-h-[90vh] rounded-2xl" /></div>}
+      {previewPhoto && <div className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--bg-overlay)]/80 p-4" onClick={() => setPreviewPhoto(null)}><img src={previewPhoto} alt="preview" className="max-h-[90vh] rounded-2xl" /></div>}
     </DashboardLayout>
   );
 }
 
-function InfoCard({ title, value, hint }) { return <div className="rounded-2xl border border-gray-800 bg-[#1a1d23] p-5"><p className="text-xs font-black text-gray-500">{title}</p><h3 className="mt-2 text-xl font-black text-white">{value}</h3><p className="mt-1 text-xs font-bold text-gray-500">{hint}</p></div>; }
-function Readonly({ label, value }) { return <div className="rounded-xl bg-gray-900 p-3"><p className="text-[11px] font-black text-gray-500">{label}</p><p className="mt-1 text-sm font-bold text-white">{value}</p></div>; }
-function Input({ label, value, onChange, type = "text", placeholder = "" }) { return <div><label className="mb-1 block text-xs font-black text-gray-500">{label}</label><input type={type} value={value ?? ""} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} className="w-full rounded-xl bg-gray-800 p-3 font-bold text-white outline-none focus:ring-2 focus:ring-yellow-400" /></div>; }
-function Textarea({ label, value, onChange, disabled = false }) { return <div><label className="mb-1 block text-xs font-black text-gray-500">{label}</label><textarea value={value ?? ""} disabled={disabled} onChange={(e) => onChange(e.target.value)} className="min-h-[110px] w-full rounded-xl bg-gray-800 p-3 font-bold text-white outline-none focus:ring-2 focus:ring-yellow-400 disabled:text-gray-400" /></div>; }
+function InfoCard({ title, value, hint }) { return <div className="rounded-2xl border border-[var(--border)] bg-[var(--bg-card)] p-5"><p className="text-xs font-black text-[var(--text-muted)]">{title}</p><h3 className="mt-2 text-xl font-black text-[var(--text-body)]">{value}</h3><p className="mt-1 text-xs font-bold text-[var(--text-muted)]">{hint}</p></div>; }
+function Readonly({ label, value }) { return <div className="rounded-xl bg-[var(--bg-hover)] p-3"><p className="text-[11px] font-black text-[var(--text-muted)]">{label}</p><p className="mt-1 text-sm font-bold text-[var(--text-body)]">{value}</p></div>; }
+function Input({ label, value, onChange, type = "text", placeholder = "" }) { return <div><label className="mb-1 block text-xs font-black text-[var(--text-muted)]">{label}</label><input type={type} value={value ?? ""} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} className="w-full rounded-xl bg-gray-800 p-3 font-bold text-[var(--text-body)] outline-none focus:ring-2 focus:ring-yellow-400" /></div>; }
+function Textarea({ label, value, onChange, disabled = false }) { return <div><label className="mb-1 block text-xs font-black text-[var(--text-muted)]">{label}</label><textarea value={value ?? ""} disabled={disabled} onChange={(e) => onChange(e.target.value)} className="min-h-[110px] w-full rounded-xl bg-gray-800 p-3 font-bold text-[var(--text-body)] outline-none focus:ring-2 focus:ring-yellow-400 disabled:text-[var(--text-dim)]" /></div>; }

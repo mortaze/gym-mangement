@@ -17,6 +17,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 import { API_BASE_URL, API_ORIGIN } from "@/config/api";
+import ThemeToggle from "@/components/ThemeToggle";
 
 /**
  * Header component:
@@ -160,7 +161,7 @@ export default function Header({ onOpenSidebar }) {
   const isActive = displayUser.status === "active" || true; // اگر سرور وضعیت نداد، فرض کن فعال
 
   return (
-    <header className="flex items-center justify-between px-6 mb-3 py-4 bg-[#1a1d23]/50 backdrop-blur-md border border-gray-800 rounded-[2rem] sticky top-4 z-50 shadow-2xl transition-all duration-500 hover:border-yellow-400/30">
+    <header className="flex items-center justify-between px-6 mb-3 py-4 bg-[var(--bg-header)] backdrop-blur-md border border-[var(--border)] rounded-[2rem] sticky top-4 z-50 shadow-2xl transition-all duration-500 hover:border-yellow-400/30">
       {/* سمت چپ: کنترل موبایل و تایتل سیستم */}
       <div className="flex items-center gap-4">
         <button
@@ -172,12 +173,12 @@ export default function Header({ onOpenSidebar }) {
         </button>
 
         <div className="flex flex-col">
-          <h2 className="text-white text-xs font-black uppercase tracking-[0.3em] opacity-50 leading-none">
+          <h2 className="text-[var(--text-muted)] text-xs font-black uppercase tracking-[0.3em] opacity-50 leading-none">
             Command Center
           </h2>
           <div className="flex items-center gap-2 mt-1">
             <span className="hidden md:block text-xl font-black italic text-white uppercase tracking-tighter">
-              پنل <span className="text-yellow-400">مدیریت کافه</span>
+              پنل <span className="text-yellow-400">مدیریت {displayRole}</span>
             </span>
           </div>
         </div>
@@ -185,26 +186,19 @@ export default function Header({ onOpenSidebar }) {
 
       {/* سمت راست: نوتیفیکیشن و پروفایل */}
       <div className="flex items-center gap-4 lg:gap-8">
-        {/* نوتیفیکیشن‌های سیستمی */}
-        <div className="relative hidden sm:block">
-          <button className="p-3 bg-gray-800/50 text-gray-400 hover:text-yellow-400 hover:bg-gray-800 rounded-2xl transition-all relative group">
-            <Bell size={20} />
-            <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full animate-ping"></span>
-            <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full"></span>
-          </button>
-        </div>
+        <ThemeToggle />
 
         {/* بخش پروفایل */}
         <div ref={profileRef} className="relative">
           <div
-            className="flex items-center gap-4 p-1 pr-4 bg-gray-900/80 border border-gray-800 rounded-full cursor-pointer hover:border-yellow-400/50 transition-all group shadow-lg"
+            className="flex items-center gap-4 p-1 pr-4 bg-gray-900/80 border border-[var(--border)] rounded-full cursor-pointer hover:border-yellow-400/50 transition-all group shadow-lg"
             onClick={() => setShowProfileInfo((s) => !s)}
           >
             <div className="flex flex-col text-right hidden lg:flex">
               <span className="text-white font-black italic text-sm tracking-tight group-hover:text-yellow-400 transition-colors">
                 {loading ? "در حال بارگذاری..." : displayName}
               </span>
-              <span className="text-[9px] text-gray-500 uppercase font-black tracking-widest flex items-center gap-1 justify-end">
+              <span className="text-[9px] text-[var(--text-muted)] uppercase font-black tracking-widest flex items-center gap-1 justify-end">
                 {displayRole}{" "}
                 <ShieldCheck size={10} className="text-yellow-400" />
               </span>
@@ -237,7 +231,7 @@ export default function Header({ onOpenSidebar }) {
 
             <ChevronDown
               size={14}
-              className={`text-gray-500 transition-transform duration-300 ${
+              className={`text-[var(--text-muted)] transition-transform duration-300 ${
                 showProfileInfo ? "rotate-180" : ""
               }`}
             />
@@ -245,14 +239,14 @@ export default function Header({ onOpenSidebar }) {
 
           {/* دراپ‌دان منو */}
           {showProfileInfo && (
-            <div className="absolute left-0 lg:right-0 mt-4 bg-[#1a1d23] border border-gray-800 p-2 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] w-56 animate-in fade-in zoom-in duration-200 z-50">
-              <div className="p-3 border-b border-gray-800 mb-2">
-                <p className="text-gray-500 text-[9px] uppercase font-black tracking-widest mb-1">
+            <div className="absolute left-0 lg:right-0 mt-4 bg-[var(--bg-card)] border border-[var(--border)] p-2 rounded-2xl shadow-[var(--shadow)] w-56 animate-in fade-in zoom-in duration-200 z-50">
+              <div className="p-3 border-b border-[var(--border)] mb-2">
+                <p className="text-[var(--text-muted)] text-[9px] uppercase font-black tracking-widest mb-1">
                   وضعیت عملیاتی
                 </p>
                 <div className="flex items-center gap-2 text-sm">
                   <span
-                    className={`${isActive ? "text-green-400" : "text-gray-400"} font-bold uppercase italic`}
+                    className={`${isActive ? "text-green-400" : "text-[var(--text-dim)]"} font-bold uppercase italic`}
                   >
                     {isActive ? "فعال" : "غیرفعال"}
                   </span>
@@ -262,8 +256,16 @@ export default function Header({ onOpenSidebar }) {
                 </div>
               </div>
 
+              <div className="flex items-center justify-between px-3 py-2 border-b border-[var(--border)] mb-2">
+                <ThemeToggle compact />
+                <button className="relative p-2 rounded-xl text-[var(--text-dim)] hover:text-yellow-400 hover:bg-gray-800/50 transition-all">
+                  <Bell size={16} />
+                  <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
+                </button>
+              </div>
+
               <div className="space-y-1 text-right">
-                <button className="w-full flex items-center justify-end gap-3 p-3 text-gray-400 hover:bg-yellow-400 hover:text-black rounded-xl transition-all text-sm font-bold italic">
+                <button className="w-full flex items-center justify-end gap-3 p-3 text-[var(--text-dim)] hover:bg-yellow-400 hover:text-black rounded-xl transition-all text-sm font-bold italic">
                   تنظیمات امنیتی <Settings size={16} />
                 </button>
 
@@ -274,15 +276,15 @@ export default function Header({ onOpenSidebar }) {
                   خروج از حساب <LogOut size={16} />
                 </button>
 
-                <div className="pt-2 border-t border-gray-800">
-                  <p className="text-[11px] text-gray-500">
+                <div className="pt-2 border-t border-[var(--border)]">
+                  <p className="text-[11px] text-[var(--text-muted)]">
                     ایمیل:
                     <span className="text-white text-[11px] font-bold">
                       {" "}
                       {displayEmail}
                     </span>
                   </p>
-                  <p className="text-[11px] text-gray-500 mt-1">
+                  <p className="text-[11px] text-[var(--text-muted)] mt-1">
                     کد عضویت:
                     <span className="text-white text-[11px] font-bold">
                       {" "}
