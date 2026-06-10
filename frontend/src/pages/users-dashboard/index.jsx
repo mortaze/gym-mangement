@@ -1,7 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import React, { useEffect, useMemo, useState } from "react";
-import { Activity, Bell, CalendarDays, CheckCircle2, CreditCard, Dumbbell, HeartPulse, ShieldAlert, Target, Timer } from "lucide-react";
+import { Activity, Bell, CalendarDays, CheckCircle2, CreditCard, Dumbbell, HeartPulse, ShieldAlert, Target, Timer, UserRound } from "lucide-react";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, RadialBarChart, RadialBar } from "recharts";
 import DashboardLayout from "./layout";
 import { API_BASE_URL } from "@/config/api";
@@ -33,6 +34,7 @@ export default function UserMainDashboard() {
   const [programs, setPrograms] = useState({ trainingPrograms: [], nutritionPrograms: [] });
   const [activities, setActivities] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
+  const [unreadCount, setUnreadCount] = useState(0);
 
   useEffect(() => {
     const raw = typeof window !== "undefined" ? sessionStorage.getItem("currentUser") : null;
@@ -42,14 +44,15 @@ export default function UserMainDashboard() {
 
     const load = async () => {
       try {
-        const [userRes, summaryRes, programsRes, activitiesRes] = await Promise.all([
+        const [userRes, summaryRes, programsRes, activitiesRes, notifRes] = await Promise.all([
           fetch(`${API_BASE_URL}/users/${user._id}`),
           fetch(`${API_BASE_URL}/memberships/summary?userId=${user._id}`),
           fetch(`${API_BASE_URL}/programs/user/${user._id}`),
           fetch(`${API_BASE_URL}/users/${user._id}/activities`),
+          fetch(`${API_BASE_URL}/notifications/unread-count/${user._id}`),
         ]);
-        const [userJson, summaryJson, programsJson, activitiesJson] = await Promise.all([
-          userRes.json(), summaryRes.json(), programsRes.json(), activitiesRes.json(),
+        const [userJson, summaryJson, programsJson, activitiesJson, notifJson] = await Promise.all([
+          userRes.json(), summaryRes.json(), programsRes.json(), activitiesRes.json(), notifRes.json(),
         ]);
         if (userJson?.user) {
           const freshUser = { ...user, ...userJson.user };
@@ -59,6 +62,7 @@ export default function UserMainDashboard() {
         setSummary(summaryJson);
         if (programsJson.success) setPrograms(programsJson);
         if (activitiesJson.success) setActivities(activitiesJson.activities || []);
+        if (notifJson.success) setUnreadCount(notifJson.count || 0);
       } catch (error) {
         console.error(error);
       }
@@ -84,6 +88,8 @@ export default function UserMainDashboard() {
     { name: "باقی‌مانده", value: activeMembership?.remainingSessions || 0 },
   ], [activeMembership]);
 
+  const progressPercent = activeTraining?.progressScore || 0;
+
   return (
     <DashboardLayout>
       <div className="min-h-screen rounded-[2rem] bg-[#0f1115] p-4 text-right md:p-8" dir="rtl">
@@ -92,10 +98,14 @@ export default function UserMainDashboard() {
             <h1 className="text-2xl font-black text-white md:text-4xl">داشبورد <span className="text-yellow-400">ورزشکار</span></h1>
             <p className="mt-2 text-xs font-bold text-gray-500">تمام اطلاعات از API و دیتابیس واقعی سیستم خوانده می‌شود.</p>
           </div>
-          <div className="relative w-fit rounded-2xl border border-gray-800 bg-[#1a1d23] p-3 text-gray-500">
+          <Link href="/users-dashboard/notifications" className="relative w-fit rounded-2xl border border-gray-800 bg-[#1a1d23] p-3 text-gray-500 transition-all hover:border-yellow-400/50 hover:text-yellow-400">
             <Bell size={20} />
-            <span className="absolute right-2 top-2 h-2 w-2 animate-ping rounded-full bg-red-600" />
-          </div>
+            {unreadCount > 0 && (
+              <span className="absolute -left-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-[10px] font-black text-white">
+                {unreadCount > 99 ? "99+" : unreadCount}
+              </span>
+            )}
+          </Link>
         </div>
 
         <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -107,10 +117,36 @@ export default function UserMainDashboard() {
 
         <div className="mb-8 grid grid-cols-1 gap-6 xl:grid-cols-3">
           <section className="rounded-[2rem] border border-gray-800 bg-[#1a1d23] p-5 xl:col-span-2">
-            <div className="mb-5 flex items-center gap-2">
-              <Dumbbell className="text-yellow-400" />
-              <h2 className="text-xl font-black text-white">برنامه تمرینی و غذایی فعال</h2>
+            <div className="mb-5 flex items-center justify-between gap-2">
+              <div className="flex items-center gap-2">
+                <Dumbbell className="text-yellow-400" />
+                <h2 className="text-xl font-black text-white">برنامه تمرینی و غذایی</h2>
+              </div>
+              {activeTraining && (
+                <Link href="/users-dashboard/workout" className="flex items-center gap-1.5 rounded-2xl bg-yellow-400/10 px-4 py-2 text-xs font-black text-yellow-400 transition-all hover:bg-yellow-400/20">
+                  <CalendarDays size={14} />
+                  تقویم تمرینی
+                </Link>
+              )}
             </div>
+            {activeTraining && (
+              <div className="mb-4 rounded-2xl bg-gray-900/50 p-4">
+                <div className="mb-2 flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <UserRound size={16} className="text-yellow-400" />
+                    <span className="text-sm font-black text-white">
+                      {activeTraining.trainerId?.name ? `مربی: ${activeTraining.trainerId.name}` : "مربی: ثبت نشده"}
+                    </span>
+                  </div>
+                  <span className="rounded-lg bg-yellow-400/10 px-2.5 py-1 text-xs font-black text-yellow-400">
+                    {progressPercent}%
+                  </span>
+                </div>
+                <div className="h-2 overflow-hidden rounded-full bg-gray-800">
+                  <div className="h-full rounded-full bg-gradient-to-l from-yellow-400 to-yellow-500 transition-all" style={{ width: `${Math.min(progressPercent, 100)}%` }} />
+                </div>
+              </div>
+            )}
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <ProgramCard title="برنامه تمرینی" subtitle={activeTraining?.trainerId?.name ? `مربی: ${activeTraining.trainerId.name}` : "در انتظار مربی"} items={(activeTraining?.exercises || []).slice(0, 6).map((ex) => `${ex.day ? `${ex.day}: ` : ""}${ex.name} | ${ex.sets || "—"} ست | ${ex.reps || "—"} تکرار`)} empty="هنوز برنامه تمرینی فعالی ثبت نشده است." />
               <ProgramCard title="برنامه غذایی" subtitle={activeNutrition?.title || "در انتظار برنامه غذایی"} items={activeNutrition?.meals ? Object.entries(activeNutrition.meals).filter(([, v]) => v).map(([k, v]) => `${mealLabels[k] || k}: ${v}`) : []} empty="هنوز برنامه غذایی فعالی ثبت نشده است." />

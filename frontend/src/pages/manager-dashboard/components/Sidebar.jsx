@@ -15,7 +15,10 @@ import {
   ChevronUp,
   X,
   Zap,
-} from "lucide-react"; // استفاده از لوسید آیکون
+  BookOpen,
+  BarChart3,
+  ClipboardList,
+} from "lucide-react";
 
 const menuItems = [
   {
@@ -37,6 +40,21 @@ const menuItems = [
     label: "حضور و غیاب",
     icon: <CalendarDays size={20} />,
     href: "/manager-dashboard/presence",
+  },
+  {
+    label: "مدیریت کلاس‌ها",
+    icon: <BookOpen size={20} />,
+    href: "/manager-dashboard/classes",
+  },
+  {
+    label: "آمار و تحلیل",
+    icon: <BarChart3 size={20} />,
+    href: "/manager-dashboard/analytics",
+  },
+  {
+    label: "لاگ فعالیت‌ها",
+    icon: <ClipboardList size={20} />,
+    href: "/manager-dashboard/audit-logs",
   },
   {
     label: "بوفه و رستوران",

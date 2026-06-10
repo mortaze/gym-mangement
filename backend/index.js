@@ -21,6 +21,12 @@ const programRoutes = require("./routes/program.routes");
 const membershipPlanRoutes = require("./routes/membershipPlan.routes");
 const couponRoutes = require("./routes/coupon.routes");
 const invoiceRoutes = require("./routes/invoice.routes");
+const weightLogRoutes = require("./routes/weightLog.routes");
+const messageRoutes = require("./routes/message.routes");
+const notificationRoutes = require("./routes/notification.routes");
+const classRoutes = require("./routes/class.routes");
+const auditLogRoutes = require("./routes/auditLog.routes");
+const analyticsRoutes = require("./routes/analytics.routes");
 const { expireMemberships } = require("./utils/membership");
 
 // --- Middleware ---
@@ -95,6 +101,12 @@ app.use("/menu", cafeMenuRoutes);
 app.use("/api/membership-plans", membershipPlanRoutes);
 app.use("/api/coupons", couponRoutes);
 app.use("/api/invoices", invoiceRoutes);
+app.use("/api/weight-logs", weightLogRoutes);
+app.use("/api/messages", messageRoutes);
+app.use("/api/notifications", notificationRoutes);
+app.use("/api/classes", classRoutes);
+app.use("/api/audit-logs", auditLogRoutes);
+app.use("/api/analytics", analyticsRoutes);
 
 // و برای پوشه‌ی آپلودها
 app.use("/uploads", express.static(uploadRoot));

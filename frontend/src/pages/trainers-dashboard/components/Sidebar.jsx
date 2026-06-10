@@ -9,10 +9,13 @@ import {
   Dumbbell,
   Coffee,
   CalendarDays,
+  MessageCircle,
+  TrendingUp,
   ChevronDown,
   ChevronUp,
   X,
   Zap,
+  BookOpen,
 } from "lucide-react"; // استفاده از لوسید آیکون
 
 const menuItems = [
@@ -32,6 +35,16 @@ const menuItems = [
     href: "/trainers-dashboard/workout-builder",
   },
   {
+    label: "پیگیری پیشرفت",
+    icon: <TrendingUp size={20} />,
+    href: "/trainers-dashboard/progress",
+  },
+  {
+    label: "پیام‌ها",
+    icon: <MessageCircle size={20} />,
+    href: "/trainers-dashboard/messages",
+  },
+  {
     label: "درخواست های تمرینی ",
     icon: <Users size={20} />,
     href: "/trainers-dashboard/trainers",
@@ -40,6 +53,11 @@ const menuItems = [
     label: "حضور و غیاب",
     icon: <CalendarDays size={20} />,
     href: "/trainers-dashboard/presence",
+  },
+  {
+    label: "کلاس‌های من",
+    icon: <BookOpen size={20} />,
+    href: "/trainers-dashboard/classes",
   },
   {
     label: "بوفه و رستوران",

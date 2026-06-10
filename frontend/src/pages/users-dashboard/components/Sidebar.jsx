@@ -14,6 +14,8 @@ import {
   Zap,
   Info,
   UserRound,
+  Bell,
+  BookOpen,
 } from "lucide-react"; // استفاده از لوسید آیکون
 
 const menuItems = [
@@ -26,6 +28,21 @@ const menuItems = [
     label: "پروفایل من",
     icon: <Info size={20} />,
     href: "/users-dashboard/profile",
+  },
+  {
+    label: "تقویم تمرینی",
+    icon: <CalendarDays size={20} />,
+    href: "/users-dashboard/workout",
+  },
+  {
+    label: "اعلان‌ها",
+    icon: <Bell size={20} />,
+    href: "/users-dashboard/notifications",
+  },
+  {
+    label: "کلاس‌های گروهی",
+    icon: <BookOpen size={20} />,
+    href: "/users-dashboard/classes",
   },
   {
     label: "امور مالی",
