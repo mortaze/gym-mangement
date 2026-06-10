@@ -5,6 +5,8 @@ import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
   Users,
+  UserCheck,
+  Dumbbell,
   Coffee,
   CalendarDays,
   ChevronDown,
@@ -20,11 +22,20 @@ const menuItems = [
     href: "/trainers-dashboard",
   },
   {
+    label: "ورزشکاران من",
+    icon: <UserCheck size={20} />,
+    href: "/trainers-dashboard/my-students",
+  },
+  {
+    label: "برنامه‌ساز تمرینی",
+    icon: <Dumbbell size={20} />,
+    href: "/trainers-dashboard/workout-builder",
+  },
+  {
     label: "درخواست های تمرینی ",
     icon: <Users size={20} />,
     href: "/trainers-dashboard/trainers",
   },
-
   {
     label: "حضور و غیاب",
     icon: <CalendarDays size={20} />,
