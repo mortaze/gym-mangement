@@ -3,6 +3,7 @@ require("dotenv").config();
 const express = require("express");
 const path = require("path");
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
 const morgan = require("morgan");
 // --- Database ---
 const connectDB = require("./config/db"); // مسیر فایل کانکت DB (CJS)
@@ -62,6 +63,7 @@ app.use(
 // Body parsers (important: parse body BEFORE requestLogger if you want to log body)
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
+app.use(cookieParser());
 
 // Attach a request id for tracing
 app.use(attachRequestId);

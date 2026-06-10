@@ -7,6 +7,7 @@ export const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
     baseUrl: API_BASE_URL,
+    timeout: 20000,
     credentials: "include",
     prepareHeaders: (headers) => {
       if (typeof window !== "undefined") {

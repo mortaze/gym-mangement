@@ -167,8 +167,7 @@ export default function Header({ onOpenSidebar }) {
                 </div>
               </div>
 
-              <div className="flex items-center justify-between px-3 py-2 border-b border-[var(--border)] mb-2">
-                <ThemeToggle compact />
+              <div className="flex items-center justify-end px-3 py-2 border-b border-[var(--border)] mb-2">
                 <button className="relative p-2 rounded-xl text-[var(--text-dim)] hover:text-yellow-400 hover:bg-gray-800/50 transition-all">
                   <Bell size={16} />
                   <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />

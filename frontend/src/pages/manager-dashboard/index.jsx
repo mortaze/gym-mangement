@@ -1,7 +1,8 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import { API_BASE_URL } from "@/config/api";
 import {
   Users,
   UserCheck,
@@ -30,30 +31,51 @@ import {
 } from "recharts";
 import DashboardLayout from "./layout";
 
-// داده‌های تحلیلی: مقایسه حضور اعضا و درآمد کل (نمودار سینوسی پیچیده)
-const performanceData = [
-  { name: "شنبه", members: 400, revenue: 2400 },
-  { name: "۱شنبه", members: 300, revenue: 1398 },
-  { name: "۲شنبه", members: 900, revenue: 9800 },
-  { name: "۳شنبه", members: 1480, revenue: 3908 },
-  { name: "۴شنبه", sales: 1890, revenue: 4800 },
-  { name: "۵شنبه", members: 2390, revenue: 3800 },
-  { name: "جمعه", members: 3490, revenue: 4300 },
-];
-
 export default function GlobalGymDashboard() {
-  // کارت‌های آمار حیاتی کل مجموعه
+  const [overview, setOverview] = useState(null);
+  const [revenueTrend, setRevenueTrend] = useState([]);
+  const [classHeatmap, setClassHeatmap] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    Promise.all([
+      fetch(`${API_BASE_URL}/analytics/overview`),
+      fetch(`${API_BASE_URL}/analytics/revenue-trend?days=7`),
+      fetch(`${API_BASE_URL}/analytics/class-heatmap?days=7`),
+    ]).then(async ([ovRes, revRes, heatRes]) => {
+      const [ov, rev, heat] = await Promise.all([
+        ovRes.json(), revRes.json(), heatRes.json(),
+      ]);
+      if (ov.success) setOverview(ov.stats);
+      if (rev.success) setRevenueTrend(rev.trend || []);
+      if (heat.success) setClassHeatmap(heat.heatmap || []);
+    }).finally(() => setLoading(false));
+  }, []);
+
+  const s = overview || {};
+  const roleCounts = s.usersByRole || {};
+  const trainerCount = roleCounts.Trainer || roleCounts.trainer || 0;
+
+  const heatByDate = {};
+  classHeatmap.forEach((h) => { heatByDate[h._id] = h.attended; });
+
+  const chartData = revenueTrend.slice(-7).map((r) => ({
+    name: r._id ? new Date(r._id).toLocaleDateString("fa-IR", { weekday: "short" }) : "",
+    members: heatByDate[r._id] || 0,
+    revenue: r.revenue || 0,
+  }));
+
   const kpiStats = [
     {
       label: "کل اعضای فعال",
-      val: "۱,۲۴۰",
-      sub: "+۱۲٪ این ماه",
+      val: loading ? "..." : (s.activeMemberships || 0).toLocaleString("fa-IR"),
+      sub: loading ? "" : `از ${(s.totalMemberships || 0).toLocaleString("fa-IR")} کل`,
       icon: <Users />,
       color: "text-blue-400",
     },
     {
-      label: "مربیان VIP",
-      val: "۱۸",
+      label: "مربیان",
+      val: loading ? "..." : String(trainerCount),
       sub: "در حال آموزش",
       icon: <UserCheck />,
       color: "text-green-400",
@@ -66,9 +88,9 @@ export default function GlobalGymDashboard() {
       color: "text-yellow-400",
     },
     {
-      label: "تراز مالی کل (سود)",
-      val: "۸۴۲.۰ M",
-      sub: "برآورد سالیانه",
+      label: "درآمد کل",
+      val: loading ? "..." : `${((s.totalRevenue || 0) / 1000000).toFixed(1)} M`,
+      sub: loading ? "" : "از فاکتورهای پرداخت‌شده",
       icon: <DollarSign />,
       color: "text-purple-400",
     },
@@ -192,7 +214,7 @@ export default function GlobalGymDashboard() {
 
             <div className="h-[350px] w-full">
               <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={performanceData}>
+                <AreaChart data={chartData}>
                   <defs>
                     <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
                       <stop offset="5%" stopColor="#facc15" stopOpacity={0.3} />

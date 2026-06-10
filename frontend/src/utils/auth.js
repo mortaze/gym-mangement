@@ -73,13 +73,21 @@ export const clearAuth = () => {
 };
 
 export const fetchCurrentUser = async (token) => {
-  const res = await fetch(`${API_BASE_URL}/auth/me`, {
-    headers: token ? { Authorization: `Bearer ${token}` } : {},
-    credentials: "include",
-  });
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 15000);
 
-  if (!res.ok) throw new Error("Invalid auth session");
-  const data = await res.json();
-  if (!data?.user) throw new Error("User not found in auth response");
-  return { ...data.user, role: normalizeRole(data.user.role) };
+  try {
+    const res = await fetch(`${API_BASE_URL}/auth/me`, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+      credentials: "include",
+      signal: controller.signal,
+    });
+
+    if (!res.ok) throw new Error("Invalid auth session");
+    const data = await res.json();
+    if (!data?.user) throw new Error("User not found in auth response");
+    return { ...data.user, role: normalizeRole(data.user.role) };
+  } finally {
+    clearTimeout(timeout);
+  }
 };

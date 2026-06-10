@@ -21,7 +21,7 @@ export default function UnifiedLoginForm() {
   const [copied, setCopied] = useState("");
   const router = useRouter();
   const [loginUser, { isLoading }] = useLoginUserMutation();
-  const { data: guideData, isLoading: guideLoading, isError: guideError } = useGetLoginGuidesQuery();
+  const { data: guideData, isLoading: guideLoading, isError: guideError, refetch: refetchGuides } = useGetLoginGuidesQuery();
   const guides = Array.isArray(guideData?.guides) ? guideData.guides : [];
 
   const {
@@ -127,7 +127,14 @@ export default function UnifiedLoginForm() {
         </div>
 
         {guideLoading && <p className="rounded-2xl bg-white/5 p-4 text-sm font-bold text-[var(--text-dim)]">در حال دریافت شناسه‌ها از دیتابیس...</p>}
-        {guideError && <p className="rounded-2xl bg-red-500/10 p-4 text-sm font-bold text-red-300">امکان دریافت راهنمای ورود از سرور وجود ندارد.</p>}
+        {guideError && (
+          <div className="rounded-2xl bg-red-500/10 p-4 text-sm font-bold text-red-300 flex items-center justify-between gap-3">
+            <span>امکان دریافت راهنمای ورود از سرور وجود ندارد.</span>
+            <button type="button" onClick={refetchGuides} className="shrink-0 rounded-xl bg-red-500/20 px-3 py-1.5 text-xs text-red-200 transition hover:bg-red-500/30">
+              تلاش مجدد
+            </button>
+          </div>
+        )}
         {!guideLoading && !guideError && guides.length === 0 && (
           <p className="rounded-2xl bg-white/5 p-4 text-sm font-bold leading-7 text-[var(--text-dim)]">برای نقش‌های هدف، کاربر فعالی در MongoDB یافت نشد.</p>
         )}
