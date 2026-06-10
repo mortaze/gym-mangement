@@ -39,7 +39,7 @@ export default function GymIntroSection() {
 
   return (
     <section
-      className="relative min-h-screen overflow-hidden bg-[radial-gradient(ellipse_at_top,#2f2a14_0%,#101318_40%,#07080c_100%)] font-sans text-[var(--text-body)]"
+      className="relative min-h-screen overflow-hidden bg-[radial-gradient(ellipse_at_top,#2f2a14_0%,#101318_40%,#07080c_100%)] text-[var(--text-body)]"
       dir="rtl"
     >
       {/* Glow orbs */}

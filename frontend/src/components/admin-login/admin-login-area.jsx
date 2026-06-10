@@ -8,7 +8,7 @@ export default function AdminLoginArea() {
   return (
     <main
       id="login-section"
-      className="overflow-x-hidden bg-[radial-gradient(circle_at_top,#2f2a14_0%,#101318_32%,#07080c_100%)] px-4 py-6 font-sans text-[var(--text-body)] sm:px-6 lg:px-8"
+      className="overflow-x-hidden bg-[radial-gradient(circle_at_top,#2f2a14_0%,#101318_32%,#07080c_100%)] px-4 py-6 text-[var(--text-body)] sm:px-6 lg:px-8"
       dir="rtl"
     >
       <div className="mx-auto flex w-full max-w-5xl flex-col items-center justify-center gap-6 py-16">

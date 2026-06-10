@@ -93,7 +93,7 @@ function MenuItem({ item, pathname, onClose, level = 0 }) {
           className={`flex items-center justify-between rounded-xl p-3 mb-1 transition-all duration-200 cursor-pointer ${
             isActive
               ? "bg-yellow-400/10 text-yellow-400"
-              : "text-[var(--text-dim)] hover:bg-gray-800/50 hover:text-white"
+              : "text-[var(--text-muted)] hover:bg-gray-100 hover:text-[var(--text-body)] dark:hover:bg-gray-800/50 dark:hover:text-white"
           }`}
           style={{ paddingRight }}
         >
@@ -133,7 +133,7 @@ function MenuItem({ item, pathname, onClose, level = 0 }) {
         className={`flex items-center gap-3 rounded-xl p-3 mb-1 transition-all duration-200 ${
           isActive
             ? "bg-yellow-400 text-black font-bold shadow-[0_0_15px_rgba(250,204,21,0.3)]"
-            : "text-[var(--text-dim)] hover:bg-gray-800/50 hover:text-white"
+            : "text-[var(--text-muted)] hover:bg-gray-100 hover:text-[var(--text-body)] dark:hover:bg-gray-800/50 dark:hover:text-white"
         }`}
         style={{ paddingRight }}
         onClick={onClose}
@@ -205,7 +205,7 @@ export default function Sidebar({ isMobileOpen, onClose }) {
         </div>
         <button
           onClick={onClose}
-          className="lg:hidden text-[var(--text-dim)] hover:text-white"
+          className="lg:hidden text-[var(--text-muted)] hover:text-[var(--text-body)] dark:hover:text-white"
         >
           <X size={24} />
         </button>
