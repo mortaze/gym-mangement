@@ -18,6 +18,7 @@ import {
   BookOpen,
   BarChart3,
   ClipboardList,
+  MessageCircle,
 } from "lucide-react";
 
 const menuItems = [
@@ -80,6 +81,11 @@ const menuItems = [
     label: "امور مالی",
     icon: <CreditCard size={20} />,
     href: "/manager-dashboard/finance",
+  },
+  {
+    label: "پیام‌ها",
+    icon: <MessageCircle size={20} />,
+    href: "/manager-dashboard/messages",
   },
 ];
 

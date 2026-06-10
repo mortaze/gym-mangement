@@ -16,6 +16,7 @@ import {
   UserRound,
   Bell,
   BookOpen,
+  MessageCircle,
 } from "lucide-react"; // استفاده از لوسید آیکون
 
 const menuItems = [
@@ -81,6 +82,11 @@ const menuItems = [
     label: "بوفه و رستوران",
     icon: <Coffee size={20} />,
     href: "/users-dashboard/cafe",
+  },
+  {
+    label: "پیام‌ها",
+    icon: <MessageCircle size={20} />,
+    href: "/users-dashboard/messages",
   },
 ];
 

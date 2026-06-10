@@ -10,6 +10,7 @@ import {
   ChevronUp,
   X,
   Zap,
+  MessageCircle,
 } from "lucide-react"; // استفاده از لوسید آیکون
 
 const menuItems = [
@@ -23,6 +24,11 @@ const menuItems = [
     label: "بوفه و رستوران",
     icon: <Coffee size={20} />,
     href: "/reception-dashboard/cafe-menu",
+  },
+  {
+    label: "پیام‌ها",
+    icon: <MessageCircle size={20} />,
+    href: "/reception-dashboard/messages",
   },
 ];
 

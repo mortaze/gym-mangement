@@ -89,6 +89,7 @@ export default function ManagerClassesPage() {
       const payload = {
         ...form,
         date: new Date(form.date).toISOString(),
+        time: form.time || (form.date.includes("T") ? form.date.split("T")[1].slice(0, 5) : ""),
         capacity: Number(form.capacity),
         duration: Number(form.duration),
       };

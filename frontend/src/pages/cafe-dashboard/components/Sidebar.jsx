@@ -13,6 +13,7 @@ import {
   X,
   Zap,
   Info,
+  MessageCircle,
 } from "lucide-react"; // استفاده از لوسید آیکون
 
 const menuItems = [
@@ -25,6 +26,11 @@ const menuItems = [
     label: "پروفایل من",
     icon: <Info size={20} />,
     href: "/cafe-dashboard/profile",
+  },
+  {
+    label: "پیام‌ها",
+    icon: <MessageCircle size={20} />,
+    href: "/cafe-dashboard/messages",
   },
 ];
 
