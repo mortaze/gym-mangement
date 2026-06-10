@@ -7,10 +7,11 @@ import AdminLoginForm from "../forms/AdminLoginForm";
 export default function AdminLoginArea() {
   return (
     <main
-      className="min-h-screen overflow-x-hidden bg-[radial-gradient(circle_at_top,#2f2a14_0%,#101318_32%,#07080c_100%)] px-4 py-6 font-sans text-white sm:px-6 lg:px-8"
+      id="login-section"
+      className="overflow-x-hidden bg-[radial-gradient(circle_at_top,#2f2a14_0%,#101318_32%,#07080c_100%)] px-4 py-6 font-sans text-white sm:px-6 lg:px-8"
       dir="rtl"
     >
-      <div className="mx-auto flex min-h-[calc(100vh-3rem)] w-full max-w-5xl flex-col items-center justify-center gap-6">
+      <div className="mx-auto flex w-full max-w-5xl flex-col items-center justify-center gap-6 py-16">
         <div className="flex items-center gap-3 rounded-full border border-yellow-400/20 bg-white/5 px-5 py-3 shadow-2xl shadow-black/30 backdrop-blur">
           <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-yellow-400 text-black">
             <Dumbbell size={24} strokeWidth={3} />
