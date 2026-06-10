@@ -223,4 +223,14 @@ router.get("/user/:userId/bookings", async (req, res) => {
   }
 });
 
+router.get("/trainers/list", async (req, res) => {
+  try {
+    const User = require("../model/User");
+    const trainers = await User.find({ role: "Trainer" }).select("name employeeCode email phone profileImage");
+    res.json({ success: true, trainers });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
 module.exports = router;

@@ -35,15 +35,12 @@ export default function ManagerClassesPage() {
   useEffect(() => {
     Promise.all([
       fetch(`${API_BASE_URL}/classes`),
-      fetch(`${API_BASE_URL}/users?role=Trainee`),
-    ]).then(async ([cRes, uRes]) => {
+      fetch(`${API_BASE_URL}/classes/trainers/list`),
+    ]).then(async ([cRes, tRes]) => {
       const cData = await cRes.json();
-      const uData = await uRes.json();
+      const tData = await tRes.json();
       if (cData.success) setSessions(cData.sessions || []);
-      if (uData.success) {
-        const trainersList = (uData.users || []).filter((u) => u.role === "Trainer");
-        setTrainers(trainersList);
-      }
+      if (tData.success) setTrainers(tData.trainers || []);
     }).finally(() => setLoading(false));
   }, []);
 

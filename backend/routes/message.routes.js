@@ -1,6 +1,27 @@
 const express = require("express");
 const router = express.Router();
 const Message = require("../model/Message");
+const User = require("../model/User");
+const Notification = require("../model/Notification");
+
+router.get("/users/search", async (req, res) => {
+  try {
+    const { q, exclude } = req.query;
+    if (!q?.trim()) return res.json({ success: true, users: [] });
+    const filter = {
+      $or: [
+        { name: { $regex: q.trim(), $options: "i" } },
+        { phone: { $regex: q.trim(), $options: "i" } },
+        { employeeCode: { $regex: q.trim(), $options: "i" } },
+      ],
+    };
+    if (exclude) filter._id = { $ne: exclude };
+    const users = await User.find(filter).select("name employeeCode phone email role profileImage").limit(20);
+    res.json({ success: true, users });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
 
 router.get("/conversations/:userId", async (req, res) => {
   try {
@@ -67,7 +88,20 @@ router.post("/", async (req, res) => {
     if (!senderId || !receiverId || !text?.trim()) {
       return res.status(400).json({ success: false, message: "senderId, receiverId, and text are required" });
     }
+
+    const sender = await User.findById(senderId).select("name");
+    if (!sender) return res.status(400).json({ success: false, message: "Sender not found" });
+
     const message = await Message.create({ senderId, receiverId, text: text.trim() });
+
+    await Notification.create({
+      userId: receiverId,
+      type: "message_received",
+      title: `پیام جدید از ${sender.name}`,
+      message: text.trim().slice(0, 100),
+      relatedId: message._id,
+    });
+
     const populated = await message.populate("senderId", "name employeeCode");
     res.status(201).json({ success: true, message: populated });
   } catch (err) {

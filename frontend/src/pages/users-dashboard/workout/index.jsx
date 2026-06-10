@@ -52,6 +52,24 @@ export default function WorkoutCalendarPage() {
     [],
   );
 
+  const prevMonth = useCallback(() => {
+    if (curMonth === 0) {
+      setCurMonth(11);
+      setCurYear((y) => y - 1);
+    } else {
+      setCurMonth((m) => m - 1);
+    }
+  }, [curMonth]);
+
+  const nextMonth = useCallback(() => {
+    if (curMonth === 11) {
+      setCurMonth(0);
+      setCurYear((y) => y + 1);
+    } else {
+      setCurMonth((m) => m + 1);
+    }
+  }, [curMonth]);
+
   const calendarDays = useMemo(() => {
     const daysInMonth = moment.jDaysInMonth(curYear, curMonth);
     const firstOfMonth = moment(`${curYear}/${curMonth + 1}/1`, "jYYYY/jM/jD");
