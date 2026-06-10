@@ -1,41 +1,93 @@
 const express = require("express");
 const Membership = require("../model/Membership");
+const MembershipPlan = require("../model/MembershipPlan");
 const Payment = require("../model/Payment");
+const Invoice = require("../model/Invoice");
+const Coupon = require("../model/Coupon");
 const Attendance = require("../model/Attendance");
 const { addMonths, expireMemberships, getMembershipSummary } = require("../utils/membership");
 
 const router = express.Router();
 
-const PLANS = {
-  "1m-10": { planName: "طرح یک‌ماهه ۱۰ جلسه‌ای", durationMonths: 1, totalSessions: 10, price: 850000 },
-  "1m-15": { planName: "طرح یک‌ماهه ۱۵ جلسه‌ای", durationMonths: 1, totalSessions: 15, price: 1100000 },
-  "1m-20": { planName: "طرح یک‌ماهه ۲۰ جلسه‌ای", durationMonths: 1, totalSessions: 20, price: 1350000 },
-  "3m-30": { planName: "طرح سه‌ماهه ۳۰ جلسه‌ای", durationMonths: 3, totalSessions: 30, price: 3200000 },
-};
-
-router.get("/plans", (req, res) => res.json({ success: true, plans: PLANS }));
+router.get("/plans", async (req, res) => {
+  try {
+    const plans = await MembershipPlan.find({ isActive: true }).sort({ priority: 1 });
+    res.json({ success: true, plans });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
 
 router.post("/purchase", async (req, res) => {
   try {
-    const { userId, planCode = "1m-10" } = req.body;
-    const plan = PLANS[planCode];
-    if (!userId || !plan) return res.status(400).json({ success: false, message: "userId and valid planCode are required" });
+    const { userId, planId, couponCode } = req.body;
+    if (!userId || !planId) return res.status(400).json({ success: false, message: "userId and planId are required" });
+
+    const plan = await MembershipPlan.findById(planId);
+    if (!plan) return res.status(404).json({ success: false, message: "Plan not found" });
+    if (!plan.isActive) return res.status(400).json({ success: false, message: "Plan is not active" });
+
+    let finalPrice = plan.effectivePrice;
+    let appliedCoupon = null;
+    let couponDiscount = 0;
+
+    if (couponCode) {
+      const coupon = await Coupon.findOne({ code: couponCode.toUpperCase().trim(), isActive: true });
+      if (!coupon) return res.status(404).json({ success: false, message: "Invalid coupon code" });
+      if (coupon.isExpired) return res.status(400).json({ success: false, message: "Coupon has expired" });
+      if (coupon.isExhausted) return res.status(400).json({ success: false, message: "Coupon usage limit reached" });
+      if (coupon.memberSpecific && String(coupon.memberSpecific) !== userId) {
+        return res.status(403).json({ success: false, message: "This coupon is not valid for you" });
+      }
+
+      couponDiscount = coupon.type === "percentage"
+        ? Math.round(finalPrice * (coupon.value / 100))
+        : Math.min(coupon.value, finalPrice);
+      finalPrice = Math.max(0, finalPrice - couponDiscount);
+      appliedCoupon = coupon;
+
+      coupon.usedCount += 1;
+      await coupon.save();
+    }
 
     const membership = await Membership.create({
       userId,
-      planName: plan.planName,
+      planName: plan.title,
       durationMonths: plan.durationMonths,
       totalSessions: plan.totalSessions,
       remainingSessions: plan.totalSessions,
       completedSessions: 0,
-      price: plan.price,
+      price: finalPrice,
       status: "Pending Payment",
     });
-    const payment = await Payment.create({ userId, membershipId: membership._id, amount: plan.price, status: "Pending Payment", method: "mock" });
+
+    const payment = await Payment.create({
+      userId,
+      membershipId: membership._id,
+      amount: finalPrice,
+      status: "Pending Payment",
+      method: "mock",
+      notes: couponDiscount > 0 ? `Coupon discount: ${couponDiscount}` : undefined,
+    });
+
     membership.paymentId = payment._id;
     await membership.save();
 
-    res.status(201).json({ success: true, membership, payment });
+    const count = await Invoice.countDocuments();
+    const invoice = await Invoice.create({
+      invoiceNumber: `INV-${String(count + 1).padStart(6, "0")}`,
+      userId,
+      membershipId: membership._id,
+      paymentId: payment._id,
+      planName: plan.title,
+      amount: plan.price,
+      discount: plan.discount + couponDiscount,
+      finalAmount: finalPrice,
+      couponCode: couponCode || undefined,
+      status: "Pending",
+    });
+
+    res.status(201).json({ success: true, membership, payment, invoice });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }

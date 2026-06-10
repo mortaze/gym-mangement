@@ -49,6 +49,16 @@ const menuItems = [
     href: "/manager-dashboard/equipment",
   },
   {
+    label: "طرح‌های عضویت",
+    icon: <CreditCard size={20} />,
+    href: "/manager-dashboard/membership-plans",
+  },
+  {
+    label: "کدهای تخفیف",
+    icon: <CreditCard size={20} />,
+    href: "/manager-dashboard/coupons",
+  },
+  {
     label: "امور مالی",
     icon: <CreditCard size={20} />,
     href: "/manager-dashboard/finance",
